@@ -105,13 +105,24 @@
                     </div>
                 </div>
 
-                <button
-                    type="button"
-                    :disabled="!selected || selected.stock <= 0"
-                    class="mt-8 w-full sm:w-auto px-8 py-3 rounded-md text-white font-medium disabled:bg-gray-300 disabled:cursor-not-allowed bg-indigo-600 hover:bg-indigo-700"
-                >
-                    Thêm vào giỏ hàng
-                </button>
+                <form method="POST" action="{{ route('cart.store') }}" class="mt-8 flex items-center gap-3">
+                    @csrf
+                    <input type="hidden" name="variant_id" :value="selectedId">
+
+                    <input type="number" name="quantity" value="1" min="1" :max="selected?.stock ?? 1" class="w-20 rounded-md border-gray-300 text-sm">
+
+                    <button
+                        type="submit"
+                        :disabled="!selected || selected.stock <= 0"
+                        class="px-8 py-3 rounded-md text-white font-medium disabled:bg-gray-300 disabled:cursor-not-allowed bg-indigo-600 hover:bg-indigo-700"
+                    >
+                        Thêm vào giỏ hàng
+                    </button>
+                </form>
+
+                @error('quantity')
+                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                @enderror
 
                 <div class="mt-10 border-t border-gray-100 pt-6">
                     <h2 class="text-sm font-semibold text-gray-900 mb-2">Mô tả sản phẩm</h2>
