@@ -54,6 +54,9 @@
                                         <x-dropdown-link :href="route('dashboard')">Dashboard</x-dropdown-link>
                                         <x-dropdown-link :href="route('orders.index')">Đơn hàng của tôi</x-dropdown-link>
                                         <x-dropdown-link :href="route('profile.edit')">Hồ sơ</x-dropdown-link>
+                                        @if (Auth::user()->is_admin)
+                                            <x-dropdown-link :href="route('admin.dashboard')">Quản trị</x-dropdown-link>
+                                        @endif
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf
                                             <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
