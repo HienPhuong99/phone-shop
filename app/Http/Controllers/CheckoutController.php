@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Payment;
 use App\Models\ProductVariant;
 use App\Services\CartService;
+use App\Services\VnpayService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +19,10 @@ class CheckoutController extends Controller
 {
     private const SHIPPING_FEE = 30000;
 
-    public function __construct(private readonly CartService $cartService) {}
+    public function __construct(
+        private readonly CartService $cartService,
+        private readonly VnpayService $vnpay,
+    ) {}
 
     public function index(Request $request): View|RedirectResponse
     {
@@ -41,7 +46,7 @@ class CheckoutController extends Controller
             'recipient_name' => ['required_without:address_id', 'nullable', 'string', 'max:255'],
             'phone' => ['required_without:address_id', 'nullable', 'string', 'max:20'],
             'address_line' => ['required_without:address_id', 'nullable', 'string', 'max:255'],
-            'payment_method' => ['required', 'in:cod'],
+            'payment_method' => ['required', 'in:cod,vnpay'],
         ]);
 
         $user = $request->user();
@@ -116,6 +121,17 @@ class CheckoutController extends Controller
             });
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();
+        }
+
+        if ($data['payment_method'] === 'vnpay') {
+            Payment::create([
+                'order_id' => $order->id,
+                'gateway' => 'vnpay',
+                'amount' => $order->total_amount,
+                'status' => Payment::STATUS_PENDING,
+            ]);
+
+            return redirect()->away($this->vnpay->buildPaymentUrl($order, $request->ip()));
         }
 
         return redirect()->route('orders.show', $order)->with('status', 'Đặt hàng thành công!');

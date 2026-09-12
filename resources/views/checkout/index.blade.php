@@ -62,9 +62,9 @@
                         <input type="radio" name="payment_method" value="cod" checked>
                         <span class="text-sm text-gray-900">Thanh toán khi nhận hàng (COD)</span>
                     </label>
-                    <label class="flex items-center gap-3 p-3 border border-gray-100 rounded-md mt-2 opacity-50 cursor-not-allowed">
-                        <input type="radio" name="payment_method" value="vnpay" disabled>
-                        <span class="text-sm text-gray-500">Thanh toán qua VNPay (sắp có)</span>
+                    <label class="flex items-center gap-3 p-3 border border-gray-200 rounded-md mt-2 cursor-pointer">
+                        <input type="radio" name="payment_method" value="vnpay">
+                        <span class="text-sm text-gray-900">Thanh toán qua VNPay</span>
                     </label>
                 </section>
             </div>

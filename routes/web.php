@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\VnpayController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -17,6 +18,9 @@ Route::get('/gio-hang', [CartController::class, 'index'])->name('cart.index');
 Route::post('/gio-hang', [CartController::class, 'store'])->name('cart.store');
 Route::patch('/gio-hang/{cartItem}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/gio-hang/{cartItem}', [CartController::class, 'destroy'])->name('cart.destroy');
+
+Route::get('/vnpay/return', [VnpayController::class, 'return'])->name('vnpay.return');
+Route::get('/vnpay/ipn', [VnpayController::class, 'ipn'])->name('vnpay.ipn');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
