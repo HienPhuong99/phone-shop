@@ -122,11 +122,78 @@
                     >
                         Thêm vào giỏ hàng
                     </button>
+
+                    <button
+                        type="button"
+                        data-testid="buy-now-button"
+                        x-on:click="$dispatch('open-modal', 'buy-now')"
+                        :disabled="!selected || selected.stock <= 0"
+                        class="flex-1 px-8 py-3 rounded-2xl font-semibold border-[1.5px] border-brand text-brand disabled:border-gray-300 disabled:text-gray-300 disabled:cursor-not-allowed hover:bg-brand/5 transition"
+                    >
+                        Mua ngay
+                    </button>
                 </form>
 
                 @error('quantity')
                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                 @enderror
+
+                <x-modal name="buy-now" :show="$errors->buyNow->isNotEmpty()" focusable>
+                    <form method="POST" action="{{ route('buy-now.store') }}" class="p-6">
+                        @csrf
+                        <input type="hidden" name="variant_id" :value="selectedId">
+
+                        <h2 class="text-lg font-bold text-ink">Mua ngay</h2>
+                        <p class="mt-1 text-sm text-ink-soft">Điền thông tin bên dưới, không cần đăng ký tài khoản — đặt hàng chỉ với một bước.</p>
+
+                        <div class="mt-5 space-y-4">
+                            <div>
+                                <x-input-label for="buy_now_recipient_name" value="Họ tên người nhận" />
+                                <x-text-input id="buy_now_recipient_name" name="recipient_name" class="block mt-1 w-full rounded-xl border-line text-sm focus:border-brand focus:ring-brand" :value="old('recipient_name')" required />
+                                <x-input-error :messages="$errors->buyNow->get('recipient_name')" class="mt-1" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="buy_now_phone" value="Số điện thoại" />
+                                <x-text-input id="buy_now_phone" name="phone" class="block mt-1 w-full rounded-xl border-line text-sm focus:border-brand focus:ring-brand" :value="old('phone')" required />
+                                <x-input-error :messages="$errors->buyNow->get('phone')" class="mt-1" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="buy_now_address_line" value="Địa chỉ giao hàng" />
+                                <x-text-input id="buy_now_address_line" name="address_line" class="block mt-1 w-full rounded-xl border-line text-sm focus:border-brand focus:ring-brand" :value="old('address_line')" required />
+                                <x-input-error :messages="$errors->buyNow->get('address_line')" class="mt-1" />
+                            </div>
+
+                            <div>
+                                <x-input-label value="Số lượng" />
+                                <input type="number" name="quantity" value="1" min="1" :max="selected?.stock ?? 1" class="block mt-1 w-24 rounded-xl border-line text-sm focus:border-brand focus:ring-brand">
+                            </div>
+
+                            <div>
+                                <x-input-label value="Phương thức thanh toán" />
+                                <div class="mt-1 space-y-2">
+                                    <label class="flex items-center gap-3 p-3 border-[1.5px] border-brand bg-brand/5 rounded-xl cursor-pointer">
+                                        <input type="radio" name="payment_method" value="cod" checked class="text-brand focus:ring-brand">
+                                        <span class="text-sm font-medium text-ink">Thanh toán khi nhận hàng (COD)</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 p-3 border border-line rounded-xl cursor-pointer hover:border-brand/50 transition">
+                                        <input type="radio" name="payment_method" value="vnpay" class="text-brand focus:ring-brand">
+                                        <span class="text-sm font-medium text-ink">Thanh toán qua VNPay</span>
+                                    </label>
+                                </div>
+                                <x-input-error :messages="$errors->buyNow->get('quantity')" class="mt-1" />
+                            </div>
+                        </div>
+
+                        <div class="mt-6 flex justify-end gap-3">
+                            <x-secondary-button type="button" x-on:click="$dispatch('close')">Huỷ</x-secondary-button>
+                            <button type="submit" class="px-6 py-2.5 rounded-xl text-white font-semibold bg-brand hover:bg-brand-dark shadow-sm transition">
+                                Xác nhận đặt hàng
+                            </button>
+                        </div>
+                    </form>
+                </x-modal>
 
                 <div class="mt-10 border-t border-line pt-6">
                     <h2 class="text-sm font-semibold text-ink mb-2">Mô tả sản phẩm</h2>

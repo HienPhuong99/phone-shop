@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BuyNowController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
@@ -19,6 +20,8 @@ Route::get('/gio-hang', [CartController::class, 'index'])->name('cart.index');
 Route::post('/gio-hang', [CartController::class, 'store'])->name('cart.store');
 Route::patch('/gio-hang/{cartItem}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/gio-hang/{cartItem}', [CartController::class, 'destroy'])->name('cart.destroy');
+
+Route::post('/mua-ngay', [BuyNowController::class, 'store'])->name('buy-now.store');
 
 Route::get('/dich-vu', [PageController::class, 'services'])->name('pages.services');
 Route::get('/chinh-sach', [PageController::class, 'policies'])->name('pages.policies');
