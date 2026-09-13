@@ -8,42 +8,43 @@
         <title>{{ $title ?? config('app.name', 'Phone Shop') }}</title>
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased bg-paper text-ink">
         <div class="min-h-screen flex flex-col">
-            <header class="bg-white border-b border-line">
+            <header class="bg-brand">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between items-center h-[76px]">
-                        <a href="{{ route('home') }}" class="font-serif text-2xl font-semibold tracking-wide text-ink">
-                            TAM300
+                        <a href="{{ route('home') }}" class="font-extrabold text-xl text-white tracking-tight flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-[3px] bg-sky-400 inline-block shadow-sm"></span>
+                            <span>TAM300</span>
                         </a>
 
                         <nav class="hidden sm:flex sm:space-x-8">
-                            <a href="{{ route('home') }}" class="inline-flex items-center px-1 pt-1 text-sm font-semibold border-b-2 {{ request()->routeIs('home') ? 'text-ink border-accent' : 'text-ink-soft border-transparent hover:text-ink' }}">
+                            <a href="{{ route('home') }}" class="inline-flex items-center px-1 pt-1 text-sm font-semibold border-b-2 {{ request()->routeIs('home') ? 'text-white border-white' : 'text-white/70 hover:text-white border-transparent' }}">
                                 Trang chủ
                             </a>
-                            <a href="{{ route('products.index') }}" class="inline-flex items-center px-1 pt-1 text-sm font-semibold border-b-2 {{ request()->routeIs('products.*') ? 'text-ink border-accent' : 'text-ink-soft border-transparent hover:text-ink' }}">
+                            <a href="{{ route('products.index') }}" class="inline-flex items-center px-1 pt-1 text-sm font-semibold border-b-2 {{ request()->routeIs('products.*') ? 'text-white border-white' : 'text-white/70 hover:text-white border-transparent' }}">
                                 Sản phẩm
                             </a>
                         </nav>
 
                         <div class="flex items-center gap-4">
-                            <a href="{{ route('cart.index') }}" class="relative text-ink-soft hover:text-ink">
+                            <a href="{{ route('cart.index') }}" class="relative text-white/80 hover:text-white transition">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 1.907-4.925 2.29-7.68l.062-.469a1.125 1.125 0 00-1.115-1.276H6.106M7.5 14.25L5.106 5.272M7.5 14.25L6.6 20.4A.75.75 0 007.35 21h9.3m-7.5-1.5h7.5m-7.5 0a.75.75 0 100 1.5.75.75 0 000-1.5zm7.5 0a.75.75 0 100 1.5.75.75 0 000-1.5z" />
                                 </svg>
                                 @if (($cartItemCount ?? 0) > 0)
-                                    <span class="absolute -top-2 -right-2 bg-accent text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">{{ $cartItemCount }}</span>
+                                    <span class="absolute -top-2 -right-2 bg-white text-brand text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center shadow-sm">{{ $cartItemCount }}</span>
                                 @endif
                             </a>
 
                             @auth
                                 <x-dropdown align="right" width="48">
                                     <x-slot name="trigger">
-                                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-[2px] text-ink-soft bg-white hover:text-ink focus:outline-none transition ease-in-out duration-150">
+                                        <button class="inline-flex items-center px-3 py-2 text-sm leading-4 font-semibold rounded-xl text-white/90 hover:text-white bg-white/10 hover:bg-white/20 focus:outline-none transition ease-in-out duration-150">
                                             {{ Auth::user()->name }}
                                             <svg class="ms-1 fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -66,8 +67,8 @@
                                     </x-slot>
                                 </x-dropdown>
                             @else
-                                <a href="{{ route('login') }}" class="text-sm font-medium text-ink-soft hover:text-ink">Đăng nhập</a>
-                                <a href="{{ route('register') }}" class="text-sm font-medium text-white bg-ink hover:bg-ink/90 px-4 py-2 rounded-[2px]">Đăng ký</a>
+                                <a href="{{ route('login') }}" class="text-sm font-medium text-white/80 hover:text-white transition">Đăng nhập</a>
+                                <a href="{{ route('register') }}" class="text-sm font-semibold text-brand bg-white hover:bg-white/90 px-4 py-2 rounded-xl shadow-sm transition">Đăng ký</a>
                             @endauth
                         </div>
                     </div>
@@ -76,7 +77,7 @@
 
             @if (session('status'))
                 <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-4">
-                    <div class="bg-green-50 text-green-800 border border-green-200 rounded-md px-4 py-3 text-sm">
+                    <div class="bg-green-50 text-green-800 border border-green-200 rounded-xl px-4 py-3 text-sm">
                         {{ session('status') }}
                     </div>
                 </div>
@@ -84,7 +85,7 @@
 
             @if (session('error'))
                 <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-4">
-                    <div class="bg-red-50 text-red-800 border border-red-200 rounded-md px-4 py-3 text-sm">
+                    <div class="bg-red-50 text-red-800 border border-red-200 rounded-xl px-4 py-3 text-sm">
                         {{ session('error') }}
                     </div>
                 </div>
@@ -96,7 +97,7 @@
 
             <footer class="bg-white border-t border-line mt-12">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-sm text-ink-soft text-center">
-                    &copy; {{ date('Y') }} TAM300 — thiết kế lại giao diện.
+                    &copy; {{ date('Y') }} TAM300.
                 </div>
             </footer>
         </div>

@@ -12,17 +12,15 @@ export default {
     theme: {
         extend: {
             colors: {
-                ink: 'oklch(18% 0.008 240)',
-                'ink-soft': 'oklch(48% 0.008 240)',
-                paper: 'oklch(98% 0.003 240)',
-                line: 'oklch(90% 0.006 240)',
-                accent: 'oklch(52% 0.14 220)',
-                'accent-dark': 'oklch(42% 0.14 220)',
-                'accent-light': 'oklch(75% 0.09 220)',
+                brand: '#0B4174',        // primary navy — buttons, links, active states (measured: rgb(11,65,116))
+                'brand-dark': '#083150', // hover/pressed state, darker navy
+                ink: '#0f172a',          // headings, body text (slate-900)
+                'ink-soft': '#64748b',   // secondary/muted text (slate-500)
+                paper: '#f8fafc',        // page background tint (slate-50) — NOT white; use white only for cards/header
+                line: '#e2e8f0',         // borders (slate-200)
             },
             fontFamily: {
-                sans: ['"Plus Jakarta Sans"', ...defaultTheme.fontFamily.sans],
-                serif: ['Fraunces', 'serif'],
+                sans: ['Inter', ...defaultTheme.fontFamily.sans],
             },
         },
     },
