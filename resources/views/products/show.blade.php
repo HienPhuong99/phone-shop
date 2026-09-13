@@ -57,7 +57,7 @@
                     <div class="mt-4 grid grid-cols-5 gap-3">
                         @foreach ($product->images as $image)
                             <div class="aspect-square bg-gray-50 border border-line rounded-xl overflow-hidden">
-                                <img src="{{ $image->url }}" alt="" loading="lazy" decoding="async" class="w-full h-full object-cover">
+                                <img src="{{ $image->thumb_url ?? $image->url }}" alt="" loading="lazy" decoding="async" class="w-full h-full object-cover">
                             </div>
                         @endforeach
                     </div>
