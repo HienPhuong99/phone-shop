@@ -56,7 +56,7 @@
                 </div>
 
                 @if ($product->thumbnail)
-                    <img src="{{ $product->thumbnail }}" class="h-24 w-24 object-cover rounded-md border border-gray-200">
+                    <img src="{{ $product->thumbnail_thumb ?? $product->thumbnail }}" class="h-24 w-24 object-cover rounded-md border border-gray-200">
                 @endif
 
                 <div>
@@ -122,7 +122,7 @@
                 <div class="grid grid-cols-4 gap-2 mb-4">
                     @foreach ($product->images as $image)
                         <div class="relative">
-                            <img src="{{ $image->url }}" class="aspect-square object-cover rounded-md border border-gray-200">
+                            <img src="{{ $image->thumb_url ?? $image->url }}" class="aspect-square object-cover rounded-md border border-gray-200">
                             <form method="POST" action="{{ route('admin.products.images.destroy', [$product, $image]) }}" class="absolute top-1 right-1">
                                 @csrf
                                 @method('DELETE')

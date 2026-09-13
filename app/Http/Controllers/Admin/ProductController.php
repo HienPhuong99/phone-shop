@@ -43,7 +43,9 @@ class ProductController extends Controller
         $data = $this->validated($request);
 
         if ($request->hasFile('thumbnail')) {
-            $data['thumbnail'] = $this->imageUploadService->store($request->file('thumbnail'), 'products');
+            $image = $this->imageUploadService->store($request->file('thumbnail'), 'products');
+            $data['thumbnail'] = $image->url;
+            $data['thumbnail_thumb'] = $image->thumbUrl;
         }
 
         $product = Product::create($data);
@@ -66,7 +68,9 @@ class ProductController extends Controller
         $data = $this->validated($request, $product);
 
         if ($request->hasFile('thumbnail')) {
-            $data['thumbnail'] = $this->imageUploadService->store($request->file('thumbnail'), 'products');
+            $image = $this->imageUploadService->store($request->file('thumbnail'), 'products');
+            $data['thumbnail'] = $image->url;
+            $data['thumbnail_thumb'] = $image->thumbUrl;
         }
 
         $product->update($data);

@@ -19,10 +19,11 @@ class ProductImageController extends Controller
             'image' => ['required', 'image', 'max:4096'],
         ]);
 
-        $url = $this->imageUploadService->store($request->file('image'), 'products');
+        $image = $this->imageUploadService->store($request->file('image'), 'products');
 
         $product->images()->create([
-            'url' => $url,
+            'url' => $image->url,
+            'thumb_url' => $image->thumbUrl,
             'sort_order' => $product->images()->max('sort_order') + 1,
         ]);
 
