@@ -19,7 +19,7 @@ Vào service web (chứa code Laravel) → tab **Variables**, thêm:
 
 | Biến | Giá trị |
 |---|---|
-| `APP_NAME` | Phone Shop |
+| `APP_NAME` | phuonghihi |
 | `APP_ENV` | production |
 | `APP_DEBUG` | false |
 | `APP_KEY` | (xem bước 4) |

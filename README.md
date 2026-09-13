@@ -1,4 +1,4 @@
-# Phone Shop
+# phuonghihi
 
 Web thương mại điện tử bán điện thoại xây dựng bằng Laravel — catalog sản phẩm, giỏ hàng, checkout, tích hợp thanh toán VNPay (sandbox), và trang quản trị đầy đủ. Dự án luyện tập kỹ năng phát triển web cho vị trí lập trình viên.
 

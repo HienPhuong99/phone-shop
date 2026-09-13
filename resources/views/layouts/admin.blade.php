@@ -5,15 +5,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ $title ?? 'Admin - Phone Shop' }}</title>
+        <title>{{ $title ?? 'Admin - phuonghihi' }}</title>
+
+        <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo-icon.svg') }}">
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased bg-gray-100 text-gray-900">
         <div class="min-h-screen flex">
             <aside class="w-56 bg-gray-900 text-gray-300 flex-shrink-0">
-                <div class="px-4 py-4 text-white font-bold text-lg border-b border-gray-800">
-                    Phone Shop Admin
+                <div class="px-4 py-4 border-b border-gray-800 flex items-center gap-2.5">
+                    <img src="{{ asset('images/logo-icon.svg') }}" alt="" class="h-8 w-8 rounded-[9px]">
+                    <span class="font-bold text-lg leading-tight">
+                        <span class="text-white">phuong</span><span class="text-[#FF6B4A]">hihi</span><br>
+                        <span class="text-[11px] font-medium tracking-wide uppercase text-gray-400">Admin</span>
+                    </span>
                 </div>
                 <nav class="mt-4 space-y-1">
                     @php

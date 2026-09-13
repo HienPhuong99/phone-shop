@@ -1,7 +1,7 @@
-<x-shop-layout title="Đơn hàng #{{ $order->order_code }} - Phone Shop">
+<x-shop-layout title="Đơn hàng #{{ $order->order_code }} - phuonghihi">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="bg-green-50 border border-green-200 text-green-800 rounded-xl px-4 py-3 mb-6 text-sm">
-            Đặt hàng thành công! Cảm ơn bạn đã mua sắm tại Phone Shop.
+            Đặt hàng thành công! Cảm ơn bạn đã mua sắm tại phuonghihi.
         </div>
 
         <div class="bg-white border border-line rounded-2xl shadow-sm p-6">

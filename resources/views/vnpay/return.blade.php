@@ -1,4 +1,4 @@
-<x-shop-layout title="Kết quả thanh toán - Phone Shop">
+<x-shop-layout title="Kết quả thanh toán - phuonghihi">
     <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
         @if (! $isValid)
             <div class="bg-red-50 border border-red-200 text-red-800 rounded-md px-6 py-8">

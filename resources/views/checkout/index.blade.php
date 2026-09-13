@@ -2,7 +2,7 @@
     $subtotal = $cart->items->sum(fn ($item) => $item->quantity * $item->variant->price);
 @endphp
 
-<x-shop-layout title="Thanh toán - Phone Shop">
+<x-shop-layout title="Thanh toán - phuonghihi">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <h1 class="font-bold text-3xl text-ink mb-6">Thanh toán</h1>
 

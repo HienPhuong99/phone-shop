@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 226 48" role="img" aria-label="phuonghihi">
+  <rect x="4" y="4" width="40" height="40" rx="11" fill="#FF6B4A"/>
+  <rect x="16" y="11" width="16" height="27" rx="4" fill="#FFFFFF"/>
+  <circle cx="24" cy="14.6" r="1" fill="#FF6B4A"/>
+  <circle cx="21" cy="24" r="1.4" fill="#FF6B4A"/>
+  <circle cx="27" cy="24" r="1.4" fill="#FF6B4A"/>
+  <path d="M20.5 28.3 Q24 32.4 27.5 28.3" stroke="#FF6B4A" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <text x="54" y="32" font-family="Inter, system-ui, sans-serif" font-size="26" font-weight="800"><tspan fill="#0B4174">phuong</tspan><tspan fill="#FF6B4A">hihi</tspan></text>
+</svg>

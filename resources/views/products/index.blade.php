@@ -1,4 +1,4 @@
-<x-shop-layout title="Sản phẩm - Phone Shop">
+<x-shop-layout title="Sản phẩm - phuonghihi">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <h1 class="font-bold text-3xl text-ink mb-6">Sản phẩm</h1>
 

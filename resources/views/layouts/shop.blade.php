@@ -5,7 +5,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ $title ?? config('app.name', 'Phone Shop') }}</title>
+        <title>{{ $title ?? config('app.name', 'phuonghihi') }}</title>
+
+        <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo-icon.svg') }}">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -17,9 +19,9 @@
             <header class="bg-brand">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between items-center h-[76px]">
-                        <a href="{{ route('home') }}" class="font-extrabold text-xl text-white tracking-tight flex items-center gap-2">
-                            <span class="w-3 h-3 rounded-[3px] bg-sky-400 inline-block shadow-sm"></span>
-                            <span>TAM300</span>
+                        <a href="{{ route('home') }}" class="font-extrabold text-xl tracking-tight flex items-center gap-2.5">
+                            <img src="{{ asset('images/logo-icon.svg') }}" alt="" class="h-9 w-9 rounded-[11px] shadow-sm">
+                            <span><span class="text-white">phuong</span><span class="text-[#FF6B4A]">hihi</span></span>
                         </a>
 
                         <nav class="hidden sm:flex sm:space-x-8">
@@ -104,7 +106,7 @@
                         <a href="{{ route('pages.contact') }}" class="hover:text-brand transition">Liên hệ</a>
                     </div>
                     <div class="mt-6 text-sm text-ink-soft text-center">
-                        &copy; {{ date('Y') }} TAM300.
+                        &copy; {{ date('Y') }} phuonghihi.
                     </div>
                 </div>
             </footer>

@@ -1,4 +1,4 @@
-<x-shop-layout title="Liên hệ - Phone Shop">
+<x-shop-layout title="Liên hệ - phuonghihi">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <nav class="text-sm text-ink-soft mb-6">
             <a href="{{ route('home') }}" class="hover:text-brand transition">Trang chủ</a> /
@@ -18,7 +18,7 @@
             </div>
             <div>
                 <h2 class="text-xs font-bold tracking-wide uppercase text-ink-soft mb-1">Email</h2>
-                <p class="text-sm text-ink">hotro@tam300.example</p>
+                <p class="text-sm text-ink">hotro@phuonghihi.example</p>
             </div>
             <div>
                 <h2 class="text-xs font-bold tracking-wide uppercase text-ink-soft mb-1">Giờ làm việc</h2>
