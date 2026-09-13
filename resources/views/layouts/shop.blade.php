@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ $title ?? config('app.name', 'phuonghihi') }}</title>
@@ -11,9 +11,9 @@
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased bg-paper text-ink">
-        <div class="min-h-screen flex flex-col">
-            <header class="bg-brand">
+    <body class="font-sans antialiased bg-paper text-ink [padding-left:env(safe-area-inset-left)] [padding-right:env(safe-area-inset-right)]">
+        <div class="min-h-screen flex flex-col" x-data="{ mobileMenuOpen: false }">
+            <header class="bg-brand [padding-top:env(safe-area-inset-top)]">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between items-center h-[76px]">
                         <a href="{{ route('home') }}" class="font-extrabold text-xl tracking-tight flex items-center gap-2.5">
@@ -41,35 +41,87 @@
                             </a>
 
                             @auth
-                                <x-dropdown align="right" width="48">
-                                    <x-slot name="trigger">
-                                        <button class="inline-flex items-center px-3 py-2 text-sm leading-4 font-semibold rounded-xl text-white/90 hover:text-white bg-white/10 hover:bg-white/20 focus:outline-none transition ease-in-out duration-150">
-                                            {{ Auth::user()->name }}
-                                            <svg class="ms-1 fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                            </svg>
-                                        </button>
-                                    </x-slot>
-                                    <x-slot name="content">
-                                        <x-dropdown-link :href="route('dashboard')">Dashboard</x-dropdown-link>
-                                        <x-dropdown-link :href="route('orders.index')">Đơn hàng của tôi</x-dropdown-link>
-                                        <x-dropdown-link :href="route('profile.edit')">Hồ sơ</x-dropdown-link>
-                                        @if (Auth::user()->is_admin)
-                                            <x-dropdown-link :href="route('admin.dashboard')">Quản trị</x-dropdown-link>
-                                        @endif
-                                        <form method="POST" action="{{ route('logout') }}">
-                                            @csrf
-                                            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
-                                                Đăng xuất
-                                            </x-dropdown-link>
-                                        </form>
-                                    </x-slot>
-                                </x-dropdown>
+                                <div class="hidden sm:block">
+                                    <x-dropdown align="right" width="48">
+                                        <x-slot name="trigger">
+                                            <button class="inline-flex items-center px-3 py-2 text-sm leading-4 font-semibold rounded-xl text-white/90 hover:text-white bg-white/10 hover:bg-white/20 focus:outline-none transition ease-in-out duration-150">
+                                                {{ Auth::user()->name }}
+                                                <svg class="ms-1 fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </x-slot>
+                                        <x-slot name="content">
+                                            <x-dropdown-link :href="route('dashboard')">Dashboard</x-dropdown-link>
+                                            <x-dropdown-link :href="route('orders.index')">Đơn hàng của tôi</x-dropdown-link>
+                                            <x-dropdown-link :href="route('profile.edit')">Hồ sơ</x-dropdown-link>
+                                            @if (Auth::user()->is_admin)
+                                                <x-dropdown-link :href="route('admin.dashboard')">Quản trị</x-dropdown-link>
+                                            @endif
+                                            <form method="POST" action="{{ route('logout') }}">
+                                                @csrf
+                                                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
+                                                    Đăng xuất
+                                                </x-dropdown-link>
+                                            </form>
+                                        </x-slot>
+                                    </x-dropdown>
+                                </div>
                             @else
-                                <a href="{{ route('login') }}" class="text-sm font-medium text-white/80 hover:text-white transition">Đăng nhập</a>
-                                <a href="{{ route('register') }}" class="text-sm font-semibold text-brand bg-white hover:bg-white/90 px-4 py-2 rounded-xl shadow-sm transition">Đăng ký</a>
+                                <div class="hidden sm:flex sm:items-center sm:gap-4">
+                                    <a href="{{ route('login') }}" class="text-sm font-medium text-white/80 hover:text-white transition">Đăng nhập</a>
+                                    <a href="{{ route('register') }}" class="text-sm font-semibold text-brand bg-white hover:bg-white/90 px-4 py-2 rounded-xl shadow-sm transition">Đăng ký</a>
+                                </div>
                             @endauth
+
+                            <button
+                                type="button"
+                                @click="mobileMenuOpen = !mobileMenuOpen"
+                                :aria-expanded="mobileMenuOpen"
+                                aria-label="Mở menu"
+                                class="sm:hidden inline-flex items-center justify-center p-2 rounded-md text-white/80 hover:text-white hover:bg-white/10 focus:outline-none transition"
+                            >
+                                <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                                    <path :class="{ 'hidden': mobileMenuOpen, 'inline-flex': !mobileMenuOpen }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                                    <path :class="{ 'hidden': !mobileMenuOpen, 'inline-flex': mobileMenuOpen }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Mobile menu -->
+                <div :class="{ 'block': mobileMenuOpen, 'hidden': !mobileMenuOpen }" class="hidden sm:hidden border-t border-white/10">
+                    <nav class="px-4 py-3 space-y-1">
+                        <a href="{{ route('home') }}" class="block px-3 py-2 rounded-xl text-sm font-semibold {{ request()->routeIs('home') ? 'text-white bg-white/10' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
+                            Trang chủ
+                        </a>
+                        <a href="{{ route('products.index') }}" class="block px-3 py-2 rounded-xl text-sm font-semibold {{ request()->routeIs('products.*') ? 'text-white bg-white/10' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
+                            Sản phẩm
+                        </a>
+                    </nav>
+
+                    <div class="px-4 pb-4 pt-2 border-t border-white/10">
+                        @auth
+                            <p class="px-3 py-1 text-sm font-medium text-white">{{ Auth::user()->name }}</p>
+                            <div class="mt-1 space-y-1">
+                                <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-xl text-sm text-white/80 hover:text-white hover:bg-white/10">Dashboard</a>
+                                <a href="{{ route('orders.index') }}" class="block px-3 py-2 rounded-xl text-sm text-white/80 hover:text-white hover:bg-white/10">Đơn hàng của tôi</a>
+                                <a href="{{ route('profile.edit') }}" class="block px-3 py-2 rounded-xl text-sm text-white/80 hover:text-white hover:bg-white/10">Hồ sơ</a>
+                                @if (Auth::user()->is_admin)
+                                    <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 rounded-xl text-sm text-white/80 hover:text-white hover:bg-white/10">Quản trị</a>
+                                @endif
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="w-full text-left px-3 py-2 rounded-xl text-sm text-white/80 hover:text-white hover:bg-white/10">Đăng xuất</button>
+                                </form>
+                            </div>
+                        @else
+                            <div class="space-y-1">
+                                <a href="{{ route('login') }}" class="block px-3 py-2 rounded-xl text-sm font-medium text-white/80 hover:text-white hover:bg-white/10">Đăng nhập</a>
+                                <a href="{{ route('register') }}" class="block px-3 py-2 rounded-xl text-sm font-semibold text-white bg-white/10 hover:bg-white/20">Đăng ký</a>
+                            </div>
+                        @endauth
                     </div>
                 </div>
             </header>
@@ -94,7 +146,7 @@
                 {{ $slot }}
             </main>
 
-            <footer class="bg-white border-t border-line mt-12">
+            <footer class="bg-white border-t border-line mt-12 [padding-bottom:env(safe-area-inset-bottom)]">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
                     <div class="flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm font-medium text-ink-soft">
                         <a href="{{ route('pages.services') }}" class="hover:text-brand transition">Dịch vụ</a>
