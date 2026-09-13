@@ -22,6 +22,7 @@
                             ['route' => 'admin.products.index', 'label' => 'Sản phẩm'],
                             ['route' => 'admin.categories.index', 'label' => 'Danh mục'],
                             ['route' => 'admin.brands.index', 'label' => 'Thương hiệu'],
+                            ['route' => 'admin.product-series.index', 'label' => 'Dòng sản phẩm'],
                             ['route' => 'admin.orders.index', 'label' => 'Đơn hàng'],
                         ];
                     @endphp
