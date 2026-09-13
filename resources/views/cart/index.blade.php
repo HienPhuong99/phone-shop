@@ -27,7 +27,7 @@
                             <form method="POST" action="{{ route('cart.update', $item) }}" class="flex items-center gap-2">
                                 @csrf
                                 @method('PATCH')
-                                <input type="number" name="quantity" value="{{ $item->quantity }}" min="1" max="{{ $item->variant->stock_quantity }}" class="w-16 rounded-xl border-line text-sm focus:border-brand focus:ring-brand">
+                                <input type="number" inputmode="numeric" name="quantity" value="{{ $item->quantity }}" min="1" max="{{ $item->variant->stock_quantity }}" class="w-16 rounded-xl border-line text-sm focus:border-brand focus:ring-brand">
                                 <button type="submit" class="text-sm font-medium text-brand hover:text-brand-dark">Cập nhật</button>
                             </form>
 

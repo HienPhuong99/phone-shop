@@ -9,9 +9,9 @@
     ]);
 @endphp
 
-<x-shop-layout :title="$product->name.' - phuonghihi'">
+<x-shop-layout :title="$product->name.' - phuonghihi'" :hide-bottom-nav="true">
     <div
-        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-28 sm:pb-8"
         x-data="{
             variants: {{ Illuminate\Support\Js::from($variantsData) }},
             selectedId: {{ $product->variants->first()?->id ?? 'null' }},
@@ -108,11 +108,11 @@
                     </div>
                 </div>
 
-                <form method="POST" action="{{ route('cart.store') }}" class="mt-8 flex items-center gap-3">
+                <form method="POST" action="{{ route('cart.store') }}" class="hidden sm:flex mt-8 items-center gap-3">
                     @csrf
                     <input type="hidden" name="variant_id" :value="selectedId">
 
-                    <input type="number" name="quantity" value="1" min="1" :max="selected?.stock ?? 1" class="w-20 rounded-xl border-line text-sm focus:border-brand focus:ring-brand">
+                    <input type="number" inputmode="numeric" name="quantity" value="1" min="1" :max="selected?.stock ?? 1" class="w-20 rounded-xl border-line text-sm focus:border-brand focus:ring-brand">
 
                     <button
                         type="submit"
@@ -133,6 +133,34 @@
                     <p class="text-sm text-ink-soft whitespace-pre-line">{{ $product->description }}</p>
                 </div>
             </div>
+        </div>
+
+        <!-- Sticky add-to-cart bar (mobile) -->
+        <div class="sm:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-line px-3 py-2.5 [padding-bottom:calc(env(safe-area-inset-bottom)+0.625rem)] flex items-center gap-2">
+            <a href="{{ route('cart.index') }}" class="shrink-0 p-2 rounded-xl border border-line text-ink-soft">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 1.907-4.925 2.29-7.68l.062-.469a1.125 1.125 0 00-1.115-1.276H6.106M7.5 14.25L5.106 5.272M7.5 14.25L6.6 20.4A.75.75 0 007.35 21h9.3m-7.5-1.5h7.5m-7.5 0a.75.75 0 100 1.5.75.75 0 000-1.5zm7.5 0a.75.75 0 100 1.5.75.75 0 000-1.5z" />
+                </svg>
+            </a>
+
+            <div class="flex-1 min-w-0">
+                <p class="text-[11px] text-ink-soft leading-none">Giá</p>
+                <p class="mt-1 text-brand font-extrabold text-base leading-none whitespace-nowrap" x-text="new Intl.NumberFormat('vi-VN').format(selected?.price ?? {{ $product->base_price }}) + 'đ'"></p>
+            </div>
+
+            <form method="POST" action="{{ route('cart.store') }}" class="shrink-0">
+                @csrf
+                <input type="hidden" name="variant_id" :value="selectedId">
+                <input type="hidden" name="quantity" value="1">
+                <button
+                    type="submit"
+                    data-testid="add-to-cart-button-mobile"
+                    :disabled="!selected || selected.stock <= 0"
+                    class="px-5 py-3 rounded-2xl text-white text-sm font-semibold disabled:bg-gray-300 disabled:cursor-not-allowed bg-brand hover:bg-brand-dark shadow-sm transition whitespace-nowrap"
+                >
+                    Thêm vào giỏ
+                </button>
+            </form>
         </div>
     </div>
 </x-shop-layout>
