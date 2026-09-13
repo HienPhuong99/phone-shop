@@ -45,7 +45,7 @@
             <div>
                 <div class="aspect-square bg-white border border-line rounded-2xl shadow-sm flex items-center justify-center overflow-hidden">
                     @if ($product->thumbnail)
-                        <img src="{{ $product->thumbnail }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
+                        <img src="{{ $product->thumbnail }}" alt="{{ $product->name }}" fetchpriority="high" decoding="async" class="w-full h-full object-cover">
                     @else
                         <div class="w-full h-full flex items-center justify-center bg-[repeating-linear-gradient(45deg,theme(colors.line),theme(colors.line)_8px,transparent_8px,transparent_16px)]">
                             <span class="font-mono text-xs text-ink-soft bg-white px-2 py-0.5 rounded shadow-xs">ảnh sản phẩm</span>
@@ -57,7 +57,7 @@
                     <div class="mt-4 grid grid-cols-5 gap-3">
                         @foreach ($product->images as $image)
                             <div class="aspect-square bg-gray-50 border border-line rounded-xl overflow-hidden">
-                                <img src="{{ $image->url }}" alt="" class="w-full h-full object-cover">
+                                <img src="{{ $image->url }}" alt="" loading="lazy" decoding="async" class="w-full h-full object-cover">
                             </div>
                         @endforeach
                     </div>
@@ -82,6 +82,7 @@
                         <template x-for="color in colors" :key="color">
                             <button
                                 type="button"
+                                data-testid="variant-color-button"
                                 @click="selectColor(color)"
                                 :class="selected?.color === color ? 'border-brand text-brand bg-brand/5' : 'border-line text-ink hover:border-brand hover:text-brand'"
                                 class="px-4 py-2 text-sm rounded-xl border-[1.5px] font-medium transition"
@@ -115,6 +116,7 @@
 
                     <button
                         type="submit"
+                        data-testid="add-to-cart-button"
                         :disabled="!selected || selected.stock <= 0"
                         class="flex-1 px-8 py-3 rounded-2xl text-white font-semibold disabled:bg-gray-300 disabled:cursor-not-allowed bg-brand hover:bg-brand-dark shadow-sm transition"
                     >

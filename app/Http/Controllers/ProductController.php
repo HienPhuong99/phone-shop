@@ -40,8 +40,8 @@ class ProductController extends Controller
 
         $products = $query->paginate(12)->withQueryString();
 
-        $allSeries = ProductSeries::orderBy('sort_order')->get();
-        $categories = Category::whereNull('parent_id')->orderBy('name')->get();
+        $allSeries = ProductSeries::navList();
+        $categories = Category::navList();
 
         return view('products.index', compact('products', 'allSeries', 'categories'));
     }

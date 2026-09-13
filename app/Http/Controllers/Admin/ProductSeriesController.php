@@ -7,6 +7,7 @@ use App\Models\ProductSeries;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -36,6 +37,8 @@ class ProductSeriesController extends Controller
 
         ProductSeries::create($data);
 
+        Cache::forget(ProductSeries::NAV_CACHE_KEY);
+
         return redirect()->route('admin.product-series.index')->with('status', 'Đã tạo dòng sản phẩm.');
     }
 
@@ -54,6 +57,8 @@ class ProductSeriesController extends Controller
 
         $productSeries->update($data);
 
+        Cache::forget(ProductSeries::NAV_CACHE_KEY);
+
         return redirect()->route('admin.product-series.index')->with('status', 'Đã cập nhật dòng sản phẩm.');
     }
 
@@ -64,6 +69,8 @@ class ProductSeriesController extends Controller
         } catch (QueryException) {
             return back()->with('error', 'Không thể xoá dòng sản phẩm vì vẫn còn sản phẩm thuộc dòng này.');
         }
+
+        Cache::forget(ProductSeries::NAV_CACHE_KEY);
 
         return back()->with('status', 'Đã xoá dòng sản phẩm.');
     }

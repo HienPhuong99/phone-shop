@@ -7,14 +7,16 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductSeries;
+use App\Services\ImageUploadService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class ProductController extends Controller
 {
+    public function __construct(private readonly ImageUploadService $imageUploadService) {}
+
     public function index(Request $request): View
     {
         $products = Product::query()
@@ -41,9 +43,7 @@ class ProductController extends Controller
         $data = $this->validated($request);
 
         if ($request->hasFile('thumbnail')) {
-            $data['thumbnail'] = Storage::disk('public')->url(
-                $request->file('thumbnail')->store('products', 'public')
-            );
+            $data['thumbnail'] = $this->imageUploadService->store($request->file('thumbnail'), 'products');
         }
 
         $product = Product::create($data);
@@ -66,9 +66,7 @@ class ProductController extends Controller
         $data = $this->validated($request, $product);
 
         if ($request->hasFile('thumbnail')) {
-            $data['thumbnail'] = Storage::disk('public')->url(
-                $request->file('thumbnail')->store('products', 'public')
-            );
+            $data['thumbnail'] = $this->imageUploadService->store($request->file('thumbnail'), 'products');
         }
 
         $product->update($data);
