@@ -5,21 +5,21 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Services\ImageUploadService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class ProductImageController extends Controller
 {
+    public function __construct(private readonly ImageUploadService $imageUploadService) {}
+
     public function store(Request $request, Product $product): RedirectResponse
     {
         $request->validate([
             'image' => ['required', 'image', 'max:4096'],
         ]);
 
-        $url = Storage::disk('public')->url(
-            $request->file('image')->store('products', 'public')
-        );
+        $url = $this->imageUploadService->store($request->file('image'), 'products');
 
         $product->images()->create([
             'url' => $url,

@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -32,6 +33,8 @@ class CategoryController extends Controller
 
         Category::create($data);
 
+        Cache::forget(Category::NAV_CACHE_KEY);
+
         return redirect()->route('admin.categories.index')->with('status', 'Đã tạo danh mục.');
     }
 
@@ -48,6 +51,8 @@ class CategoryController extends Controller
 
         $category->update($data);
 
+        Cache::forget(Category::NAV_CACHE_KEY);
+
         return redirect()->route('admin.categories.index')->with('status', 'Đã cập nhật danh mục.');
     }
 
@@ -58,6 +63,8 @@ class CategoryController extends Controller
         } catch (QueryException) {
             return back()->with('error', 'Không thể xoá danh mục vì vẫn còn sản phẩm hoặc danh mục con thuộc danh mục này.');
         }
+
+        Cache::forget(Category::NAV_CACHE_KEY);
 
         return back()->with('status', 'Đã xoá danh mục.');
     }

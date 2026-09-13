@@ -58,6 +58,26 @@ Trong service web → tab **Settings → Networking → Generate Domain**. Railw
 - Thử đăng ký tài khoản, thêm giỏ hàng, đặt hàng COD.
 - Đăng nhập `admin@phoneshop.test` / `password` (đổi mật khẩu này ngay sau khi demo xong) để vào `/admin`.
 
+## 7. (Khuyến nghị) Thêm Redis cho cache/session/queue
+
+Mặc định `CACHE_STORE`, `SESSION_DRIVER`, `QUEUE_CONNECTION` đều dùng driver `database` — đơn giản, chạy được ngay không cần thêm gì, nhưng mỗi lần đọc/ghi cache hay session lại tốn thêm một round-trip MySQL. Khi đã có traffic thật, nâng cấp sang Redis rẻ và nhanh hơn đáng kể:
+
+1. Trong project Railway, bấm **+ New → Database → Add Redis**. Railway tự tạo các biến `REDISHOST`, `REDISPORT`, `REDISUSER`, `REDISPASSWORD`.
+2. Ở service web → tab **Variables**, cập nhật:
+
+   | Biến | Giá trị |
+   |---|---|
+   | `CACHE_STORE` | redis |
+   | `SESSION_DRIVER` | redis |
+   | `QUEUE_CONNECTION` | redis |
+   | `REDIS_HOST` | `${{Redis.REDISHOST}}` |
+   | `REDIS_PORT` | `${{Redis.REDISPORT}}` |
+   | `REDIS_PASSWORD` | `${{Redis.REDISPASSWORD}}` |
+
+3. Redeploy. `REDIS_CLIENT=phpredis` đã có sẵn trong `.env.example`/config mặc định của Laravel và dùng extension `redis` của PHP (không cần thêm package Composer nào).
+
+Không bắt buộc cho môi trường local/demo — driver `database` mặc định vẫn hoạt động đúng, chỉ là chậm hơn khi có nhiều người dùng đồng thời.
+
 ## Lưu ý quan trọng
 
 - **Dev dependencies vẫn được cài ở production:** `nixpacks.toml` không dùng `--no-dev` vì seeder dùng `fakerphp/faker` (dev dependency) để tạo dữ liệu demo sau khi deploy. Đây là đánh đổi hợp lý cho dự án demo/CV; một app production thật nên tách seeder ra và dùng `--no-dev`.

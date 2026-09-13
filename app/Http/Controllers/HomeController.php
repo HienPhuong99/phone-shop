@@ -18,8 +18,8 @@ class HomeController extends Controller
             ->take(8)
             ->get();
 
-        $categories = Category::whereNull('parent_id')->orderBy('name')->get();
-        $series = ProductSeries::orderBy('sort_order')->get();
+        $categories = Category::navList();
+        $series = ProductSeries::navList();
 
         return view('home', compact('featuredProducts', 'categories', 'series'));
     }
