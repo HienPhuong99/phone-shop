@@ -96,8 +96,16 @@
             </main>
 
             <footer class="bg-white border-t border-line mt-12">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-sm text-ink-soft text-center">
-                    &copy; {{ date('Y') }} TAM300.
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+                    <div class="flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm font-medium text-ink-soft">
+                        <a href="{{ route('pages.services') }}" class="hover:text-brand transition">Dịch vụ</a>
+                        <a href="{{ route('pages.policies') }}" class="hover:text-brand transition">Chính sách</a>
+                        <a href="{{ route('pages.about') }}" class="hover:text-brand transition">Giới thiệu</a>
+                        <a href="{{ route('pages.contact') }}" class="hover:text-brand transition">Liên hệ</a>
+                    </div>
+                    <div class="mt-6 text-sm text-ink-soft text-center">
+                        &copy; {{ date('Y') }} TAM300.
+                    </div>
                 </div>
             </footer>
         </div>
