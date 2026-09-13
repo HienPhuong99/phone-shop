@@ -11,8 +11,18 @@ export default {
 
     theme: {
         extend: {
+            colors: {
+                ink: 'oklch(18% 0.008 240)',
+                'ink-soft': 'oklch(48% 0.008 240)',
+                paper: 'oklch(98% 0.003 240)',
+                line: 'oklch(90% 0.006 240)',
+                accent: 'oklch(52% 0.14 220)',
+                'accent-dark': 'oklch(42% 0.14 220)',
+                'accent-light': 'oklch(75% 0.09 220)',
+            },
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['"Plus Jakarta Sans"', ...defaultTheme.fontFamily.sans],
+                serif: ['Fraunces', 'serif'],
             },
         },
     },
