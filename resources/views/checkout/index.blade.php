@@ -42,15 +42,15 @@
                         <div class="mt-3 space-y-3">
                             <div>
                                 <x-input-label for="recipient_name" value="Họ tên người nhận" />
-                                <x-text-input id="recipient_name" name="recipient_name" class="block mt-1 w-full rounded-xl border-line text-sm focus:border-brand focus:ring-brand" :value="old('recipient_name')" />
+                                <x-text-input id="recipient_name" name="recipient_name" autocomplete="name" class="block mt-1 w-full rounded-xl border-line text-sm focus:border-brand focus:ring-brand" :value="old('recipient_name')" />
                             </div>
                             <div>
                                 <x-input-label for="phone" value="Số điện thoại" />
-                                <x-text-input id="phone" name="phone" class="block mt-1 w-full rounded-xl border-line text-sm focus:border-brand focus:ring-brand" :value="old('phone')" />
+                                <x-text-input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" class="block mt-1 w-full rounded-xl border-line text-sm focus:border-brand focus:ring-brand" :value="old('phone')" />
                             </div>
                             <div>
                                 <x-input-label for="address_line" value="Địa chỉ" />
-                                <x-text-input id="address_line" name="address_line" class="block mt-1 w-full rounded-xl border-line text-sm focus:border-brand focus:ring-brand" :value="old('address_line')" />
+                                <x-text-input id="address_line" name="address_line" autocomplete="street-address" class="block mt-1 w-full rounded-xl border-line text-sm focus:border-brand focus:ring-brand" :value="old('address_line')" />
                             </div>
                         </div>
                     </details>

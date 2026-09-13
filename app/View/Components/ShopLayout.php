@@ -7,7 +7,7 @@ use Illuminate\View\View;
 
 class ShopLayout extends Component
 {
-    public function __construct(public ?string $title = null) {}
+    public function __construct(public ?string $title = null, public bool $hideBottomNav = false) {}
 
     /**
      * Get the view / contents that represents the component.

@@ -14,7 +14,7 @@
         @else
             <div class="border border-line rounded-2xl bg-white shadow-sm divide-y divide-line overflow-hidden">
                 @foreach ($cart->items as $item)
-                    <div class="flex items-center gap-4 p-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-4">
                         <div class="flex-1 min-w-0">
                             <a href="{{ route('products.show', $item->variant->product->slug) }}" class="font-semibold text-ink hover:text-brand transition">
                                 {{ $item->variant->product->name }}
@@ -23,20 +23,22 @@
                             <p class="text-sm text-brand font-semibold">{{ number_format($item->variant->price, 0, ',', '.') }}đ</p>
                         </div>
 
-                        <form method="POST" action="{{ route('cart.update', $item) }}" class="flex items-center gap-2">
-                            @csrf
-                            @method('PATCH')
-                            <input type="number" name="quantity" value="{{ $item->quantity }}" min="1" max="{{ $item->variant->stock_quantity }}" class="w-16 rounded-xl border-line text-sm focus:border-brand focus:ring-brand">
-                            <button type="submit" class="text-sm font-medium text-brand hover:text-brand-dark">Cập nhật</button>
-                        </form>
+                        <div class="flex items-center justify-between gap-3 sm:justify-end sm:gap-4">
+                            <form method="POST" action="{{ route('cart.update', $item) }}" class="flex items-center gap-2">
+                                @csrf
+                                @method('PATCH')
+                                <input type="number" inputmode="numeric" name="quantity" value="{{ $item->quantity }}" min="1" max="{{ $item->variant->stock_quantity }}" class="w-16 rounded-xl border-line text-sm focus:border-brand focus:ring-brand">
+                                <button type="submit" class="text-sm font-medium text-brand hover:text-brand-dark">Cập nhật</button>
+                            </form>
 
-                        <p class="w-28 text-right font-semibold text-ink">{{ number_format($item->quantity * $item->variant->price, 0, ',', '.') }}đ</p>
+                            <p class="sm:w-28 text-right font-semibold text-ink">{{ number_format($item->quantity * $item->variant->price, 0, ',', '.') }}đ</p>
 
-                        <form method="POST" action="{{ route('cart.destroy', $item) }}">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-sm text-red-500 hover:text-red-700 hover:underline">Xoá</button>
-                        </form>
+                            <form method="POST" action="{{ route('cart.destroy', $item) }}">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-sm text-red-500 hover:text-red-700 hover:underline">Xoá</button>
+                            </form>
+                        </div>
                     </div>
                 @endforeach
             </div>
