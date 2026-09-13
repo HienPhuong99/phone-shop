@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+  <rect width="800" height="800" fill="#fbebf2"/>
+  <g transform="translate(400 380)">
+    <rect x="-110" y="-190" width="220" height="380" rx="34" fill="none" stroke="#C2447B" stroke-width="10"/>
+    <rect x="-90" y="-165" width="180" height="300" rx="6" fill="#C2447B" fill-opacity="0.07"/>
+    <circle cx="0" cy="150" r="7" fill="#C2447B"/>
+    <rect x="-24" y="-178" width="48" height="8" rx="4" fill="#C2447B"/>
+    <g fill="#C2447B">
+      <circle cx="-38" cy="-120" r="16"/>
+      <circle cx="10" cy="-120" r="16"/>
+      <circle cx="-14" cy="-72" r="16"/>
+    </g>
+  </g>
+  <text x="400" y="600" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="26" font-weight="800" fill="#C2447B">iPhone 13 Pro</text>
+  <text x="400" y="630" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="16" font-weight="600" letter-spacing="1.5" fill="#C2447B" fill-opacity="0.55">IPHONE 13 SERIES</text>
+</svg>

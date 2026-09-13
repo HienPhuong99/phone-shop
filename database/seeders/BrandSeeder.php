@@ -13,7 +13,9 @@ class BrandSeeder extends Seeder
      */
     public function run(): void
     {
-        $brands = ['Apple', 'Samsung', 'Xiaomi', 'Oppo', 'Vivo', 'Realme'];
+        // Storefront now sells Apple exclusively; kept as a table (not hardcoded)
+        // so the admin brand CRUD and schema stay reusable if that changes later.
+        $brands = ['Apple'];
 
         foreach ($brands as $name) {
             Brand::updateOrCreate(

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductSeries;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -17,7 +18,7 @@ class ProductController extends Controller
     public function index(Request $request): View
     {
         $products = Product::query()
-            ->with(['brand', 'category'])
+            ->with(['brand', 'category', 'series'])
             ->when($request->filled('search'), fn ($q) => $q->where('name', 'like', '%'.$request->string('search').'%'))
             ->latest()
             ->paginate(15)
@@ -30,8 +31,9 @@ class ProductController extends Controller
     {
         $categories = Category::orderBy('name')->get();
         $brands = Brand::orderBy('name')->get();
+        $allSeries = ProductSeries::orderBy('sort_order')->get();
 
-        return view('admin.products.create', compact('categories', 'brands'));
+        return view('admin.products.create', compact('categories', 'brands', 'allSeries'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -54,8 +56,9 @@ class ProductController extends Controller
         $product->load(['variants', 'images']);
         $categories = Category::orderBy('name')->get();
         $brands = Brand::orderBy('name')->get();
+        $allSeries = ProductSeries::orderBy('sort_order')->get();
 
-        return view('admin.products.edit', compact('product', 'categories', 'brands'));
+        return view('admin.products.edit', compact('product', 'categories', 'brands', 'allSeries'));
     }
 
     public function update(Request $request, Product $product): RedirectResponse
@@ -85,6 +88,7 @@ class ProductController extends Controller
         $data = $request->validate([
             'category_id' => ['required', 'integer', 'exists:categories,id'],
             'brand_id' => ['required', 'integer', 'exists:brands,id'],
+            'series_id' => ['required', 'integer', 'exists:product_series,id'],
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'base_price' => ['required', 'numeric', 'min:0'],

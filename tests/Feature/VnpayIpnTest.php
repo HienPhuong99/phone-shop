@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Models\ProductSeries;
 use App\Models\ProductVariant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -31,6 +32,7 @@ class VnpayIpnTest extends TestCase
         $product = Product::create([
             'category_id' => Category::create(['name' => 'Điện thoại', 'slug' => 'dien-thoai'])->id,
             'brand_id' => Brand::create(['name' => 'Apple', 'slug' => 'apple'])->id,
+            'series_id' => ProductSeries::create(['name' => 'iPhone 15 Series', 'slug' => 'iphone-15-series'])->id,
             'name' => 'iPhone Test',
             'slug' => 'iphone-test',
             'base_price' => 20000000,

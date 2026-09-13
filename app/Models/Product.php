@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['category_id', 'brand_id', 'name', 'slug', 'description', 'base_price', 'thumbnail', 'status'])]
+#[Fillable(['category_id', 'brand_id', 'series_id', 'name', 'slug', 'description', 'base_price', 'thumbnail', 'status'])]
 class Product extends Model
 {
     /** @use HasFactory<ProductFactory> */
@@ -35,6 +35,11 @@ class Product extends Model
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class);
+    }
+
+    public function series(): BelongsTo
+    {
+        return $this->belongsTo(ProductSeries::class, 'series_id');
     }
 
     public function variants(): HasMany

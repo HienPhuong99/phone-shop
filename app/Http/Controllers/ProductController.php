@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductSeries;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -14,10 +14,10 @@ class ProductController extends Controller
     {
         $query = Product::query()
             ->where('status', 'active')
-            ->with(['brand', 'category', 'variants']);
+            ->with(['series', 'category', 'variants']);
 
-        if ($request->filled('brand')) {
-            $query->whereHas('brand', fn ($q) => $q->where('slug', $request->string('brand')));
+        if ($request->filled('series')) {
+            $query->whereHas('series', fn ($q) => $q->where('slug', $request->string('series')));
         }
 
         if ($request->filled('category')) {
@@ -40,15 +40,15 @@ class ProductController extends Controller
 
         $products = $query->paginate(12)->withQueryString();
 
-        $brands = Brand::orderBy('name')->get();
+        $allSeries = ProductSeries::orderBy('sort_order')->get();
         $categories = Category::whereNull('parent_id')->orderBy('name')->get();
 
-        return view('products.index', compact('products', 'brands', 'categories'));
+        return view('products.index', compact('products', 'allSeries', 'categories'));
     }
 
     public function show(Product $product): View
     {
-        $product->load(['brand', 'category', 'variants', 'images']);
+        $product->load(['series', 'category', 'variants', 'images']);
 
         return view('products.show', compact('product'));
     }

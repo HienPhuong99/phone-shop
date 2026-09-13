@@ -9,7 +9,7 @@
             <x-text-input id="name" name="name" class="block mt-1 w-full" :value="old('name')" required />
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-3 gap-4">
             <div>
                 <x-input-label for="category_id" value="Danh mục" />
                 <select id="category_id" name="category_id" class="block mt-1 w-full rounded-md border-gray-300" required>
@@ -25,6 +25,15 @@
                     <option value="">— Chọn —</option>
                     @foreach ($brands as $brand)
                         <option value="{{ $brand->id }}" {{ old('brand_id') == $brand->id ? 'selected' : '' }}>{{ $brand->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
+                <x-input-label for="series_id" value="Dòng sản phẩm" />
+                <select id="series_id" name="series_id" class="block mt-1 w-full rounded-md border-gray-300" required>
+                    <option value="">— Chọn —</option>
+                    @foreach ($allSeries as $item)
+                        <option value="{{ $item->id }}" {{ old('series_id') == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
                     @endforeach
                 </select>
             </div>

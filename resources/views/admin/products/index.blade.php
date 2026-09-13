@@ -13,7 +13,7 @@
             <div class="flex items-center justify-between p-4">
                 <div>
                     <p class="font-medium text-gray-900">{{ $product->name }}</p>
-                    <p class="text-sm text-gray-500">{{ $product->brand->name }} — {{ $product->category->name }} — {{ number_format($product->base_price, 0, ',', '.') }}đ</p>
+                    <p class="text-sm text-gray-500">{{ $product->series->name }} — {{ $product->category->name }} — {{ number_format($product->base_price, 0, ',', '.') }}đ</p>
                 </div>
                 <div class="flex items-center gap-3 text-sm">
                     <span class="px-2 py-1 rounded-full text-xs {{ $product->status === 'active' ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-500' }}">

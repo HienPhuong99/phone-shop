@@ -5,6 +5,7 @@ namespace Tests\Feature\Admin;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductSeries;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -22,6 +23,8 @@ class ProductManagementTest extends TestCase
     private Category $category;
 
     private Brand $brand;
+
+    private ProductSeries $series;
 
     protected function setUp(): void
     {
@@ -44,6 +47,7 @@ class ProductManagementTest extends TestCase
 
         $this->category = Category::create(['name' => 'Điện thoại', 'slug' => 'dien-thoai']);
         $this->brand = Brand::create(['name' => 'Apple', 'slug' => 'apple']);
+        $this->series = ProductSeries::create(['name' => 'iPhone 15 Series', 'slug' => 'iphone-15-series']);
     }
 
     public function test_non_admin_cannot_access_admin_panel(): void
@@ -67,6 +71,7 @@ class ProductManagementTest extends TestCase
         $response = $this->actingAs($this->admin)->post('/admin/products', [
             'category_id' => $this->category->id,
             'brand_id' => $this->brand->id,
+            'series_id' => $this->series->id,
             'name' => 'iPhone Test',
             'base_price' => 20000000,
             'status' => 'active',
@@ -85,6 +90,7 @@ class ProductManagementTest extends TestCase
         $product = Product::create([
             'category_id' => $this->category->id,
             'brand_id' => $this->brand->id,
+            'series_id' => $this->series->id,
             'name' => 'iPhone Test',
             'slug' => 'iphone-test',
             'base_price' => 20000000,
@@ -116,6 +122,7 @@ class ProductManagementTest extends TestCase
         Product::create([
             'category_id' => $this->category->id,
             'brand_id' => $this->brand->id,
+            'series_id' => $this->series->id,
             'name' => 'iPhone Test',
             'slug' => 'iphone-test',
             'base_price' => 20000000,

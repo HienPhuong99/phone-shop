@@ -35,28 +35,28 @@
         }"
     >
         <nav class="text-sm text-ink-soft mb-6">
-            <a href="{{ route('home') }}" class="hover:text-ink">Trang chủ</a> /
-            <a href="{{ route('products.index') }}" class="hover:text-ink">Sản phẩm</a> /
-            <span class="text-ink">{{ $product->name }}</span>
+            <a href="{{ route('home') }}" class="hover:text-brand transition">Trang chủ</a> /
+            <a href="{{ route('products.index') }}" class="hover:text-brand transition">Sản phẩm</a> /
+            <span class="text-ink font-medium">{{ $product->name }}</span>
         </nav>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <!-- Ảnh sản phẩm -->
             <div>
-                <div class="aspect-square bg-white border border-line rounded-[2px] flex items-center justify-center overflow-hidden">
+                <div class="aspect-square bg-white border border-line rounded-2xl shadow-sm flex items-center justify-center overflow-hidden">
                     @if ($product->thumbnail)
                         <img src="{{ $product->thumbnail }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
                     @else
                         <div class="w-full h-full flex items-center justify-center bg-[repeating-linear-gradient(45deg,theme(colors.line),theme(colors.line)_8px,transparent_8px,transparent_16px)]">
-                            <span class="font-mono text-xs text-ink-soft bg-white px-1">ảnh sản phẩm</span>
+                            <span class="font-mono text-xs text-ink-soft bg-white px-2 py-0.5 rounded shadow-xs">ảnh sản phẩm</span>
                         </div>
                     @endif
                 </div>
 
                 @if ($product->images->isNotEmpty())
-                    <div class="mt-4 grid grid-cols-5 gap-2">
+                    <div class="mt-4 grid grid-cols-5 gap-3">
                         @foreach ($product->images as $image)
-                            <div class="aspect-square bg-gray-100 rounded-[2px] overflow-hidden">
+                            <div class="aspect-square bg-gray-50 border border-line rounded-xl overflow-hidden">
                                 <img src="{{ $image->url }}" alt="" class="w-full h-full object-cover">
                             </div>
                         @endforeach
@@ -66,25 +66,25 @@
 
             <!-- Thông tin -->
             <div>
-                <p class="text-xs font-bold tracking-wide uppercase text-ink-soft">{{ $product->brand->name }}</p>
-                <h1 class="mt-1 font-serif text-[32px] font-medium text-ink">{{ $product->name }}</h1>
+                <p class="text-xs font-bold tracking-wide uppercase text-brand">{{ $product->series->name }}</p>
+                <h1 class="mt-1 font-bold text-3xl text-ink">{{ $product->name }}</h1>
 
-                <p class="mt-4 text-accent text-[32px] font-bold" x-text="new Intl.NumberFormat('vi-VN').format(selected?.price ?? {{ $product->base_price }}) + 'đ'"></p>
+                <p class="mt-4 text-brand text-3xl font-extrabold" x-text="new Intl.NumberFormat('vi-VN').format(selected?.price ?? {{ $product->base_price }}) + 'đ'"></p>
 
                 <template x-if="selected">
-                    <p class="mt-1 text-sm" :class="selected.stock > 0 ? 'text-[oklch(52%_0.12_150)]' : 'text-red-500'" x-text="selected.stock > 0 ? `Còn hàng (${selected.stock} sản phẩm)` : 'Hết hàng'"></p>
+                    <p class="mt-1 text-sm font-medium" :class="selected.stock > 0 ? 'text-emerald-600' : 'text-red-500'" x-text="selected.stock > 0 ? `Còn hàng (${selected.stock} sản phẩm)` : 'Hết hàng'"></p>
                 </template>
 
                 <!-- Chọn màu -->
                 <div class="mt-6">
-                    <p class="text-sm font-medium text-ink mb-2">Màu sắc</p>
+                    <p class="text-sm font-semibold text-ink mb-2">Màu sắc</p>
                     <div class="flex flex-wrap gap-2">
                         <template x-for="color in colors" :key="color">
                             <button
                                 type="button"
                                 @click="selectColor(color)"
-                                :class="selected?.color === color ? 'border-accent text-accent' : 'border-line text-ink'"
-                                class="px-4 py-2 text-sm rounded-[2px] border-[1.5px] hover:border-accent"
+                                :class="selected?.color === color ? 'border-brand text-brand bg-brand/5' : 'border-line text-ink hover:border-brand hover:text-brand'"
+                                class="px-4 py-2 text-sm rounded-xl border-[1.5px] font-medium transition"
                                 x-text="color"
                             ></button>
                         </template>
@@ -93,14 +93,14 @@
 
                 <!-- Chọn dung lượng -->
                 <div class="mt-4">
-                    <p class="text-sm font-medium text-ink mb-2">Dung lượng</p>
+                    <p class="text-sm font-semibold text-ink mb-2">Dung lượng</p>
                     <div class="flex flex-wrap gap-2">
                         <template x-for="storage in storagesForColor" :key="storage">
                             <button
                                 type="button"
                                 @click="selectStorage(storage)"
-                                :class="selected?.storage === storage ? 'border-accent text-accent' : 'border-line text-ink'"
-                                class="px-4 py-2 text-sm rounded-[2px] border-[1.5px] hover:border-accent"
+                                :class="selected?.storage === storage ? 'border-brand text-brand bg-brand/5' : 'border-line text-ink hover:border-brand hover:text-brand'"
+                                class="px-4 py-2 text-sm rounded-xl border-[1.5px] font-medium transition"
                                 x-text="storage"
                             ></button>
                         </template>
@@ -111,12 +111,12 @@
                     @csrf
                     <input type="hidden" name="variant_id" :value="selectedId">
 
-                    <input type="number" name="quantity" value="1" min="1" :max="selected?.stock ?? 1" class="w-20 rounded-[2px] border-line text-sm">
+                    <input type="number" name="quantity" value="1" min="1" :max="selected?.stock ?? 1" class="w-20 rounded-xl border-line text-sm focus:border-brand focus:ring-brand">
 
                     <button
                         type="submit"
                         :disabled="!selected || selected.stock <= 0"
-                        class="flex-1 px-8 py-3 rounded-[2px] text-white font-medium disabled:bg-gray-300 disabled:cursor-not-allowed bg-ink hover:bg-ink/90"
+                        class="flex-1 px-8 py-3 rounded-2xl text-white font-semibold disabled:bg-gray-300 disabled:cursor-not-allowed bg-brand hover:bg-brand-dark shadow-sm transition"
                     >
                         Thêm vào giỏ hàng
                     </button>
