@@ -93,14 +93,46 @@ class ProductController extends Controller
             'series_id' => ['required', 'integer', 'exists:product_series,id'],
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
+            'specifications' => ['nullable', 'string'],
             'base_price' => ['required', 'numeric', 'min:0'],
             'status' => ['required', 'in:active,inactive'],
             'thumbnail' => ['nullable', 'image', 'max:4096'],
         ]);
 
         unset($data['thumbnail']);
+        $data['specifications'] = $this->parseSpecifications($data['specifications'] ?? null);
         $data['slug'] = $product?->slug ?? Str::slug($data['name']).'-'.Str::random(4);
 
         return $data;
+    }
+
+    /**
+     * Parse "Label: value" lines from the admin textarea into an ordered map.
+     *
+     * @return array<string, string>|null
+     */
+    private function parseSpecifications(?string $raw): ?array
+    {
+        if (blank($raw)) {
+            return null;
+        }
+
+        $specifications = [];
+
+        foreach (preg_split('/\r\n|\r|\n/', $raw) as $line) {
+            if (blank($line) || ! str_contains($line, ':')) {
+                continue;
+            }
+
+            [$label, $value] = explode(':', $line, 2);
+            $label = trim($label);
+            $value = trim($value);
+
+            if ($label !== '' && $value !== '') {
+                $specifications[$label] = $value;
+            }
+        }
+
+        return $specifications === [] ? null : $specifications;
     }
 }

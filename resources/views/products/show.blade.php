@@ -128,7 +128,21 @@
                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                 @enderror
 
-                <div class="mt-10 border-t border-line pt-6">
+                @if (! empty($product->specifications))
+                    <div class="mt-10 border-t border-line pt-6">
+                        <h2 class="text-sm font-semibold text-ink mb-3">Thông số kỹ thuật</h2>
+                        <dl class="divide-y divide-line rounded-xl border border-line overflow-hidden">
+                            @foreach ($product->specifications as $label => $value)
+                                <div class="flex flex-col sm:flex-row gap-1 sm:gap-4 px-4 py-2.5 odd:bg-gray-50/60">
+                                    <dt class="w-full sm:w-48 shrink-0 text-sm font-medium text-ink">{{ $label }}</dt>
+                                    <dd class="text-sm text-ink-soft">{{ $value }}</dd>
+                                </div>
+                            @endforeach
+                        </dl>
+                    </div>
+                @endif
+
+                <div class="mt-6 border-t border-line pt-6">
                     <h2 class="text-sm font-semibold text-ink mb-2">Mô tả sản phẩm</h2>
                     <p class="text-sm text-ink-soft whitespace-pre-line">{{ $product->description }}</p>
                 </div>

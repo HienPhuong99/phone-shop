@@ -58,6 +58,12 @@
         </div>
 
         <div>
+            <x-input-label for="specifications" value="Thông số kỹ thuật" />
+            <p class="text-xs text-gray-500 mt-1">Mỗi dòng một thông số, theo định dạng "Tên: Giá trị" (ví dụ: Màn hình: 6.1 inch OLED).</p>
+            <textarea id="specifications" name="specifications" rows="6" class="block mt-1 w-full rounded-md border-gray-300 font-mono text-sm">{{ old('specifications') }}</textarea>
+        </div>
+
+        <div>
             <x-input-label for="description" value="Mô tả" />
             <textarea id="description" name="description" rows="5" class="block mt-1 w-full rounded-md border-gray-300">{{ old('description') }}</textarea>
         </div>
