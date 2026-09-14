@@ -1028,7 +1028,7 @@ class ProductSeeder extends Seeder
                     DESC,
                 'colors' => ['Đen', 'Trắng', 'Xanh dương'],
                 'storages' => [
-                    ['label' => '64GB', 'price' => 8000000],
+                    ['label' => '64GB', 'price' => 5200000],
                     ['label' => '128GB', 'price' => 9200000],
                     ['label' => '256GB', 'price' => 10400000],
                 ],
@@ -1062,7 +1062,7 @@ class ProductSeeder extends Seeder
                     DESC,
                 'colors' => ['Pacific Blue', 'Than chì', 'Bạc'],
                 'storages' => [
-                    ['label' => '128GB', 'price' => 10000000],
+                    ['label' => '128GB', 'price' => 7300000],
                     ['label' => '256GB', 'price' => 11500000],
                     ['label' => '512GB', 'price' => 13000000],
                 ],
@@ -1096,7 +1096,7 @@ class ProductSeeder extends Seeder
                     DESC,
                 'colors' => ['Pacific Blue', 'Than chì', 'Bạc'],
                 'storages' => [
-                    ['label' => '128GB', 'price' => 12000000],
+                    ['label' => '128GB', 'price' => 9600000],
                     ['label' => '256GB', 'price' => 13500000],
                     ['label' => '512GB', 'price' => 15000000],
                 ],
@@ -1314,7 +1314,7 @@ class ProductSeeder extends Seeder
                     DESC,
                 'colors' => ['Midnight', 'Xanh dương', 'Tím'],
                 'storages' => [
-                    ['label' => '128GB', 'price' => 13000000],
+                    ['label' => '128GB', 'price' => 8700000],
                     ['label' => '256GB', 'price' => 14500000],
                     ['label' => '512GB', 'price' => 16000000],
                 ],
@@ -1348,7 +1348,7 @@ class ProductSeeder extends Seeder
                     DESC,
                 'colors' => ['Midnight', 'Xanh dương', 'Vàng'],
                 'storages' => [
-                    ['label' => '128GB', 'price' => 14500000],
+                    ['label' => '128GB', 'price' => 9600000],
                     ['label' => '256GB', 'price' => 16000000],
                     ['label' => '512GB', 'price' => 17500000],
                 ],
@@ -1381,7 +1381,7 @@ class ProductSeeder extends Seeder
                     DESC,
                 'colors' => ['Deep Purple', 'Space Black', 'Vàng'],
                 'storages' => [
-                    ['label' => '128GB', 'price' => 18000000],
+                    ['label' => '128GB', 'price' => 12400000],
                     ['label' => '256GB', 'price' => 19500000],
                     ['label' => '512GB', 'price' => 21000000],
                     ['label' => '1TB', 'price' => 23000000],
@@ -1416,7 +1416,7 @@ class ProductSeeder extends Seeder
                     DESC,
                 'colors' => ['Deep Purple', 'Space Black', 'Bạc'],
                 'storages' => [
-                    ['label' => '128GB', 'price' => 20000000],
+                    ['label' => '128GB', 'price' => 14600000],
                     ['label' => '256GB', 'price' => 21500000],
                     ['label' => '512GB', 'price' => 23000000],
                     ['label' => '1TB', 'price' => 25000000],
@@ -1455,7 +1455,7 @@ class ProductSeeder extends Seeder
                     DESC,
                 'colors' => ['Đen', 'Xanh dương', 'Hồng pastel'],
                 'storages' => [
-                    ['label' => '128GB', 'price' => 16000000],
+                    ['label' => '128GB', 'price' => 11300000],
                     ['label' => '256GB', 'price' => 17500000],
                     ['label' => '512GB', 'price' => 19000000],
                 ],
@@ -1489,7 +1489,7 @@ class ProductSeeder extends Seeder
                     DESC,
                 'colors' => ['Đen', 'Xanh lá', 'Hồng'],
                 'storages' => [
-                    ['label' => '128GB', 'price' => 18000000],
+                    ['label' => '128GB', 'price' => 13700000],
                     ['label' => '256GB', 'price' => 19500000],
                     ['label' => '512GB', 'price' => 21000000],
                 ],
@@ -1523,7 +1523,7 @@ class ProductSeeder extends Seeder
                     DESC,
                 'colors' => ['Titan Tự nhiên', 'Titan Xanh', 'Titan Trắng'],
                 'storages' => [
-                    ['label' => '128GB', 'price' => 22000000],
+                    ['label' => '128GB', 'price' => 15500000],
                     ['label' => '256GB', 'price' => 23500000],
                     ['label' => '512GB', 'price' => 25000000],
                     ['label' => '1TB', 'price' => 27000000],
@@ -1557,7 +1557,7 @@ class ProductSeeder extends Seeder
                     DESC,
                 'colors' => ['Titan Tự nhiên', 'Titan Xanh', 'Titan Đen'],
                 'storages' => [
-                    ['label' => '256GB', 'price' => 26000000],
+                    ['label' => '256GB', 'price' => 19000000],
                     ['label' => '512GB', 'price' => 28000000],
                     ['label' => '1TB', 'price' => 31000000],
                 ],
@@ -1594,7 +1594,7 @@ class ProductSeeder extends Seeder
                     DESC,
                 'colors' => ['Đen', 'Xanh Mòng Két (Teal)', 'Xanh Lưu Ly (Ultramarine)'],
                 'storages' => [
-                    ['label' => '128GB', 'price' => 19000000],
+                    ['label' => '128GB', 'price' => 16900000],
                     ['label' => '256GB', 'price' => 20500000],
                     ['label' => '512GB', 'price' => 22000000],
                 ],
@@ -1628,7 +1628,7 @@ class ProductSeeder extends Seeder
                     DESC,
                 'colors' => ['Đen', 'Trắng', 'Hồng'],
                 'storages' => [
-                    ['label' => '128GB', 'price' => 21000000],
+                    ['label' => '128GB', 'price' => 19900000],
                     ['label' => '256GB', 'price' => 22500000],
                     ['label' => '512GB', 'price' => 24000000],
                 ],
@@ -1661,7 +1661,7 @@ class ProductSeeder extends Seeder
                     DESC,
                 'colors' => ['Titan Sa Mạc (Desert)', 'Titan Tự nhiên', 'Titan Trắng'],
                 'storages' => [
-                    ['label' => '128GB', 'price' => 26000000],
+                    ['label' => '128GB', 'price' => 23800000],
                     ['label' => '256GB', 'price' => 27500000],
                     ['label' => '512GB', 'price' => 29000000],
                     ['label' => '1TB', 'price' => 31000000],
@@ -1696,7 +1696,7 @@ class ProductSeeder extends Seeder
                     DESC,
                 'colors' => ['Titan Sa Mạc (Desert)', 'Titan Tự nhiên', 'Titan Đen'],
                 'storages' => [
-                    ['label' => '256GB', 'price' => 32000000],
+                    ['label' => '256GB', 'price' => 28200000],
                     ['label' => '512GB', 'price' => 34000000],
                     ['label' => '1TB', 'price' => 37000000],
                 ],
