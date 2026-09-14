@@ -80,6 +80,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone (2G)',
                 'series' => 'iphone-co-dien',
+                'thumbnail' => '/images/products/iphone-2g.svg',
                 'specifications' => [
                     'Màn hình' => '3.5 inch, TFT cảm ứng điện dung đa điểm, 320 x 480 pixels (165 ppi)',
                     'Vi xử lý (CPU)' => 'Samsung 32-bit RISC ARM 412 MHz',
@@ -113,6 +114,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 3G',
                 'series' => 'iphone-co-dien',
+                'thumbnail' => '/images/products/iphone-3g.svg',
                 'specifications' => [
                     'Màn hình' => '3.5 inch, TFT 16 triệu màu, 320 x 480 pixels (165 ppi)',
                     'Vi xử lý (CPU)' => 'Samsung ARM 11 412 MHz',
@@ -145,6 +147,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 3GS',
                 'series' => 'iphone-co-dien',
+                'thumbnail' => '/images/products/iphone-3gs.svg',
                 'specifications' => [
                     'Màn hình' => '3.5 inch TFT, 320 x 480 pixels, phủ lớp Oleophobic chống vân tay',
                     'Vi xử lý (CPU)' => 'Samsung Cortex-A8 600 MHz, GPU PowerVR SGX535',
@@ -182,6 +185,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 4',
                 'series' => 'iphone-4-series',
+                'thumbnail' => '/images/products/iphone-4.svg',
                 'specifications' => [
                     'Màn hình' => '3.5 inch Retina Display (IPS LCD), 960 x 640 pixels (326 ppi)',
                     'Vi xử lý (CPU)' => 'Apple A4 (1 nhân Cortex-A8 1.0 GHz)',
@@ -215,6 +219,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 4s',
                 'series' => 'iphone-4-series',
+                'thumbnail' => '/images/products/iphone-4s.svg',
                 'specifications' => [
                     'Màn hình' => '3.5 inch Retina IPS LCD, 960 x 640 pixels, tương phản 800:1',
                     'Vi xử lý (CPU)' => 'Apple A5 lõi kép (Dual-core Cortex-A9), đồ họa 2 nhân',
@@ -253,6 +258,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 5',
                 'series' => 'iphone-5-series',
+                'thumbnail' => '/images/products/iphone-5.svg',
                 'specifications' => [
                     'Màn hình' => '4.0 inch Retina IPS LCD, 1136 x 640 pixels (tỉ lệ 16:9, 326 ppi)',
                     'Vi xử lý (CPU)' => 'Apple A6 (2 nhân 1.3 GHz nền tảng ARMv7)',
@@ -286,6 +292,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 5c',
                 'series' => 'iphone-5-series',
+                'thumbnail' => '/images/products/iphone-5c.svg',
                 'specifications' => [
                     'Màn hình' => '4.0 inch Retina IPS LCD, 1136 x 640 pixels (326 ppi)',
                     'Vi xử lý (CPU)' => 'Apple A6 (2 nhân 1.3 GHz)',
@@ -319,6 +326,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 5s',
                 'series' => 'iphone-5-series',
+                'thumbnail' => '/images/products/iphone-5s.svg',
                 'specifications' => [
                     'Màn hình' => '4.0 inch Retina IPS LCD, 1136 x 640 pixels (326 ppi)',
                     'Vi xử lý (CPU)' => 'Apple A7 (64-bit đầu tiên thế giới) + Chip đo chuyển động M7',
@@ -356,6 +364,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 6',
                 'series' => 'iphone-6-series',
+                'thumbnail' => '/images/products/iphone-6.svg',
                 'specifications' => [
                     'Màn hình' => '4.7 inch Retina HD (IPS LCD), 1334 x 750 pixels (326 ppi)',
                     'Vi xử lý (CPU)' => 'Apple A8 (tiến trình 20nm, 2 nhân 1.4 GHz)',
@@ -389,6 +398,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 6 Plus',
                 'series' => 'iphone-6-series',
+                'thumbnail' => '/images/products/iphone-6-plus.svg',
                 'specifications' => [
                     'Màn hình' => '5.5 inch Retina HD Full HD, 1920 x 1080 pixels (401 ppi)',
                     'Vi xử lý (CPU)' => 'Apple A8 (2 nhân 1.4 GHz, 20nm)',
@@ -422,6 +432,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 6s',
                 'series' => 'iphone-6-series',
+                'thumbnail' => '/images/products/iphone-6s.svg',
                 'specifications' => [
                     'Màn hình' => '4.7 inch Retina HD, tích hợp công nghệ cảm ứng lực 3D Touch',
                     'Vi xử lý (CPU)' => 'Apple A9 (2 nhân 1.84 GHz, kiến trúc Twister)',
@@ -455,6 +466,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 6s Plus',
                 'series' => 'iphone-6-series',
+                'thumbnail' => '/images/products/iphone-6s-plus.svg',
                 'specifications' => [
                     'Màn hình' => '5.5 inch Retina HD Full HD (1920 x 1080), 3D Touch',
                     'Vi xử lý (CPU)' => 'Apple A9 (2 nhân 1.84 GHz)',
@@ -492,6 +504,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone SE (2016)',
                 'series' => 'iphone-se-series',
+                'thumbnail' => '/images/products/iphone-se-2016.svg',
                 'specifications' => [
                     'Màn hình' => '4.0 inch Retina IPS LCD, 1136 x 640 pixels (326 ppi)',
                     'Vi xử lý (CPU)' => 'Apple A9 (mạnh tương đương iPhone 6s)',
@@ -529,6 +542,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 7',
                 'series' => 'iphone-7-series',
+                'thumbnail' => '/images/products/iphone-7.svg',
                 'specifications' => [
                     'Màn hình' => '4.7 inch Retina HD, dải màu rộng DCI-P3, độ sáng 625 nits',
                     'Vi xử lý (CPU)' => 'Apple A10 Fusion (4 nhân: 2 nhân hiệu năng + 2 nhân tiết kiệm điện)',
@@ -562,6 +576,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 7 Plus',
                 'series' => 'iphone-7-series',
+                'thumbnail' => '/images/products/iphone-7-plus.svg',
                 'specifications' => [
                     'Màn hình' => '5.5 inch Retina HD Full HD (1920 x 1080), dải màu rộng DCI-P3',
                     'Vi xử lý (CPU)' => 'Apple A10 Fusion (4 nhân)',
@@ -599,6 +614,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 8',
                 'series' => 'iphone-8-series',
+                'thumbnail' => '/images/products/iphone-8.svg',
                 'specifications' => [
                     'Màn hình' => '4.7 inch Retina HD, bổ sung công nghệ hiển thị True Tone',
                     'Vi xử lý (CPU)' => 'Apple A11 Bionic (6 nhân, 10nm, có bộ xử lý mạng thần kinh)',
@@ -632,6 +648,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 8 Plus',
                 'series' => 'iphone-8-series',
+                'thumbnail' => '/images/products/iphone-8-plus.svg',
                 'specifications' => [
                     'Màn hình' => '5.5 inch Retina HD Full HD, công nghệ True Tone',
                     'Vi xử lý (CPU)' => 'Apple A11 Bionic (6 nhân 10nm)',
@@ -669,6 +686,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone X',
                 'series' => 'iphone-x-series',
+                'thumbnail' => '/images/products/iphone-x.svg',
                 'specifications' => [
                     'Màn hình' => '5.8 inch Super Retina OLED, 2436 x 1125 pixels (458 ppi), HDR10, Dolby Vision',
                     'Vi xử lý (CPU)' => 'Apple A11 Bionic (6 nhân, 10nm)',
@@ -701,6 +719,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone XR',
                 'series' => 'iphone-x-series',
+                'thumbnail' => '/images/products/iphone-xr.svg',
                 'specifications' => [
                     'Màn hình' => '6.1 inch Liquid Retina (IPS LCD), 1792 x 828 pixels (326 ppi), True Tone',
                     'Vi xử lý (CPU)' => 'Apple A12 Bionic (tiến trình 7nm đầu tiên thế giới)',
@@ -873,6 +892,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 11 Pro Max',
                 'series' => 'iphone-11-series',
+                'thumbnail' => '/images/products/iphone-11-pro-max.svg',
                 'specifications' => [
                     'Màn hình' => '6.5 inch Super Retina XDR OLED, 2688 x 1242 pixels, 1.200 nits',
                     'Vi xử lý (CPU)' => 'Apple A13 Bionic (7nm+)',
@@ -910,6 +930,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone SE 2 (2020)',
                 'series' => 'iphone-se-series',
+                'thumbnail' => '/images/products/iphone-se-2-2020.svg',
                 'specifications' => [
                     'Màn hình' => '4.7 inch Retina HD (IPS LCD), 1334 x 750 pixels, True Tone',
                     'Vi xử lý (CPU)' => 'Apple A13 Bionic (ngang ngửa dòng iPhone 11)',
@@ -947,6 +968,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 12 mini',
                 'series' => 'iphone-12-series',
+                'thumbnail' => '/images/products/iphone-12-mini.svg',
                 'specifications' => [
                     'Màn hình' => '5.4 inch Super Retina XDR OLED, 2340 x 1080 pixels (476 ppi siêu nét)',
                     'Vi xử lý (CPU)' => 'Apple A14 Bionic (tiến trình 5nm đầu tiên thế giới)',
@@ -1048,6 +1070,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 12 Pro Max',
                 'series' => 'iphone-12-series',
+                'thumbnail' => '/images/products/iphone-12-pro-max.svg',
                 'specifications' => [
                     'Màn hình' => '6.7 inch Super Retina XDR OLED rộng rãi, 2778 x 1284 pixels',
                     'Vi xử lý (CPU)' => 'Apple A14 Bionic (5nm)',
@@ -1085,6 +1108,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 13 mini',
                 'series' => 'iphone-13-series',
+                'thumbnail' => '/images/products/iphone-13-mini.svg',
                 'specifications' => [
                     'Màn hình' => '5.4 inch Super Retina XDR OLED, độ sáng tăng lên 800 nits, tai thỏ nhỏ hơn 20%',
                     'Vi xử lý (CPU)' => 'Apple A15 Bionic (6 nhân CPU, 4 nhân GPU)',
@@ -1187,6 +1211,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 13 Pro Max',
                 'series' => 'iphone-13-series',
+                'thumbnail' => '/images/products/iphone-13-pro-max.svg',
                 'specifications' => [
                     'Màn hình' => '6.7 inch Super Retina XDR OLED, 120Hz ProMotion, 1.000 nits (tối đa 1.200 nits)',
                     'Vi xử lý (CPU)' => 'Apple A15 Bionic (5 nhân GPU đỉnh cao)',
@@ -1225,6 +1250,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone SE 3 (2022)',
                 'series' => 'iphone-se-series',
+                'thumbnail' => '/images/products/iphone-se-3-2022.svg',
                 'specifications' => [
                     'Màn hình' => '4.7 inch Retina HD IPS LCD, 1334 x 750 pixels, True Tone',
                     'Vi xử lý (CPU)' => 'Apple A15 Bionic (mạnh mẽ tương đương iPhone 13)',
@@ -1296,6 +1322,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 14 Plus',
                 'series' => 'iphone-14-series',
+                'thumbnail' => '/images/products/iphone-14-plus.svg',
                 'specifications' => [
                     'Màn hình' => '6.7 inch Super Retina XDR OLED rộng rãi, 60Hz',
                     'Vi xử lý (CPU)' => 'Apple A15 Bionic (5 nhân GPU)',
@@ -1363,6 +1390,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 14 Pro Max',
                 'series' => 'iphone-14-series',
+                'thumbnail' => '/images/products/iphone-14-pro-max.svg',
                 'specifications' => [
                     'Màn hình' => '6.7 inch Super Retina XDR OLED, 120Hz ProMotion, Dynamic Island, Always-On, ngoài trời 2.000 nits',
                     'Vi xử lý (CPU)' => 'Apple A16 Bionic (4nm, 6 nhân CPU, 5 nhân GPU)',
@@ -1435,6 +1463,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 15 Plus',
                 'series' => 'iphone-15-series',
+                'thumbnail' => '/images/products/iphone-15-plus.svg',
                 'specifications' => [
                     'Màn hình' => '6.7 inch Super Retina XDR OLED, 60Hz, Dynamic Island, đỉnh sáng 2.000 nits',
                     'Vi xử lý (CPU)' => 'Apple A16 Bionic (4nm)',
@@ -1540,6 +1569,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 16',
                 'series' => 'iphone-16-series',
+                'thumbnail' => '/images/products/iphone-16.svg',
                 'specifications' => [
                     'Màn hình' => '6.1 inch Super Retina XDR OLED, 60Hz, Dynamic Island, độ sáng từ 1 nit đến 2.000 nits',
                     'Vi xử lý (CPU)' => 'Apple A18 (tiến trình 3nm thế hệ thứ 2, 6 nhân CPU, 5 nhân GPU)',
@@ -1572,6 +1602,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 16 Plus',
                 'series' => 'iphone-16-series',
+                'thumbnail' => '/images/products/iphone-16-plus.svg',
                 'specifications' => [
                     'Màn hình' => '6.7 inch Super Retina XDR OLED, 60Hz, Dynamic Island, độ sáng 1 - 2.000 nits',
                     'Vi xử lý (CPU)' => 'Apple A18 (3nm thế hệ 2, tích hợp Neural Engine 16 nhân thế hệ mới)',
@@ -1605,6 +1636,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 16 Pro',
                 'series' => 'iphone-16-series',
+                'thumbnail' => '/images/products/iphone-16-pro.svg',
                 'specifications' => [
                     'Màn hình' => '6.3 inch Super Retina XDR OLED, 120Hz ProMotion, Always-On, viền mỏng kỷ lục',
                     'Vi xử lý (CPU)' => 'Apple A18 Pro (tiến trình 3nm thế hệ 2, 6 nhân CPU, 6 nhân GPU cực mạnh)',
@@ -1638,6 +1670,7 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'iPhone 16 Pro Max',
                 'series' => 'iphone-16-series',
+                'thumbnail' => '/images/products/iphone-16-pro-max.svg',
                 'specifications' => [
                     'Màn hình' => '6.9 inch Super Retina XDR OLED (màn hình lớn nhất lịch sử iPhone), 120Hz ProMotion, viền siêu mỏng',
                     'Vi xử lý (CPU)' => 'Apple A18 Pro (3nm thế hệ 2, băng thông bộ nhớ tăng 17%, hỗ trợ Ray Tracing nhanh gấp đôi)',
