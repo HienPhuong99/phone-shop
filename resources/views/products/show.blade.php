@@ -7,6 +7,17 @@
         'stock' => $variant->stock_quantity,
         'sku' => $variant->sku,
     ]);
+
+    $galleryImages = collect()
+        ->when($product->thumbnail, fn ($c) => $c->push([
+            'url' => $product->thumbnail,
+            'thumb' => $product->thumbnail_thumb ?? $product->thumbnail,
+        ]))
+        ->merge($product->images->map(fn ($image) => [
+            'url' => $image->url,
+            'thumb' => $image->thumb_url ?? $image->url,
+        ]))
+        ->values();
 @endphp
 
 <x-shop-layout :title="$product->name.' - phuonghihi'" :hide-bottom-nav="true">
@@ -14,7 +25,29 @@
         class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-28 sm:pb-8"
         x-data="{
             variants: {{ Illuminate\Support\Js::from($variantsData) }},
+            gallery: {{ Illuminate\Support\Js::from($galleryImages) }},
+            activeImage: 0,
+            fading: false,
             selectedId: {{ $product->variants->first()?->id ?? 'null' }},
+            quantity: 1,
+            pulse: false,
+            init() {
+                this.$watch('selectedId', () => {
+                    if (this.selected && this.quantity > this.selected.stock) {
+                        this.quantity = Math.max(1, this.selected.stock);
+                    }
+                    this.pulse = true;
+                    setTimeout(() => { this.pulse = false; }, 220);
+                });
+            },
+            switchImage(index) {
+                if (index === this.activeImage) return;
+                this.fading = true;
+                setTimeout(() => {
+                    this.activeImage = index;
+                    this.fading = false;
+                }, 150);
+            },
             get selected() {
                 return this.variants.find(v => v.id === this.selectedId) ?? null;
             },
@@ -81,11 +114,19 @@
         <div class="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8 lg:gap-10 items-start">
             <!-- Ảnh sản phẩm -->
             <div>
-                <div class="relative aspect-square bg-white border border-line rounded-2xl shadow-sm flex items-center justify-center overflow-hidden">
+                <div class="relative aspect-square bg-white border border-line rounded-2xl shadow-sm overflow-hidden">
                     <span class="absolute top-3 left-3 z-10 bg-white/90 backdrop-blur text-[11px] font-bold tracking-wide uppercase text-brand px-2.5 py-1 rounded-full shadow-xs">Chính hãng VN/A</span>
 
-                    @if ($product->thumbnail)
-                        <img src="{{ $product->thumbnail }}" alt="{{ $product->name }}" fetchpriority="high" decoding="async" class="w-full h-full object-cover">
+                    @if ($galleryImages->isNotEmpty())
+                        <img
+                            src="{{ $galleryImages->first()['url'] }}"
+                            :src="gallery[activeImage]?.url"
+                            alt="{{ $product->name }}"
+                            fetchpriority="high"
+                            decoding="async"
+                            class="w-full h-full object-cover transition-opacity duration-150"
+                            :class="fading ? 'opacity-0' : 'opacity-100'"
+                        >
                     @else
                         <div class="w-full h-full flex items-center justify-center bg-[repeating-linear-gradient(45deg,theme(colors.line),theme(colors.line)_8px,transparent_8px,transparent_16px)]">
                             <span class="font-mono text-xs text-ink-soft bg-white px-2 py-0.5 rounded shadow-xs">ảnh sản phẩm</span>
@@ -93,12 +134,17 @@
                     @endif
                 </div>
 
-                @if ($product->images->isNotEmpty())
+                @if ($galleryImages->count() > 1)
                     <div class="mt-4 grid grid-cols-5 gap-3">
-                        @foreach ($product->images as $image)
-                            <div class="aspect-square bg-gray-50 border border-line rounded-xl overflow-hidden">
-                                <img src="{{ $image->thumb_url ?? $image->url }}" alt="" loading="lazy" decoding="async" class="w-full h-full object-cover">
-                            </div>
+                        @foreach ($galleryImages as $index => $image)
+                            <button
+                                type="button"
+                                @click="switchImage({{ $index }})"
+                                :class="activeImage === {{ $index }} ? 'border-brand ring-1 ring-brand' : 'border-line hover:border-brand/60'"
+                                class="aspect-square bg-gray-50 border-[1.5px] rounded-xl overflow-hidden transition"
+                            >
+                                <img src="{{ $image['thumb'] }}" alt="" loading="lazy" decoding="async" class="w-full h-full object-cover">
+                            </button>
                         @endforeach
                     </div>
                 @endif
@@ -110,12 +156,20 @@
                 <h1 class="mt-1 font-bold text-2xl sm:text-3xl text-ink leading-tight">{{ $product->name }}</h1>
 
                 <div class="mt-3 flex items-baseline gap-2 flex-wrap">
-                    <p class="text-brand text-3xl font-extrabold" x-text="new Intl.NumberFormat('vi-VN').format(selected?.price ?? {{ $product->base_price }}) + 'đ'"></p>
+                    <p
+                        class="text-brand text-3xl font-extrabold transition-transform duration-200 ease-out"
+                        :class="pulse ? 'scale-105' : 'scale-100'"
+                        x-text="new Intl.NumberFormat('vi-VN').format(selected?.price ?? {{ $product->base_price }}) + 'đ'"
+                    ></p>
                     <p class="text-xs text-ink-soft">(Đã bao gồm VAT)</p>
                 </div>
 
                 <template x-if="selected">
-                    <p class="mt-1 text-sm font-medium" :class="selected.stock > 0 ? 'text-emerald-600' : 'text-red-500'" x-text="selected.stock > 0 ? `Còn hàng (${selected.stock} sản phẩm)` : 'Hết hàng'"></p>
+                    <p
+                        class="mt-1 text-sm font-medium transition-opacity duration-150"
+                        :class="[selected.stock > 0 ? 'text-emerald-600' : 'text-red-500', pulse ? 'opacity-60' : 'opacity-100']"
+                        x-text="selected.stock > 0 ? `Còn hàng (${selected.stock} sản phẩm)` : 'Hết hàng'"
+                    ></p>
                 </template>
 
                 <!-- Ưu đãi kèm theo -->
@@ -182,7 +236,28 @@
                     @csrf
                     <input type="hidden" name="variant_id" :value="selectedId">
 
-                    <input type="number" inputmode="numeric" name="quantity" value="1" min="1" :max="selected?.stock ?? 1" class="w-20 rounded-xl border-line text-sm focus:border-brand focus:ring-brand">
+                    <div class="flex items-center border-[1.5px] border-line rounded-xl overflow-hidden shrink-0">
+                        <button
+                            type="button"
+                            @click="quantity = Math.max(1, quantity - 1)"
+                            class="w-9 h-11 flex items-center justify-center text-ink-soft hover:bg-paper active:scale-95 transition"
+                        >−</button>
+                        <input
+                            type="number"
+                            inputmode="numeric"
+                            name="quantity"
+                            x-model.number="quantity"
+                            @change="quantity = Math.min(Math.max(1, quantity || 1), selected?.stock ?? 1)"
+                            min="1"
+                            :max="selected?.stock ?? 1"
+                            class="w-12 h-11 border-0 border-x-[1.5px] border-line text-center text-sm focus:border-brand focus:ring-0"
+                        >
+                        <button
+                            type="button"
+                            @click="quantity = Math.min(selected?.stock ?? 1, quantity + 1)"
+                            class="w-9 h-11 flex items-center justify-center text-ink-soft hover:bg-paper active:scale-95 transition"
+                        >+</button>
+                    </div>
 
                     <button
                         type="submit"
