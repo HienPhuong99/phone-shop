@@ -13,6 +13,35 @@ use Illuminate\Support\Str;
 class ProductSeeder extends Seeder
 {
     /**
+     * Only these 20 iPhone lines stay listed for sale on the storefront;
+     * every other model in models() is seeded with status=inactive (hidden).
+     *
+     * @var list<string>
+     */
+    private const ACTIVE_MODELS = [
+        'iPhone 12',
+        'iPhone 12 Pro',
+        'iPhone 12 Pro Max',
+        'iPhone 13 mini',
+        'iPhone 13',
+        'iPhone 13 Pro',
+        'iPhone 13 Pro Max',
+        'iPhone SE 3 (2022)',
+        'iPhone 14',
+        'iPhone 14 Plus',
+        'iPhone 14 Pro',
+        'iPhone 14 Pro Max',
+        'iPhone 15',
+        'iPhone 15 Plus',
+        'iPhone 15 Pro',
+        'iPhone 15 Pro Max',
+        'iPhone 16',
+        'iPhone 16 Plus',
+        'iPhone 16 Pro',
+        'iPhone 16 Pro Max',
+    ];
+
+    /**
      * Run the database seeds.
      */
     public function run(): void
@@ -35,7 +64,7 @@ class ProductSeeder extends Seeder
                     'specifications' => $model['specifications'],
                     'base_price' => min(array_column($model['storages'], 'price')),
                     'thumbnail' => $model['thumbnail'] ?? null,
-                    'status' => 'active',
+                    'status' => in_array($model['name'], self::ACTIVE_MODELS, true) ? 'active' : 'inactive',
                 ]
             );
 

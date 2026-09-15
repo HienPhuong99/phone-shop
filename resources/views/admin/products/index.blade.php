@@ -20,7 +20,14 @@
                         {{ $product->status === 'active' ? 'Đang bán' : 'Ẩn' }}
                     </span>
                     <a href="{{ route('admin.products.edit', $product) }}" class="text-indigo-600 hover:underline">Sửa</a>
-                    <form method="POST" action="{{ route('admin.products.destroy', $product) }}" onsubmit="return confirm('Xoá sản phẩm này?')">
+                    <form method="POST" action="{{ route('admin.products.toggle-status', $product) }}">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="text-amber-600 hover:underline">
+                            {{ $product->status === 'active' ? 'Ẩn' : 'Hiện' }}
+                        </button>
+                    </form>
+                    <form method="POST" action="{{ route('admin.products.destroy', $product) }}" onsubmit="return confirm('Xoá vĩnh viễn sản phẩm này? Nếu chỉ muốn ngừng bán, hãy dùng nút Ẩn thay vì Xoá.')">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="text-red-500 hover:underline">Xoá</button>

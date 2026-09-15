@@ -85,6 +85,15 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')->with('status', 'Đã xoá sản phẩm.');
     }
 
+    public function toggleStatus(Product $product): RedirectResponse
+    {
+        $product->update(['status' => $product->status === 'active' ? 'inactive' : 'active']);
+
+        $message = $product->status === 'active' ? 'Đã hiện sản phẩm.' : 'Đã ẩn sản phẩm.';
+
+        return back()->with('status', $message);
+    }
+
     private function validated(Request $request, ?Product $product = null): array
     {
         $data = $request->validate([

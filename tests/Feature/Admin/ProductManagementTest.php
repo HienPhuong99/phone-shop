@@ -117,6 +117,31 @@ class ProductManagementTest extends TestCase
         Storage::disk('public')->assertExists('products/'.basename($product->images()->first()->url));
     }
 
+    public function test_admin_can_toggle_product_status_to_hide_and_show_it(): void
+    {
+        $product = Product::create([
+            'category_id' => $this->category->id,
+            'brand_id' => $this->brand->id,
+            'series_id' => $this->series->id,
+            'name' => 'iPhone Test',
+            'slug' => 'iphone-test',
+            'base_price' => 20000000,
+            'status' => 'active',
+        ]);
+
+        $this->actingAs($this->admin)
+            ->patch(route('admin.products.toggle-status', $product))
+            ->assertRedirect();
+
+        $this->assertSame('inactive', $product->fresh()->status);
+
+        $this->actingAs($this->admin)
+            ->patch(route('admin.products.toggle-status', $product))
+            ->assertRedirect();
+
+        $this->assertSame('active', $product->fresh()->status);
+    }
+
     public function test_deleting_category_with_products_is_blocked(): void
     {
         Product::create([
