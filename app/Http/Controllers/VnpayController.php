@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 use Illuminate\View\View;
 
 class VnpayController extends Controller
@@ -30,10 +31,19 @@ class VnpayController extends Controller
         $order = $isValid ? Order::where('order_code', $params['vnp_TxnRef'] ?? null)->first() : null;
         $success = $isValid && ($params['vnp_ResponseCode'] ?? null) === '00';
 
+        // A guest order has no account to view "my orders" on — sign a
+        // one-off link to the same confirmation page instead. Safe to mint
+        // here regardless of who's viewing: it only ever reveals the one
+        // order this valid, signature-verified VNPay callback already named.
+        $orderUrl = $order
+            ? ($order->user_id ? route('orders.show', $order) : URL::signedRoute('orders.guest-show', ['order' => $order]))
+            : null;
+
         return view('vnpay.return', [
             'success' => $success,
             'isValid' => $isValid,
             'order' => $order,
+            'orderUrl' => $orderUrl,
         ]);
     }
 

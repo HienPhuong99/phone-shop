@@ -20,14 +20,14 @@
                 <div class="w-10 h-10 rounded-xl bg-brand/10 text-brand flex items-center justify-center mb-4 font-bold text-lg">%</div>
                 <h2 class="font-bold text-base text-ink mb-1">Trả góp 0% lãi suất</h2>
                 <p class="text-sm text-ink-soft">Duyệt hồ sơ nhanh trong ngày qua thẻ tín dụng hoặc công ty tài chính liên kết, không cần chứng minh thu nhập.</p>
-                <a href="{{ route('pages.contact') }}" class="inline-block mt-3 text-sm font-semibold text-brand hover:text-brand-dark transition">Liên hệ tư vấn &rarr;</a>
+                <a href="{{ route('pages.installment') }}" class="inline-block mt-3 text-sm font-semibold text-brand hover:text-brand-dark transition">Tính khoản trả góp &rarr;</a>
             </div>
 
             <div class="bg-white border border-line rounded-2xl shadow-sm p-6">
                 <div class="w-10 h-10 rounded-xl bg-brand/10 text-brand flex items-center justify-center mb-4 font-bold text-lg">⇄</div>
                 <h2 class="font-bold text-base text-ink mb-1">Thu cũ lên đời</h2>
                 <p class="text-sm text-ink-soft">Định giá máy cũ minh bạch ngay tại cửa hàng, trừ thẳng vào hoá đơn khi lên đời máy mới.</p>
-                <a href="{{ route('pages.contact') }}" class="inline-block mt-3 text-sm font-semibold text-brand hover:text-brand-dark transition">Nhận báo giá &rarr;</a>
+                <a href="{{ route('pages.trade-in') }}" class="inline-block mt-3 text-sm font-semibold text-brand hover:text-brand-dark transition">Ước tính giá thu cũ &rarr;</a>
             </div>
 
             <div class="bg-white border border-line rounded-2xl shadow-sm p-6">

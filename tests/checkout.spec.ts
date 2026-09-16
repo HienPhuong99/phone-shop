@@ -48,6 +48,7 @@ test.describe('Giỏ hàng & thanh toán', () => {
         await page.fill('#recipient_name', 'Người Dùng Test');
         await page.fill('#phone', '0900000000');
         await page.fill('#address_line', '123 Đường Test, Quận 1, TP.HCM');
+        await page.selectOption('#province', 'Thành phố Hồ Chí Minh');
 
         await page.getByRole('button', { name: 'Đặt hàng' }).click();
 

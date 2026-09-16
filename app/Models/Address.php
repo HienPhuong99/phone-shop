@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable(['user_id', 'recipient_name', 'phone', 'address_line', 'is_default'])]
+#[Fillable(['user_id', 'recipient_name', 'phone', 'address_line', 'province', 'is_default'])]
 class Address extends Model
 {
     protected function casts(): array

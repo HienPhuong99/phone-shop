@@ -18,7 +18,7 @@
         @endif
 
         @if ($order)
-            <a href="{{ route('orders.show', $order) }}" class="inline-block mt-6 text-indigo-600 hover:underline">
+            <a href="{{ $orderUrl }}" class="inline-block mt-6 text-indigo-600 hover:underline">
                 Xem chi tiết đơn hàng #{{ $order->order_code }}
             </a>
         @else

@@ -41,6 +41,12 @@
                     <span class="text-gray-600">Phí vận chuyển</span>
                     <span class="text-gray-900">{{ number_format($order->shipping_fee, 0, ',', '.') }}đ</span>
                 </div>
+                @if ($order->discount_amount > 0)
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Giảm giá{{ $order->coupon_code ? " ({$order->coupon_code})" : '' }}</span>
+                        <span class="text-emerald-600">−{{ number_format($order->discount_amount, 0, ',', '.') }}đ</span>
+                    </div>
+                @endif
                 <div class="flex justify-between font-semibold text-base">
                     <span>Tổng cộng</span>
                     <span class="text-indigo-600">{{ number_format($order->total_amount, 0, ',', '.') }}đ</span>

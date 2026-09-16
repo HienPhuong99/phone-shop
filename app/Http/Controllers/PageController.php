@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\View\View;
 
 class PageController extends Controller
@@ -9,6 +10,18 @@ class PageController extends Controller
     public function services(): View
     {
         return view('pages.services');
+    }
+
+    public function installment(): View
+    {
+        return view('pages.installment');
+    }
+
+    public function tradeIn(): View
+    {
+        $products = Product::active()->orderBy('name')->get(['id', 'name', 'base_price', 'series_id']);
+
+        return view('pages.trade-in', compact('products'));
     }
 
     public function policies(): View

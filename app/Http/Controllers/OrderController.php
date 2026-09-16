@@ -21,6 +21,6 @@ class OrderController extends Controller
 
         $order->load(['items', 'address', 'payment']);
 
-        return view('orders.show', compact('order'));
+        return view('orders.show', ['order' => $order, 'isGuestView' => false]);
     }
 }

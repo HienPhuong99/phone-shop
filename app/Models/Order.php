@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-#[Fillable(['user_id', 'order_code', 'address_id', 'total_amount', 'shipping_fee', 'status', 'payment_method'])]
+#[Fillable(['user_id', 'order_code', 'address_id', 'total_amount', 'shipping_fee', 'coupon_code', 'discount_amount', 'status', 'payment_method'])]
 class Order extends Model
 {
     public const STATUS_PENDING = 'pending';
@@ -26,6 +26,7 @@ class Order extends Model
         return [
             'total_amount' => 'decimal:2',
             'shipping_fee' => 'decimal:2',
+            'discount_amount' => 'decimal:2',
         ];
     }
 

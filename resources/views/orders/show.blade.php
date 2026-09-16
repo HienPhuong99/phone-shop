@@ -35,6 +35,12 @@
                     <span class="text-ink-soft">Phí vận chuyển</span>
                     <span class="text-ink">{{ number_format($order->shipping_fee, 0, ',', '.') }}đ</span>
                 </div>
+                @if ($order->discount_amount > 0)
+                    <div class="flex justify-between">
+                        <span class="text-ink-soft">Giảm giá{{ $order->coupon_code ? " ({$order->coupon_code})" : '' }}</span>
+                        <span class="text-emerald-600">−{{ number_format($order->discount_amount, 0, ',', '.') }}đ</span>
+                    </div>
+                @endif
                 <div class="flex justify-between font-semibold text-base">
                     <span>Tổng cộng</span>
                     <span class="text-brand font-bold text-lg">{{ number_format($order->total_amount, 0, ',', '.') }}đ</span>
@@ -46,6 +52,14 @@
             </p>
         </div>
 
-        <a href="{{ route('orders.index') }}" class="inline-block mt-6 text-brand hover:text-brand-dark font-medium text-sm transition">&larr; Xem tất cả đơn hàng</a>
+        @if ($isGuestView ?? false)
+            <div class="mt-6 bg-amber-50 border border-amber-200 text-amber-800 rounded-xl px-4 py-3 text-sm">
+                Lưu lại đường dẫn này hoặc mã đơn hàng <span class="font-semibold">{{ $order->order_code }}</span> — bạn có thể
+                <a href="{{ route('orders.lookup') }}" class="font-semibold underline">tra cứu lại đơn hàng</a>
+                bất cứ lúc nào bằng mã đơn và số điện thoại đã đặt.
+            </div>
+        @else
+            <a href="{{ route('orders.index') }}" class="inline-block mt-6 text-brand hover:text-brand-dark font-medium text-sm transition">&larr; Xem tất cả đơn hàng</a>
+        @endif
     </div>
 </x-shop-layout>

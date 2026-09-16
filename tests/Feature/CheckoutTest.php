@@ -11,6 +11,7 @@ use App\Models\ProductSeries;
 use App\Models\ProductVariant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class CheckoutTest extends TestCase
@@ -59,13 +60,15 @@ class CheckoutTest extends TestCase
         return $cart;
     }
 
-    public function test_guest_is_redirected_to_login_when_visiting_checkout(): void
+    public function test_guest_can_access_checkout_page_without_logging_in(): void
     {
-        $this->addToCart();
+        $cart = Cart::create(['session_id' => (string) Str::uuid()]);
+        $cart->items()->create(['variant_id' => $this->variant->id, 'quantity' => 1]);
+        $this->withSession(['cart_session_id' => $cart->session_id]);
 
         $response = $this->get('/thanh-toan');
 
-        $response->assertRedirect('/login');
+        $response->assertOk();
     }
 
     public function test_checkout_with_empty_cart_redirects_to_cart(): void
@@ -85,6 +88,7 @@ class CheckoutTest extends TestCase
             'recipient_name' => 'Buyer',
             'phone' => '0900000000',
             'address_line' => '123 Test Street',
+            'province' => 'Thành phố Hà Nội',
             'payment_method' => 'cod',
         ]);
 
@@ -111,6 +115,7 @@ class CheckoutTest extends TestCase
             'recipient_name' => 'Buyer',
             'phone' => '0900000000',
             'address_line' => '123 Test Street',
+            'province' => 'Thành phố Hà Nội',
             'payment_method' => 'cod',
         ]);
 
@@ -129,12 +134,14 @@ class CheckoutTest extends TestCase
             'recipient_name' => 'Buyer',
             'phone' => '0900000000',
             'address_line' => '123 Test Street',
+            'province' => 'Thành phố Hà Nội',
             'payment_method' => 'cod',
             'total_amount' => 1,
         ]);
 
         $order = Order::first();
 
-        $this->assertEquals(20030000, $order->total_amount);
+        // 20.000.000đ variant price + 20.000đ Hà Nội shipping tier.
+        $this->assertEquals(20020000, $order->total_amount);
     }
 }

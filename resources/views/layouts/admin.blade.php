@@ -29,6 +29,7 @@
                             ['route' => 'admin.categories.index', 'label' => 'Danh mục'],
                             ['route' => 'admin.brands.index', 'label' => 'Thương hiệu'],
                             ['route' => 'admin.product-series.index', 'label' => 'Dòng sản phẩm'],
+                            ['route' => 'admin.coupons.index', 'label' => 'Mã giảm giá'],
                             ['route' => 'admin.orders.index', 'label' => 'Đơn hàng'],
                         ];
                     @endphp

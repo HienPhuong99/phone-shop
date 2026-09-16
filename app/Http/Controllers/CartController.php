@@ -19,7 +19,11 @@ class CartController extends Controller
         $cart = $this->cartService->currentCart($request);
         $cart->load(['items.variant.product']);
 
-        return view('cart.index', compact('cart'));
+        $subtotal = (float) $cart->items->sum(fn ($item) => $item->quantity * $item->variant->price);
+        $coupon = $this->cartService->appliedCoupon($request, $subtotal);
+        $discount = $coupon?->discountFor($subtotal) ?? 0.0;
+
+        return view('cart.index', compact('cart', 'coupon', 'discount'));
     }
 
     public function store(AddToCartRequest $request): RedirectResponse
@@ -72,6 +76,32 @@ class CartController extends Controller
         $cartItem->delete();
 
         return back()->with('status', 'Đã xoá sản phẩm khỏi giỏ hàng.');
+    }
+
+    public function applyCoupon(Request $request): RedirectResponse
+    {
+        $data = $request->validate(['code' => ['required', 'string', 'max:50']]);
+
+        $cart = $this->cartService->currentCart($request);
+        $cart->load('items.variant');
+        $subtotal = (float) $cart->items->sum(fn ($item) => $item->quantity * $item->variant->price);
+
+        $this->cartService->applyCoupon($request, $data['code']);
+
+        if (! $this->cartService->appliedCoupon($request, $subtotal)) {
+            $this->cartService->removeCoupon($request);
+
+            return back()->with('error', 'Mã giảm giá không hợp lệ, đã hết hạn, hoặc đơn hàng chưa đạt giá trị tối thiểu.');
+        }
+
+        return back()->with('status', 'Đã áp dụng mã giảm giá.');
+    }
+
+    public function removeCoupon(Request $request): RedirectResponse
+    {
+        $this->cartService->removeCoupon($request);
+
+        return back()->with('status', 'Đã bỏ mã giảm giá.');
     }
 
     private function authorizeCartItem(Request $request, CartItem $cartItem): void
