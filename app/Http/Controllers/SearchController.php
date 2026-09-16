@@ -28,6 +28,7 @@ class SearchController extends Controller
         $products = Product::query()
             ->active()
             ->with(['series', 'category', 'variants'])
+            ->withRatingStats()
             ->when($term !== '', fn ($query) => $query->search($term))
             ->filter($request->all())
             ->sorted($request->string('sort')->toString())

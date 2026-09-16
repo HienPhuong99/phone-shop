@@ -15,6 +15,7 @@ class ProductController extends Controller
         $products = Product::query()
             ->active()
             ->with(['series', 'category', 'variants'])
+            ->withRatingStats()
             ->filter($request->all())
             ->sorted($request->string('sort')->toString())
             ->paginate(12)
@@ -28,15 +29,17 @@ class ProductController extends Controller
         return view('products.index', compact('products', 'allSeries', 'categories', 'storageOptions', 'colorOptions'));
     }
 
-    public function show(Product $product): View
+    public function show(Request $request, Product $product): View
     {
-        $product->load(['series', 'category', 'variants', 'images']);
+        $product->load(['series', 'category', 'variants', 'images', 'reviews' => fn ($q) => $q->with('user')->latest()]);
+        $product->loadCount('reviews')->loadAvg('reviews', 'rating');
 
         $relatedProducts = Product::query()
             ->active()
             ->where('series_id', $product->series_id)
             ->where('id', '!=', $product->id)
             ->with(['series', 'variants'])
+            ->withRatingStats()
             ->take(4)
             ->get();
 
@@ -49,6 +52,13 @@ class ProductController extends Controller
             ->orderByRaw('ABS(base_price - ?)', [$product->base_price])
             ->first();
 
-        return view('products.show', compact('product', 'relatedProducts', 'comparisonProduct'));
+        $user = $request->user();
+        $canReview = $user && ! $user->hasReviewed($product) && $user->purchasedOrderItemFor($product) !== null;
+        $hasReviewed = $user && $user->hasReviewed($product);
+        $isWishlisted = $user && $product->wishlists()->where('user_id', $user->id)->exists();
+
+        return view('products.show', compact(
+            'product', 'relatedProducts', 'comparisonProduct', 'canReview', 'hasReviewed', 'isWishlisted'
+        ));
     }
 }

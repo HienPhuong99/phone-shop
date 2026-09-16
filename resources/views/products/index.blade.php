@@ -17,7 +17,7 @@
             <!-- Danh sách -->
             <div class="lg:col-span-3">
                 <div class="flex items-center justify-between mb-4">
-                    <p class="text-sm text-ink-soft">{{ $products->total() }} sản phẩm</p>
+                    <p class="text-sm text-ink-soft" data-testid="product-count">{{ $products->total() }} sản phẩm</p>
 
                     <form method="GET" action="{{ route('products.index') }}">
                         @foreach (request()->except('sort', 'page') as $key => $value)

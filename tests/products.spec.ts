@@ -7,7 +7,7 @@ test.describe('Danh sách sản phẩm', () => {
         await page.goto(`${BASE_URL}/san-pham`);
 
         await expect(page.getByRole('heading', { name: 'Sản phẩm', exact: true })).toBeVisible();
-        await expect(page.locator('text=/\\d+ sản phẩm/')).toBeVisible();
+        await expect(page.getByTestId('product-count')).toContainText(/\d+ sản phẩm/);
 
         await page.fill('input[name="min_price"]', '0');
         await page.fill('input[name="max_price"]', '999999999');

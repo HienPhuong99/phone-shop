@@ -22,6 +22,7 @@ class HomeController extends Controller
         $featuredProducts = Product::query()
             ->active()
             ->with(['series', 'variants'])
+            ->withRatingStats()
             ->latest()
             ->take(8)
             ->get();

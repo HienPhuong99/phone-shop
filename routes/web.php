@@ -2,13 +2,16 @@
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CompareController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\VnpayController;
+use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -20,6 +23,8 @@ Route::get('/tim-kiem', [SearchController::class, 'index'])->name('search');
 Route::get('/tim-kiem/goi-y', [SearchController::class, 'suggest'])
     ->middleware('throttle:60,1')
     ->name('search.suggest');
+
+Route::get('/so-sanh', [CompareController::class, 'show'])->name('compare.show');
 
 Route::get('/gio-hang', [CartController::class, 'index'])->name('cart.index');
 Route::post('/gio-hang', [CartController::class, 'store'])->name('cart.store');
@@ -52,6 +57,12 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/don-hang', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/don-hang/{order}', [OrderController::class, 'show'])->name('orders.show');
+
+    Route::post('/san-pham/{product}/danh-gia', [ReviewController::class, 'store'])->name('reviews.store');
+
+    Route::get('/yeu-thich', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/yeu-thich/{product}', [WishlistController::class, 'store'])->name('wishlist.store');
+    Route::delete('/yeu-thich/{product}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
 });
 
 require __DIR__.'/auth.php';

@@ -72,6 +72,7 @@
                                         <x-slot name="content">
                                             <x-dropdown-link :href="route('dashboard')">Dashboard</x-dropdown-link>
                                             <x-dropdown-link :href="route('orders.index')">Đơn hàng của tôi</x-dropdown-link>
+                                            <x-dropdown-link :href="route('wishlist.index')">Yêu thích</x-dropdown-link>
                                             <x-dropdown-link :href="route('profile.edit')">Hồ sơ</x-dropdown-link>
                                             @if (Auth::user()->is_admin)
                                                 <x-dropdown-link :href="route('admin.dashboard')">Quản trị</x-dropdown-link>
@@ -191,6 +192,7 @@
                     <div class="px-2 pb-2 space-y-0.5">
                         <a href="{{ route('dashboard') }}" class="block px-3 py-3 rounded-xl text-sm font-medium text-ink hover:bg-paper">Dashboard</a>
                         <a href="{{ route('orders.index') }}" class="block px-3 py-3 rounded-xl text-sm font-medium text-ink hover:bg-paper">Đơn hàng của tôi</a>
+                        <a href="{{ route('wishlist.index') }}" class="block px-3 py-3 rounded-xl text-sm font-medium text-ink hover:bg-paper">Yêu thích</a>
                         <a href="{{ route('profile.edit') }}" class="block px-3 py-3 rounded-xl text-sm font-medium text-ink hover:bg-paper">Hồ sơ</a>
                         @if (Auth::user()->is_admin)
                             <a href="{{ route('admin.dashboard') }}" class="block px-3 py-3 rounded-xl text-sm font-medium text-ink hover:bg-paper">Quản trị</a>
@@ -217,6 +219,8 @@
                     </form>
                 @endauth
             </div>
+
+            <x-compare-bar />
         </div>
     </body>
 </html>

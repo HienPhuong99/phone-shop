@@ -106,6 +106,26 @@ class Product extends Model
         return $this->hasMany(ProductImage::class)->orderBy('sort_order');
     }
 
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function wishlists(): HasMany
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    /**
+     * Adds reviews_count and reviews_avg_rating (Laravel's withCount/
+     * withAvg naming) via SQL aggregates — cheap on listing pages, unlike
+     * eager-loading every review row just to average it in PHP.
+     */
+    public function scopeWithRatingStats(Builder $query): Builder
+    {
+        return $query->withCount('reviews')->withAvg('reviews', 'rating');
+    }
+
     /**
      * Order items sold across this product's variants, for the "Bán chạy"
      * sort. Excludes cancelled orders — those were never real demand.
@@ -241,6 +261,15 @@ class Product extends Model
             'low_stock' => 'Sắp hết hàng',
             default => "Còn {$this->total_stock} máy",
         };
+    }
+
+    /**
+     * Rounded average rating, or null when withRatingStats() wasn't applied
+     * or the product has no reviews yet.
+     */
+    public function getAverageRatingAttribute(): ?float
+    {
+        return $this->reviews_avg_rating !== null ? round((float) $this->reviews_avg_rating, 1) : null;
     }
 
     /**

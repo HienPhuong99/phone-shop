@@ -46,4 +46,32 @@ class User extends Authenticatable
     {
         return $this->hasMany(Cart::class);
     }
+
+    public function wishlists(): HasMany
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    /**
+     * The order item that proves this user actually received $product —
+     * from a completed order, so a review can be attached to it. Null when
+     * there's no such purchase, which is also "not eligible to review yet".
+     */
+    public function purchasedOrderItemFor(Product $product): ?OrderItem
+    {
+        return OrderItem::query()
+            ->whereHas('variant', fn ($q) => $q->where('product_id', $product->id))
+            ->whereHas('order', fn ($q) => $q->where('user_id', $this->id)->where('status', Order::STATUS_COMPLETED))
+            ->first();
+    }
+
+    public function hasReviewed(Product $product): bool
+    {
+        return $this->reviews()->where('product_id', $product->id)->exists();
+    }
 }
