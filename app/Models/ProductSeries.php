@@ -22,6 +22,11 @@ class ProductSeries extends Model
 
     /**
      * All series shown in nav/filters, cached because they rarely change.
+     * Only series with at least one active product — several early iPhone
+     * series only have inactive (hidden) models, and picking one from the
+     * nav would otherwise dead-end on an empty result page. Busted from
+     * Admin\ProductController on every product create/update/delete/
+     * toggle-status, since those are what change a series's emptiness.
      *
      * @return Collection<int, self>
      */
@@ -33,7 +38,8 @@ class ProductSeries extends Model
         $rows = Cache::remember(
             self::NAV_CACHE_KEY,
             now()->addHour(),
-            fn () => self::orderBy('sort_order')->get()
+            fn () => self::whereHas('products', fn ($q) => $q->where('status', 'active'))
+                ->orderBy('sort_order')->get()
                 ->map(fn (self $series) => $series->getAttributes())
                 ->all()
         );

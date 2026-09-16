@@ -5,59 +5,13 @@
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <!-- Bộ lọc -->
             <aside class="lg:col-span-1">
-                <div class="bg-white border border-line rounded-2xl shadow-sm overflow-hidden">
-                    <input type="checkbox" id="filter-toggle" class="peer hidden">
-                    <label for="filter-toggle" class="lg:hidden flex items-center justify-between gap-2 p-4 cursor-pointer text-sm font-semibold text-ink select-none">
-                        <span>Bộ lọc</span>
-                        <svg class="h-4 w-4 text-ink-soft" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </label>
-
-                <form method="GET" action="{{ route('products.index') }}" class="hidden peer-checked:block lg:!block p-5 space-y-6">
-                    <div>
-                        <h3 class="text-xs font-bold tracking-wide uppercase text-ink-soft mb-2">Danh mục</h3>
-                        <div class="space-y-1">
-                            @foreach ($categories as $category)
-                                <label class="flex items-center gap-2 py-2 -mx-1 px-1 min-h-[44px] text-sm text-ink cursor-pointer">
-                                    <input type="radio" name="category" value="{{ $category->slug }}" {{ request('category') === $category->slug ? 'checked' : '' }} onchange="this.form.submit()" class="h-4 w-4 text-brand focus:ring-brand">
-                                    {{ $category->name }}
-                                </label>
-                            @endforeach
-                            @if (request('category'))
-                                <a href="{{ route('products.index', request()->except('category', 'page')) }}" class="text-xs text-brand hover:text-brand-dark font-medium inline-block mt-1">Bỏ lọc danh mục</a>
-                            @endif
-                        </div>
-                    </div>
-
-                    <div>
-                        <h3 class="text-xs font-bold tracking-wide uppercase text-ink-soft mb-2">Dòng sản phẩm</h3>
-                        <div class="space-y-1">
-                            @foreach ($allSeries as $item)
-                                <label class="flex items-center gap-2 py-2 -mx-1 px-1 min-h-[44px] text-sm text-ink cursor-pointer">
-                                    <input type="radio" name="series" value="{{ $item->slug }}" {{ request('series') === $item->slug ? 'checked' : '' }} onchange="this.form.submit()" class="h-4 w-4 text-brand focus:ring-brand">
-                                    {{ $item->name }}
-                                </label>
-                            @endforeach
-                            @if (request('series'))
-                                <a href="{{ route('products.index', request()->except('series', 'page')) }}" class="text-xs text-brand hover:text-brand-dark font-medium inline-block mt-1">Bỏ lọc dòng sản phẩm</a>
-                            @endif
-                        </div>
-                    </div>
-
-                    <div>
-                        <h3 class="text-xs font-bold tracking-wide uppercase text-ink-soft mb-2">Khoảng giá</h3>
-                        <div class="flex items-center gap-2">
-                            <input type="number" inputmode="numeric" name="min_price" value="{{ request('min_price') }}" placeholder="Từ" class="w-full rounded-xl border-line text-sm focus:border-brand focus:ring-brand">
-                            <span class="text-ink-soft">-</span>
-                            <input type="number" inputmode="numeric" name="max_price" value="{{ request('max_price') }}" placeholder="Đến" class="w-full rounded-xl border-line text-sm focus:border-brand focus:ring-brand">
-                        </div>
-                        <button type="submit" class="mt-3 w-full text-sm font-semibold bg-brand text-white rounded-xl py-2 hover:bg-brand-dark shadow-sm transition">Áp dụng</button>
-                    </div>
-
-                    <input type="hidden" name="sort" value="{{ request('sort') }}">
-                </form>
-                </div>
+                <x-product-filters
+                    :action="route('products.index')"
+                    :categories="$categories"
+                    :all-series="$allSeries"
+                    :storage-options="$storageOptions"
+                    :color-options="$colorOptions"
+                />
             </aside>
 
             <!-- Danh sách -->
@@ -67,15 +21,25 @@
 
                     <form method="GET" action="{{ route('products.index') }}">
                         @foreach (request()->except('sort', 'page') as $key => $value)
-                            <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                            @if (is_array($value))
+                                @foreach ($value as $item)
+                                    <input type="hidden" name="{{ $key }}[]" value="{{ $item }}">
+                                @endforeach
+                            @else
+                                <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                            @endif
                         @endforeach
                         <select name="sort" onchange="this.form.submit()" class="text-sm border-line rounded-xl focus:border-brand focus:ring-brand">
                             <option value="" {{ request('sort') === null || request('sort') === '' ? 'selected' : '' }}>Mới nhất</option>
+                            <option value="best_selling" {{ request('sort') === 'best_selling' ? 'selected' : '' }}>Bán chạy</option>
+                            <option value="discount" {{ request('sort') === 'discount' ? 'selected' : '' }}>Giảm giá nhiều nhất</option>
                             <option value="price_asc" {{ request('sort') === 'price_asc' ? 'selected' : '' }}>Giá tăng dần</option>
                             <option value="price_desc" {{ request('sort') === 'price_desc' ? 'selected' : '' }}>Giá giảm dần</option>
                         </select>
                     </form>
                 </div>
+
+                <x-active-filter-chips :action="route('products.index')" :categories="$categories" :all-series="$allSeries" />
 
                 @if ($products->isEmpty())
                     <div class="bg-white border border-line rounded-2xl shadow-sm p-10 text-center text-ink-soft">

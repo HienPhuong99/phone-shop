@@ -30,7 +30,11 @@ class Category extends Model
     }
 
     /**
-     * Top-level categories shown in nav/filters, cached because they rarely change.
+     * Top-level categories shown in nav/filters, cached because they rarely
+     * change. Only categories with at least one active product — otherwise
+     * picking one is a dead end straight to an empty result page. Busted
+     * from Admin\ProductController on every product create/update/delete/
+     * toggle-status, since those are what change a category's emptiness.
      *
      * @return Collection<int, self>
      */
@@ -42,7 +46,9 @@ class Category extends Model
         $rows = Cache::remember(
             self::NAV_CACHE_KEY,
             now()->addHour(),
-            fn () => self::whereNull('parent_id')->orderBy('name')->get()
+            fn () => self::whereNull('parent_id')
+                ->whereHas('products', fn ($q) => $q->where('status', 'active'))
+                ->orderBy('name')->get()
                 ->map(fn (self $category) => $category->getAttributes())
                 ->all()
         );

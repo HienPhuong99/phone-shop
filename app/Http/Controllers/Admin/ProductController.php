@@ -10,6 +10,7 @@ use App\Models\ProductSeries;
 use App\Services\ImageUploadService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -50,6 +51,8 @@ class ProductController extends Controller
 
         $product = Product::create($data);
 
+        $this->bustCategoryAndSeriesNavCache();
+
         return redirect()->route('admin.products.edit', $product)->with('status', 'Đã tạo sản phẩm. Thêm biến thể bên dưới.');
     }
 
@@ -75,6 +78,8 @@ class ProductController extends Controller
 
         $product->update($data);
 
+        $this->bustCategoryAndSeriesNavCache();
+
         return redirect()->route('admin.products.edit', $product)->with('status', 'Đã cập nhật sản phẩm.');
     }
 
@@ -82,12 +87,16 @@ class ProductController extends Controller
     {
         $product->delete();
 
+        $this->bustCategoryAndSeriesNavCache();
+
         return redirect()->route('admin.products.index')->with('status', 'Đã xoá sản phẩm.');
     }
 
     public function toggleStatus(Product $product): RedirectResponse
     {
         $product->update(['status' => $product->status === 'active' ? 'inactive' : 'active']);
+
+        $this->bustCategoryAndSeriesNavCache();
 
         $message = $product->status === 'active' ? 'Đã hiện sản phẩm.' : 'Đã ẩn sản phẩm.';
 
@@ -113,6 +122,7 @@ class ProductController extends Controller
             'description' => ['nullable', 'string'],
             'specifications' => ['nullable', 'string'],
             'base_price' => ['required', 'numeric', 'min:0'],
+            'compare_at_price' => ['nullable', 'numeric', 'min:0', 'gt:base_price'],
             'status' => ['required', 'in:active,inactive'],
             'thumbnail' => ['nullable', 'image', 'max:4096'],
             'is_featured' => ['sometimes', 'boolean'],
@@ -155,5 +165,17 @@ class ProductController extends Controller
         }
 
         return $specifications === [] ? null : $specifications;
+    }
+
+    /**
+     * Category::navList() and ProductSeries::navList() only list entries
+     * with at least one active product, so any change to a product's
+     * status/category/series can flip that — bust both caches rather than
+     * try to work out which one actually changed.
+     */
+    private function bustCategoryAndSeriesNavCache(): void
+    {
+        Cache::forget(Category::NAV_CACHE_KEY);
+        Cache::forget(ProductSeries::NAV_CACHE_KEY);
     }
 }

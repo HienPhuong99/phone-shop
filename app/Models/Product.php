@@ -9,13 +9,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
-#[Fillable(['category_id', 'brand_id', 'series_id', 'name', 'slug', 'description', 'specifications', 'base_price', 'thumbnail', 'thumbnail_thumb', 'status', 'is_featured', 'featured_tagline', 'search_text'])]
+#[Fillable(['category_id', 'brand_id', 'series_id', 'name', 'slug', 'description', 'specifications', 'base_price', 'compare_at_price', 'thumbnail', 'thumbnail_thumb', 'status', 'is_featured', 'featured_tagline', 'search_text'])]
 class Product extends Model
 {
     /** @use HasFactory<ProductFactory> */
     use HasFactory;
+
+    /**
+     * Total stock at or below this is "sắp hết hàng" rather than "còn hàng".
+     */
+    private const LOW_STOCK_THRESHOLD = 5;
 
     /**
      * Mirrors the products table's own default(false) for is_featured
@@ -35,6 +43,7 @@ class Product extends Model
     {
         return [
             'base_price' => 'decimal:2',
+            'compare_at_price' => 'decimal:2',
             'specifications' => 'array',
             'is_featured' => 'boolean',
         ];
@@ -97,6 +106,16 @@ class Product extends Model
         return $this->hasMany(ProductImage::class)->orderBy('sort_order');
     }
 
+    /**
+     * Order items sold across this product's variants, for the "Bán chạy"
+     * sort. Excludes cancelled orders — those were never real demand.
+     */
+    public function orderItems(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderItem::class, ProductVariant::class, 'product_id', 'variant_id')
+            ->whereHas('order', fn (Builder $q) => $q->where('status', '!=', Order::STATUS_CANCELLED));
+    }
+
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', 'active');
@@ -119,15 +138,17 @@ class Product extends Model
     }
 
     /**
-     * Apply the series/category/price filters shared by the product listing
-     * and search results pages.
+     * Apply the series/category/price/storage/color/stock filters shared by
+     * the product listing and search results pages. series/storage/color
+     * each accept either a single value or an array of values (checkboxes
+     * post arrays, a quick-filter link posts one string).
      *
      * @param  array<string, mixed>  $filters
      */
     public function scopeFilter(Builder $query, array $filters): Builder
     {
         if (! empty($filters['series'])) {
-            $query->whereHas('series', fn (Builder $q) => $q->where('slug', $filters['series']));
+            $query->whereHas('series', fn (Builder $q) => $q->whereIn('slug', Arr::wrap($filters['series'])));
         }
 
         if (! empty($filters['category'])) {
@@ -142,6 +163,18 @@ class Product extends Model
             $query->where('base_price', '<=', (float) $filters['max_price']);
         }
 
+        if (! empty($filters['storage'])) {
+            $query->whereHas('variants', fn (Builder $q) => $q->whereIn('storage', Arr::wrap($filters['storage'])));
+        }
+
+        if (! empty($filters['color'])) {
+            $query->whereHas('variants', fn (Builder $q) => $q->whereIn('color', Arr::wrap($filters['color'])));
+        }
+
+        if (! empty($filters['in_stock'])) {
+            $query->whereHas('variants', fn (Builder $q) => $q->where('stock_quantity', '>', 0));
+        }
+
         return $query;
     }
 
@@ -150,6 +183,15 @@ class Product extends Model
         return match ($sort) {
             'price_asc' => $query->orderBy('base_price'),
             'price_desc' => $query->orderByDesc('base_price'),
+            // "* 1.0" forces floating-point division — on SQLite, dividing
+            // two integer columns truncates to 0 for every product whose
+            // discount is under 100%, which silently broke this sort.
+            'discount' => $query->orderByRaw(
+                'CASE WHEN compare_at_price IS NOT NULL AND compare_at_price > base_price
+                    THEN (compare_at_price - base_price) * 1.0 / compare_at_price
+                    ELSE 0 END DESC'
+            ),
+            'best_selling' => $query->withSum('orderItems as sold_count', 'quantity')->orderByDesc('sold_count'),
             default => $query->latest(),
         };
     }
@@ -159,5 +201,98 @@ class Product extends Model
         $cheapestVariant = $this->variants->sortBy('price')->first();
 
         return $cheapestVariant?->price ?? $this->base_price;
+    }
+
+    /**
+     * Percent off compare_at_price, or null when there's nothing to show
+     * (no compare price set, or it's not actually higher than base_price).
+     */
+    public function getDiscountPercentAttribute(): ?int
+    {
+        if ($this->compare_at_price === null || (float) $this->compare_at_price <= (float) $this->base_price) {
+            return null;
+        }
+
+        return (int) round((1 - ((float) $this->base_price / (float) $this->compare_at_price)) * 100);
+    }
+
+    /**
+     * Relies on `variants` being eager-loaded — same convention as
+     * getFinalPriceAttribute() above, no extra query.
+     */
+    public function getTotalStockAttribute(): int
+    {
+        return (int) $this->variants->sum('stock_quantity');
+    }
+
+    public function getStockStatusAttribute(): string
+    {
+        return match (true) {
+            $this->total_stock <= 0 => 'out_of_stock',
+            $this->total_stock <= self::LOW_STOCK_THRESHOLD => 'low_stock',
+            default => 'in_stock',
+        };
+    }
+
+    public function getStockLabelAttribute(): string
+    {
+        return match ($this->stock_status) {
+            'out_of_stock' => 'Hết hàng',
+            'low_stock' => 'Sắp hết hàng',
+            default => "Còn {$this->total_stock} máy",
+        };
+    }
+
+    /**
+     * Distinct storages across this product's variants, smallest first.
+     *
+     * @return Collection<int, string>
+     */
+    public function getStorageOptionsAttribute(): Collection
+    {
+        return $this->variants
+            ->pluck('storage')
+            ->unique()
+            ->sortBy(fn (string $storage) => self::storageSortKey($storage))
+            ->values();
+    }
+
+    /**
+     * Distinct storages across every active product's variants, for the
+     * listing/search filter sidebar. Cheap enough on this catalog size to
+     * run uncached — revisit if the catalog grows into the thousands.
+     *
+     * @return Collection<int, string>
+     */
+    public static function availableStorages(): Collection
+    {
+        return ProductVariant::whereHas('product', fn (Builder $q) => $q->active())
+            ->distinct()
+            ->pluck('storage')
+            ->sortBy(fn (string $storage) => self::storageSortKey($storage))
+            ->values();
+    }
+
+    /**
+     * Distinct colors across every active product's variants, for the
+     * listing/search filter sidebar.
+     *
+     * @return Collection<int, string>
+     */
+    public static function availableColors(): Collection
+    {
+        return ProductVariant::whereHas('product', fn (Builder $q) => $q->active())
+            ->distinct()
+            ->orderBy('color')
+            ->pluck('color');
+    }
+
+    /**
+     * Sorts "128GB" < "256GB" < ... < "1TB" — a plain string sort would put
+     * "1TB" before "256GB".
+     */
+    private static function storageSortKey(string $storage): int
+    {
+        return str_contains($storage, 'TB') ? ((int) $storage) * 1024 : (int) $storage;
     }
 }

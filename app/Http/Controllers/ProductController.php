@@ -22,8 +22,10 @@ class ProductController extends Controller
 
         $allSeries = ProductSeries::navList();
         $categories = Category::navList();
+        $storageOptions = Product::availableStorages();
+        $colorOptions = Product::availableColors();
 
-        return view('products.index', compact('products', 'allSeries', 'categories'));
+        return view('products.index', compact('products', 'allSeries', 'categories', 'storageOptions', 'colorOptions'));
     }
 
     public function show(Product $product): View

@@ -220,6 +220,80 @@ class ProductManagementTest extends TestCase
         ])->assertInvalid(['featured_tagline']);
     }
 
+    public function test_admin_can_set_compare_at_price_to_show_a_discount(): void
+    {
+        $product = Product::create([
+            'category_id' => $this->category->id,
+            'brand_id' => $this->brand->id,
+            'series_id' => $this->series->id,
+            'name' => 'iPhone Test',
+            'slug' => 'iphone-test',
+            'base_price' => 20000000,
+            'status' => 'active',
+        ]);
+
+        $this->actingAs($this->admin)->patch(route('admin.products.update', $product), [
+            'category_id' => $this->category->id,
+            'brand_id' => $this->brand->id,
+            'series_id' => $this->series->id,
+            'name' => $product->name,
+            'base_price' => 18000000,
+            'compare_at_price' => 20000000,
+            'status' => 'active',
+        ])->assertRedirect();
+
+        $product->refresh();
+        $this->assertSame('20000000.00', $product->compare_at_price);
+        $this->assertSame(10, $product->discount_percent);
+    }
+
+    public function test_updating_product_rejects_compare_at_price_not_greater_than_base_price(): void
+    {
+        $product = Product::create([
+            'category_id' => $this->category->id,
+            'brand_id' => $this->brand->id,
+            'series_id' => $this->series->id,
+            'name' => 'iPhone Test',
+            'slug' => 'iphone-test',
+            'base_price' => 20000000,
+            'status' => 'active',
+        ]);
+
+        $this->actingAs($this->admin)->patch(route('admin.products.update', $product), [
+            'category_id' => $this->category->id,
+            'brand_id' => $this->brand->id,
+            'series_id' => $this->series->id,
+            'name' => $product->name,
+            'base_price' => 20000000,
+            'compare_at_price' => 20000000,
+            'status' => 'active',
+        ])->assertInvalid(['compare_at_price']);
+    }
+
+    public function test_toggling_product_status_busts_category_and_series_nav_cache(): void
+    {
+        $product = Product::create([
+            'category_id' => $this->category->id,
+            'brand_id' => $this->brand->id,
+            'series_id' => $this->series->id,
+            'name' => 'iPhone Test',
+            'slug' => 'iphone-test',
+            'base_price' => 20000000,
+            'status' => 'active',
+        ]);
+
+        // Prime both caches while the product is still active.
+        $this->assertTrue(Category::navList()->contains('id', $this->category->id));
+        $this->assertTrue(ProductSeries::navList()->contains('id', $this->series->id));
+
+        $this->actingAs($this->admin)->patch(route('admin.products.toggle-status', $product))->assertRedirect();
+
+        // Hiding the only product in this category/series should drop both
+        // from the nav immediately, not after the cache's 1-hour TTL.
+        $this->assertFalse(Category::navList()->contains('id', $this->category->id));
+        $this->assertFalse(ProductSeries::navList()->contains('id', $this->series->id));
+    }
+
     public function test_deleting_category_with_products_is_blocked(): void
     {
         Product::create([

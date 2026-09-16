@@ -40,8 +40,10 @@ class SearchController extends Controller
 
         $allSeries = ProductSeries::navList();
         $categories = Category::navList();
+        $storageOptions = Product::availableStorages();
+        $colorOptions = Product::availableColors();
 
-        return view('search.index', compact('products', 'term', 'suggestion', 'allSeries', 'categories'));
+        return view('search.index', compact('products', 'term', 'suggestion', 'allSeries', 'categories', 'storageOptions', 'colorOptions'));
     }
 
     /**

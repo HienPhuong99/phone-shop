@@ -42,9 +42,16 @@
                     </div>
                 </div>
 
-                <div>
-                    <x-input-label for="base_price" value="Giá gốc" />
-                    <x-text-input id="base_price" name="base_price" type="number" step="1000" class="block mt-1 w-full" :value="old('base_price', $product->base_price)" required />
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <x-input-label for="base_price" value="Giá gốc" />
+                        <x-text-input id="base_price" name="base_price" type="number" step="1000" class="block mt-1 w-full" :value="old('base_price', $product->base_price)" required />
+                    </div>
+                    <div>
+                        <x-input-label for="compare_at_price" value="Giá trước khi giảm (không bắt buộc)" />
+                        <x-text-input id="compare_at_price" name="compare_at_price" type="number" step="1000" class="block mt-1 w-full" :value="old('compare_at_price', $product->compare_at_price)" />
+                        <p class="text-xs text-gray-500 mt-1">Để trống nếu không chạy khuyến mãi. Chỉ hiện badge giảm giá khi lớn hơn Giá gốc.</p>
+                    </div>
                 </div>
 
                 <div>
