@@ -142,6 +142,84 @@ class ProductManagementTest extends TestCase
         $this->assertSame('active', $product->fresh()->status);
     }
 
+    public function test_admin_can_toggle_product_featured_flag_for_homepage_slider(): void
+    {
+        $product = Product::create([
+            'category_id' => $this->category->id,
+            'brand_id' => $this->brand->id,
+            'series_id' => $this->series->id,
+            'name' => 'iPhone Test',
+            'slug' => 'iphone-test',
+            'base_price' => 20000000,
+            'status' => 'active',
+        ]);
+
+        $this->assertFalse($product->is_featured);
+
+        $this->actingAs($this->admin)
+            ->patch(route('admin.products.toggle-featured', $product))
+            ->assertRedirect();
+
+        $this->assertTrue($product->fresh()->is_featured);
+
+        $this->actingAs($this->admin)
+            ->patch(route('admin.products.toggle-featured', $product))
+            ->assertRedirect();
+
+        $this->assertFalse($product->fresh()->is_featured);
+    }
+
+    public function test_admin_can_set_featured_tagline_when_updating_product(): void
+    {
+        $product = Product::create([
+            'category_id' => $this->category->id,
+            'brand_id' => $this->brand->id,
+            'series_id' => $this->series->id,
+            'name' => 'iPhone Test',
+            'slug' => 'iphone-test',
+            'base_price' => 20000000,
+            'status' => 'active',
+        ]);
+
+        $this->actingAs($this->admin)->patch(route('admin.products.update', $product), [
+            'category_id' => $this->category->id,
+            'brand_id' => $this->brand->id,
+            'series_id' => $this->series->id,
+            'name' => $product->name,
+            'base_price' => $product->base_price,
+            'status' => 'active',
+            'is_featured' => '1',
+            'featured_tagline' => 'Camera vượt trội, hiệu năng đỉnh cao.',
+        ])->assertRedirect();
+
+        $product->refresh();
+        $this->assertTrue($product->is_featured);
+        $this->assertSame('Camera vượt trội, hiệu năng đỉnh cao.', $product->featured_tagline);
+    }
+
+    public function test_updating_product_rejects_featured_tagline_over_160_characters(): void
+    {
+        $product = Product::create([
+            'category_id' => $this->category->id,
+            'brand_id' => $this->brand->id,
+            'series_id' => $this->series->id,
+            'name' => 'iPhone Test',
+            'slug' => 'iphone-test',
+            'base_price' => 20000000,
+            'status' => 'active',
+        ]);
+
+        $this->actingAs($this->admin)->patch(route('admin.products.update', $product), [
+            'category_id' => $this->category->id,
+            'brand_id' => $this->brand->id,
+            'series_id' => $this->series->id,
+            'name' => $product->name,
+            'base_price' => $product->base_price,
+            'status' => 'active',
+            'featured_tagline' => str_repeat('a', 161),
+        ])->assertInvalid(['featured_tagline']);
+    }
+
     public function test_deleting_category_with_products_is_blocked(): void
     {
         Product::create([

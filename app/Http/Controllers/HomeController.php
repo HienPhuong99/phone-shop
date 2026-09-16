@@ -11,6 +11,14 @@ class HomeController extends Controller
 {
     public function index(): View
     {
+        $heroProducts = Product::query()
+            ->where('status', 'active')
+            ->where('is_featured', true)
+            ->with(['series', 'variants'])
+            ->latest()
+            ->take(6)
+            ->get();
+
         $featuredProducts = Product::query()
             ->where('status', 'active')
             ->with(['series', 'variants'])
@@ -21,6 +29,6 @@ class HomeController extends Controller
         $categories = Category::navList();
         $series = ProductSeries::navList();
 
-        return view('home', compact('featuredProducts', 'categories', 'series'));
+        return view('home', compact('heroProducts', 'featuredProducts', 'categories', 'series'));
     }
 }

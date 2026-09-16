@@ -94,6 +94,15 @@ class ProductController extends Controller
         return back()->with('status', $message);
     }
 
+    public function toggleFeatured(Product $product): RedirectResponse
+    {
+        $product->update(['is_featured' => ! $product->is_featured]);
+
+        $message = $product->is_featured ? 'Đã thêm vào sản phẩm nổi bật.' : 'Đã bỏ khỏi sản phẩm nổi bật.';
+
+        return back()->with('status', $message);
+    }
+
     private function validated(Request $request, ?Product $product = null): array
     {
         $data = $request->validate([
@@ -106,9 +115,12 @@ class ProductController extends Controller
             'base_price' => ['required', 'numeric', 'min:0'],
             'status' => ['required', 'in:active,inactive'],
             'thumbnail' => ['nullable', 'image', 'max:4096'],
+            'is_featured' => ['sometimes', 'boolean'],
+            'featured_tagline' => ['nullable', 'string', 'max:160'],
         ]);
 
         unset($data['thumbnail']);
+        $data['is_featured'] = $request->boolean('is_featured');
         $data['specifications'] = $this->parseSpecifications($data['specifications'] ?? null);
         $data['slug'] = $product?->slug ?? Str::slug($data['name']).'-'.Str::random(4);
 

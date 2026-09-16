@@ -10,14 +10,18 @@
                     Xem tất cả sản phẩm
                 </a>
             </div>
-            <div class="aspect-square bg-white border border-line rounded-2xl shadow-sm flex items-center justify-center p-8">
-                <div class="w-full h-full rounded-xl bg-slate-50 border border-dashed border-line flex flex-col items-center justify-center text-center p-6">
-                    <svg class="w-16 h-16 text-brand/40 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
-                    </svg>
-                    <span class="text-xs font-semibold text-ink-soft uppercase tracking-wider">Sản phẩm nổi bật</span>
+            @if ($heroProducts->isNotEmpty())
+                <x-hero-product-slider :products="$heroProducts" />
+            @else
+                <div class="aspect-square bg-white border border-line rounded-2xl shadow-sm flex items-center justify-center p-8">
+                    <div class="w-full h-full rounded-xl bg-slate-50 border border-dashed border-line flex flex-col items-center justify-center text-center p-6">
+                        <svg class="w-16 h-16 text-brand/40 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+                        </svg>
+                        <span class="text-xs font-semibold text-ink-soft uppercase tracking-wider">Sản phẩm nổi bật</span>
+                    </div>
                 </div>
-            </div>
+            @endif
         </div>
     </section>
 

@@ -68,6 +68,19 @@
             <textarea id="description" name="description" rows="5" class="block mt-1 w-full rounded-md border-gray-300">{{ old('description') }}</textarea>
         </div>
 
+        <div class="border-t border-gray-100 pt-4">
+            <label class="flex items-center gap-2">
+                <input type="checkbox" name="is_featured" value="1" {{ old('is_featured') ? 'checked' : '' }} class="rounded border-gray-300 text-indigo-600">
+                <span class="text-sm font-medium text-gray-700">Hiển thị trong "Sản phẩm nổi bật" ở trang chủ</span>
+            </label>
+
+            <div class="mt-3">
+                <x-input-label for="featured_tagline" value="Slogan / giới thiệu ngắn (hiển thị trên trang chủ)" />
+                <x-text-input id="featured_tagline" name="featured_tagline" class="block mt-1 w-full" :value="old('featured_tagline')" maxlength="160" />
+                <p class="text-xs text-gray-500 mt-1">Ví dụ: "Camera vượt trội, hiệu năng đỉnh cao." Tối đa 160 ký tự.</p>
+            </div>
+        </div>
+
         <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2 rounded-md">Tạo sản phẩm</button>
     </form>
 </x-admin-layout>
