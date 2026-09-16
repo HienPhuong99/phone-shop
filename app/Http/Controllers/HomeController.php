@@ -12,7 +12,7 @@ class HomeController extends Controller
     public function index(): View
     {
         $heroProducts = Product::query()
-            ->where('status', 'active')
+            ->active()
             ->where('is_featured', true)
             ->with(['series', 'variants'])
             ->latest()
@@ -20,7 +20,7 @@ class HomeController extends Controller
             ->get();
 
         $featuredProducts = Product::query()
-            ->where('status', 'active')
+            ->active()
             ->with(['series', 'variants'])
             ->latest()
             ->take(8)

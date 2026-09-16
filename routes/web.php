@@ -7,6 +7,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\VnpayController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,11 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/san-pham', [ProductController::class, 'index'])->name('products.index');
 Route::get('/san-pham/{product}', [ProductController::class, 'show'])->name('products.show');
+
+Route::get('/tim-kiem', [SearchController::class, 'index'])->name('search');
+Route::get('/tim-kiem/goi-y', [SearchController::class, 'suggest'])
+    ->middleware('throttle:60,1')
+    ->name('search.suggest');
 
 Route::get('/gio-hang', [CartController::class, 'index'])->name('cart.index');
 Route::post('/gio-hang', [CartController::class, 'store'])->name('cart.store');

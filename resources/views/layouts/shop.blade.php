@@ -15,13 +15,15 @@
         <div class="min-h-screen flex flex-col pb-16 sm:pb-0" x-data="{ accountSheetOpen: false }">
             <header class="bg-brand [padding-top:env(safe-area-inset-top)]">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex justify-between items-center h-[76px]">
-                        <a href="{{ route('home') }}" class="font-extrabold text-xl tracking-tight flex items-center gap-2.5">
+                    <div class="flex items-center gap-4 sm:gap-6 h-[76px]">
+                        <a href="{{ route('home') }}" class="shrink-0 font-extrabold text-xl tracking-tight flex items-center gap-2.5">
                             <img src="{{ asset('images/logo-icon.svg') }}" alt="" class="h-9 w-9 rounded-[11px] shadow-sm">
-                            <span><span class="text-white">phuong</span><span class="text-[#FF6B4A]">hihi</span></span>
+                            <span class="hidden sm:inline"><span class="text-white">phuong</span><span class="text-[#FF6B4A]">hihi</span></span>
                         </a>
 
-                        <nav class="hidden sm:flex sm:space-x-8">
+                        <x-search-bar />
+
+                        <nav class="hidden lg:flex lg:space-x-8 shrink-0">
                             <a href="{{ route('home') }}" class="inline-flex items-center px-1 pt-1 text-sm font-semibold border-b-2 {{ request()->routeIs('home') ? 'text-white border-white' : 'text-white/70 hover:text-white border-transparent' }}">
                                 Trang chủ
                             </a>
@@ -30,7 +32,7 @@
                             </a>
                         </nav>
 
-                        <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-4 shrink-0">
                             <a href="{{ route('cart.index') }}" class="hidden sm:block relative text-white/80 hover:text-white transition">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 1.907-4.925 2.29-7.68l.062-.469a1.125 1.125 0 00-1.115-1.276H6.106M7.5 14.25L5.106 5.272M7.5 14.25L6.6 20.4A.75.75 0 007.35 21h9.3m-7.5-1.5h7.5m-7.5 0a.75.75 0 100 1.5.75.75 0 000-1.5zm7.5 0a.75.75 0 100 1.5.75.75 0 000-1.5z" />
