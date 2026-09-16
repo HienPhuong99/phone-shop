@@ -7,9 +7,25 @@
 
         <title>{{ $title ?? config('app.name', 'phuonghihi') }}</title>
 
+        @if ($description)
+            <meta name="description" content="{{ $description }}">
+        @endif
+
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="{{ $title ?? config('app.name', 'phuonghihi') }}">
+        <meta property="og:url" content="{{ url()->current() }}">
+        @if ($description)
+            <meta property="og:description" content="{{ $description }}">
+        @endif
+        @if ($ogImage)
+            <meta property="og:image" content="{{ $ogImage }}">
+        @endif
+
         <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo-icon.svg') }}">
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        {{ $head ?? '' }}
     </head>
     <body class="font-sans antialiased bg-paper text-ink [padding-left:env(safe-area-inset-left)] [padding-right:env(safe-area-inset-right)]">
         <div class="min-h-screen flex flex-col pb-16 sm:pb-0" x-data="{ accountSheetOpen: false }">

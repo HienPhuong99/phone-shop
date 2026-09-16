@@ -32,6 +32,23 @@ class ProductController extends Controller
     {
         $product->load(['series', 'category', 'variants', 'images']);
 
-        return view('products.show', compact('product'));
+        $relatedProducts = Product::query()
+            ->active()
+            ->where('series_id', $product->series_id)
+            ->where('id', '!=', $product->id)
+            ->with(['series', 'variants'])
+            ->take(4)
+            ->get();
+
+        // "So sánh nhanh" picks whichever other active product sits closest
+        // in price — usually the previous generation of the same tier.
+        $comparisonProduct = Product::query()
+            ->active()
+            ->where('id', '!=', $product->id)
+            ->with(['series', 'variants'])
+            ->orderByRaw('ABS(base_price - ?)', [$product->base_price])
+            ->first();
+
+        return view('products.show', compact('product', 'relatedProducts', 'comparisonProduct'));
     }
 }

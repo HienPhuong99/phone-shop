@@ -18,14 +18,60 @@
             'thumb' => $image->thumb_url ?? $image->url,
         ]))
         ->values();
+
+    // Only specs both products actually have, so the table never shows a
+    // blank cell.
+    $comparisonSpecLabels = $comparisonProduct
+        ? collect($product->specifications ?? [])
+            ->keys()
+            ->intersect(collect($comparisonProduct->specifications ?? [])->keys())
+            ->take(6)
+        : collect();
+
+    $metaDescription = $product->description
+        ? Illuminate\Support\Str::limit(preg_replace('/\s+/', ' ', trim($product->description)), 155)
+        : "{$product->name} chính hãng, giá ".number_format((float) $product->base_price, 0, ',', '.')."đ tại phuonghihi. Bảo hành 12 tháng, giao toàn quốc.";
 @endphp
 
-<x-shop-layout :title="$product->name.' - phuonghihi'" :hide-bottom-nav="true">
+<x-shop-layout
+    :title="$product->name.' - phuonghihi'"
+    :hide-bottom-nav="true"
+    :description="$metaDescription"
+    :og-image="$galleryImages->first()['url'] ?? null"
+>
+    <x-slot:head>
+        {{--
+            Plain json_encode(), not Js::from() — Js::from() wraps its
+            output in a JSON.parse(...) JS expression (meant for a JS
+            variable assignment), but application/ld+json needs the
+            script tag's textContent to parse as JSON on its own.
+            json_encode()'s default slash-escaping keeps a stray
+            "</script>" in any field from breaking out of the tag.
+        --}}
+        <script type="application/ld+json">{!! json_encode([
+                '@@context' => 'https://schema.org',
+                '@type' => 'Product',
+                'name' => $product->name,
+                'description' => $metaDescription,
+                'image' => $galleryImages->pluck('url')->values()->all(),
+                'brand' => ['@type' => 'Brand', 'name' => 'Apple'],
+                'offers' => [
+                    '@type' => 'Offer',
+                    'url' => route('products.show', $product->slug),
+                    'priceCurrency' => 'VND',
+                    'price' => (string) $product->base_price,
+                    'availability' => $product->total_stock > 0
+                        ? 'https://schema.org/InStock'
+                        : 'https://schema.org/OutOfStock',
+                ],
+            ], JSON_UNESCAPED_UNICODE) !!}</script>
+    </x-slot:head>
     <div
         class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-28 sm:pb-8"
         x-data="{
             variants: {{ Illuminate\Support\Js::from($variantsData) }},
             gallery: {{ Illuminate\Support\Js::from($galleryImages) }},
+            compareAtPrice: {{ $product->compare_at_price ? (float) $product->compare_at_price : 'null' }},
             activeImage: 0,
             fading: false,
             selectedId: {{ $product->variants->first()?->id ?? 'null' }},
@@ -50,6 +96,16 @@
             },
             get selected() {
                 return this.variants.find(v => v.id === this.selectedId) ?? null;
+            },
+            get currentPrice() {
+                return this.selected?.price ?? {{ (float) $product->base_price }};
+            },
+            get savings() {
+                if (!this.compareAtPrice || this.compareAtPrice <= this.currentPrice) return null;
+                return this.compareAtPrice - this.currentPrice;
+            },
+            get monthlyInstallment() {
+                return Math.round(this.currentPrice / 12);
             },
             get colors() {
                 return [...new Set(this.variants.map(v => v.color))];
@@ -108,6 +164,7 @@
         <nav class="text-sm text-ink-soft mb-6">
             <a href="{{ route('home') }}" class="hover:text-brand transition">Trang chủ</a> /
             <a href="{{ route('products.index') }}" class="hover:text-brand transition">Sản phẩm</a> /
+            <a href="{{ route('products.index', ['series' => $product->series->slug]) }}" class="hover:text-brand transition">{{ $product->series->name }}</a> /
             <span class="text-ink font-medium">{{ $product->name }}</span>
         </nav>
 
@@ -159,10 +216,17 @@
                     <p
                         class="text-brand text-3xl font-extrabold transition-transform duration-200 ease-out"
                         :class="pulse ? 'scale-105' : 'scale-100'"
-                        x-text="new Intl.NumberFormat('vi-VN').format(selected?.price ?? {{ $product->base_price }}) + 'đ'"
+                        x-text="new Intl.NumberFormat('vi-VN').format(currentPrice) + 'đ'"
                     ></p>
+                    <template x-if="savings">
+                        <p class="text-sm text-ink-soft/70 line-through" x-text="new Intl.NumberFormat('vi-VN').format(compareAtPrice) + 'đ'"></p>
+                    </template>
                     <p class="text-xs text-ink-soft">(Đã bao gồm VAT)</p>
                 </div>
+
+                <template x-if="savings">
+                    <p class="mt-1 text-xs font-semibold text-[#c2410c]" x-text="`Tiết kiệm ${new Intl.NumberFormat('vi-VN').format(savings)}đ`"></p>
+                </template>
 
                 <template x-if="selected">
                     <p
@@ -178,10 +242,12 @@
                         <span class="shrink-0 w-6 h-6 rounded-lg bg-brand/10 text-brand flex items-center justify-center text-[11px] font-bold">✓</span>
                         <span class="text-xs text-ink">Bảo hành chính hãng 12 tháng, 1 đổi 1 trong 30 ngày đầu</span>
                     </div>
-                    <div class="flex items-center gap-2.5 px-3.5 py-2.5">
+                    <a href="{{ route('pages.services') }}" class="flex items-center gap-2.5 px-3.5 py-2.5 hover:bg-white transition">
                         <span class="shrink-0 w-6 h-6 rounded-lg bg-brand/10 text-brand flex items-center justify-center text-[11px] font-bold">%</span>
-                        <span class="text-xs text-ink">Trả góp 0% lãi suất qua thẻ tín dụng</span>
-                    </div>
+                        <span class="text-xs text-ink">
+                            Trả góp 0% — từ <span class="font-semibold" x-text="new Intl.NumberFormat('vi-VN').format(monthlyInstallment) + 'đ'"></span>/tháng (12 tháng)
+                        </span>
+                    </a>
                     <div class="flex items-center gap-2.5 px-3.5 py-2.5">
                         <span class="shrink-0 w-6 h-6 rounded-lg bg-brand/10 text-brand flex items-center justify-center text-[11px] font-bold">⇄</span>
                         <span class="text-xs text-ink">Thu cũ lên đời, trừ thẳng vào hoá đơn</span>
@@ -304,6 +370,55 @@
             </div>
         </div>
 
+        <!-- So sánh nhanh -->
+        @if ($comparisonProduct && $comparisonSpecLabels->isNotEmpty())
+            <div class="mt-12 max-w-3xl">
+                <h2 class="font-bold text-lg text-ink mb-3">So sánh nhanh trong tầm giá</h2>
+                <div class="rounded-2xl border border-line overflow-hidden bg-white shadow-sm overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-paper/60">
+                                <th class="text-left font-medium text-ink-soft px-4 py-3 w-1/3">Tiêu chí</th>
+                                <th class="text-left font-bold text-brand px-4 py-3 bg-brand/5">{{ $product->name }}</th>
+                                <th class="text-left font-bold text-ink px-4 py-3">{{ $comparisonProduct->name }}</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-line">
+                            <tr>
+                                <td class="px-4 py-3 font-medium text-ink-soft">Giá từ</td>
+                                <td class="px-4 py-3 font-bold text-brand bg-brand/5">{{ number_format($product->base_price, 0, ',', '.') }}đ</td>
+                                <td class="px-4 py-3 text-ink">{{ number_format($comparisonProduct->base_price, 0, ',', '.') }}đ</td>
+                            </tr>
+                            @foreach ($comparisonSpecLabels as $label)
+                                <tr>
+                                    <td class="px-4 py-3 font-medium text-ink-soft">{{ $label }}</td>
+                                    <td class="px-4 py-3 text-ink bg-brand/5">{{ $product->specifications[$label] }}</td>
+                                    <td class="px-4 py-3 text-ink">{{ $comparisonProduct->specifications[$label] }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @endif
+
+        <!-- Cùng dòng sản phẩm -->
+        @if ($relatedProducts->isNotEmpty())
+            <div class="mt-12">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="font-bold text-lg text-ink">Cùng dòng {{ $product->series->name }}</h2>
+                    <a href="{{ route('products.index', ['series' => $product->series->slug]) }}" class="text-sm font-semibold text-brand hover:text-brand-dark transition">Xem tất cả &rarr;</a>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    @foreach ($relatedProducts as $related)
+                        <x-product-card :product="$related" />
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
+        <x-recently-viewed :product="$product" />
+
         <!-- Sticky add-to-cart bar (mobile) -->
         <div class="sm:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-line px-3 py-2.5 [padding-bottom:calc(env(safe-area-inset-bottom)+0.625rem)] flex items-center gap-2">
             <a href="{{ route('cart.index') }}" class="shrink-0 p-2 rounded-xl border border-line text-ink-soft">
@@ -314,7 +429,7 @@
 
             <div class="flex-1 min-w-0">
                 <p class="text-[11px] text-ink-soft leading-none">Giá</p>
-                <p class="mt-1 text-brand font-extrabold text-base leading-none whitespace-nowrap" x-text="new Intl.NumberFormat('vi-VN').format(selected?.price ?? {{ $product->base_price }}) + 'đ'"></p>
+                <p class="mt-1 text-brand font-extrabold text-base leading-none whitespace-nowrap" x-text="new Intl.NumberFormat('vi-VN').format(currentPrice) + 'đ'"></p>
             </div>
 
             <form method="POST" action="{{ route('cart.store') }}" class="shrink-0">
