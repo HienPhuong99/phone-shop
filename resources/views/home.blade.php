@@ -49,16 +49,34 @@
     </section>
 
     <!-- Dòng sản phẩm -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    @php
+        $initialSeriesCount = 6;
+    @endphp
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6" x-data="{ expanded: false }">
         <h2 class="text-xs font-bold tracking-wide uppercase text-ink-soft mb-4">Dòng sản phẩm</h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            @foreach ($series as $item)
-                <a href="{{ route('products.index', ['series' => $item->slug]) }}" class="block px-4 py-3 rounded-2xl border border-line bg-white shadow-sm hover:border-brand transition">
+            @foreach ($series as $index => $item)
+                <a
+                    href="{{ route('products.index', ['series' => $item->slug]) }}"
+                    @if ($index >= $initialSeriesCount)
+                        x-show="expanded" x-cloak
+                    @endif
+                    class="block px-4 py-3 rounded-2xl border border-line bg-white shadow-sm hover:border-brand transition"
+                >
                     <p class="text-sm font-semibold text-ink">{{ $item->name }}</p>
                     <p class="mt-1 text-xs text-ink-soft line-clamp-2">{{ $item->description }}</p>
                 </a>
             @endforeach
         </div>
+
+        @if ($series->count() > $initialSeriesCount)
+            <div class="mt-4 text-center">
+                <button type="button" @click="expanded = !expanded" class="text-sm font-semibold text-brand hover:text-brand-dark transition">
+                    <span x-show="!expanded">Xem thêm dòng sản phẩm</span>
+                    <span x-show="expanded" x-cloak>Thu gọn</span>
+                </button>
+            </div>
+        @endif
     </section>
 
     <!-- Danh mục -->
