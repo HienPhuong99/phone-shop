@@ -17,6 +17,20 @@ class Product extends Model
     /** @use HasFactory<ProductFactory> */
     use HasFactory;
 
+    /**
+     * Mirrors the products table's own default(false) for is_featured
+     * (migration 2026_09_16_075458). Without this, a freshly created()
+     * model has no is_featured attribute at all until it's reloaded from
+     * the database — the column default is applied by the database, not
+     * reflected back onto the in-memory model — so $product->is_featured
+     * reads as null instead of false right after create().
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'is_featured' => false,
+    ];
+
     protected function casts(): array
     {
         return [
