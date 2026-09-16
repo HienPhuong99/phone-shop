@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
-#[Fillable(['category_id', 'brand_id', 'series_id', 'name', 'slug', 'description', 'specifications', 'base_price', 'thumbnail', 'thumbnail_thumb', 'status', 'is_featured', 'featured_tagline'])]
+#[Fillable(['category_id', 'brand_id', 'series_id', 'name', 'slug', 'description', 'specifications', 'base_price', 'thumbnail', 'thumbnail_thumb', 'status', 'is_featured', 'featured_tagline', 'search_text'])]
 class Product extends Model
 {
     /** @use HasFactory<ProductFactory> */
@@ -35,7 +35,9 @@ class Product extends Model
     {
         // Keep search_text (name + series + category, lowercased and
         // accent-stripped) in sync on every save so search matches
-        // Vietnamese input typed without diacritics.
+        // Vietnamese input typed without diacritics. This does NOT fire
+        // during `db:seed` — DatabaseSeeder uses WithoutModelEvents, so
+        // ProductSeeder sets search_text itself via buildSearchText().
         static::saving(function (self $product): void {
             $seriesName = $product->series_id
                 ? ProductSeries::whereKey($product->series_id)->value('name')
@@ -45,10 +47,15 @@ class Product extends Model
                 ? Category::whereKey($product->category_id)->value('name')
                 : null;
 
-            $product->search_text = Str::lower(Str::ascii(
-                collect([$product->name, $seriesName, $categoryName])->filter()->implode(' ')
-            ));
+            $product->search_text = self::buildSearchText($product->name, $seriesName, $categoryName);
         });
+    }
+
+    public static function buildSearchText(string $name, ?string $seriesName, ?string $categoryName): string
+    {
+        return Str::lower(Str::ascii(
+            collect([$name, $seriesName, $categoryName])->filter()->implode(' ')
+        ));
     }
 
     public function category(): BelongsTo

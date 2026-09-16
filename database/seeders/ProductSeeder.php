@@ -46,9 +46,11 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        $categoryId = Category::where('name', 'Điện thoại')->value('id');
+        $categoryName = 'Điện thoại';
+        $categoryId = Category::where('name', $categoryName)->value('id');
         $brandId = Brand::where('name', 'Apple')->value('id');
         $seriesIds = ProductSeries::pluck('id', 'slug');
+        $seriesNames = ProductSeries::pluck('name', 'slug');
 
         foreach ($this->models() as $model) {
             $slug = Str::slug($model['name']);
@@ -65,6 +67,10 @@ class ProductSeeder extends Seeder
                     'base_price' => min(array_column($model['storages'], 'price')),
                     'thumbnail' => $model['thumbnail'] ?? null,
                     'status' => in_array($model['name'], self::ACTIVE_MODELS, true) ? 'active' : 'inactive',
+                    // DatabaseSeeder disables model events (WithoutModelEvents),
+                    // so Product::booted()'s saving hook never runs here —
+                    // set search_text ourselves via the same helper it uses.
+                    'search_text' => Product::buildSearchText($model['name'], $seriesNames[$model['series']], $categoryName),
                 ]
             );
 
