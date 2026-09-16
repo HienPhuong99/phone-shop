@@ -176,3 +176,13 @@ This project has two ways to verify the frontend — pick whichever fits the tas
 - **`npx playwright test`** (runs `tests/*.spec.ts`, config in `playwright.config.ts`): use to verify no regression before calling a UI task done, or when the same check needs to be repeatable (CI, re-run after future changes). Add a spec file here when a flow is worth guarding long-term (e.g. login/register submit successfully), not for every visual tweak.
 
 Rule of thumb: exploring/debugging → live inspection. Confirming/guarding a finished change → run (or add to) the test suite. `php artisan serve` must be running on `127.0.0.1:8000` for either to work, since `baseURL` in `playwright.config.ts` is intentionally left empty.
+
+## Frontend rebuild reminder
+
+Whenever a reply tells the user a frontend change (Blade classes, `resources/css`, `resources/js`) needs a rebuild to show up, end that reply with the exact command, e.g.:
+
+```
+npm run build
+```
+
+(or `composer run dev` if they're actively developing and want it to auto-rebuild on save).
