@@ -153,6 +153,91 @@ class ProductShowTest extends TestCase
         $response->assertDontSee('So sánh nhanh trong tầm giá');
     }
 
+    public function test_specifications_render_under_their_group_headings(): void
+    {
+        $product = $this->makeProduct(['name' => 'iPhone Nhóm', 'slug' => 'iphone-nhom']);
+        $product->update(['specifications' => [
+            'Màn hình' => '6.9 inch OLED',
+            'Vi xử lý (CPU)' => 'A18 Pro',
+            'Pin' => '4.685 mAh',
+        ]]);
+
+        $response = $this->get(route('products.show', $product));
+
+        $response->assertOk();
+        // Group headings are uppercased by CSS, so the markup keeps their
+        // original casing.
+        $response->assertSeeInOrder([
+            'Màn hình', '6.9 inch OLED',
+            'Hiệu năng &amp; Bộ nhớ', 'A18 Pro',
+            'Pin &amp; Sạc', '4.685 mAh',
+        ], false);
+    }
+
+    public function test_highlight_cards_and_summary_rail_render_from_spec_highlights(): void
+    {
+        // The summary rail sits beside the description as a reading aid, so
+        // the product needs one for the rail to have anything to sit next to.
+        $product = $this->makeProduct([
+            'name' => 'Iphone Noi Bat', 'slug' => 'iphone-noi-bat', 'description' => 'Mô tả máy.',
+        ]);
+        $product->update(['spec_highlights' => ['Chip' => 'Apple A18 Pro', 'Pin' => '4.685 mAh']]);
+
+        $response = $this->get(route('products.show', $product));
+
+        $response->assertOk();
+        $response->assertSee('Thông số nổi bật');
+        $response->assertSee('Tóm tắt máy');
+        // Once as a highlight card, once in the sticky summary rail.
+        $this->assertSame(2, substr_count($response->getContent(), 'Apple A18 Pro'));
+    }
+
+    public function test_a_product_without_highlights_shows_neither_the_cards_nor_the_rail(): void
+    {
+        $product = $this->makeProduct(['name' => 'iPhone Trống', 'slug' => 'iphone-trong', 'description' => 'Mô tả ngắn.']);
+
+        $response = $this->get(route('products.show', $product));
+
+        $response->assertOk();
+        $response->assertDontSee('Thông số nổi bật');
+        $response->assertDontSee('Tóm tắt máy');
+    }
+
+    public function test_description_headings_render_above_their_paragraphs(): void
+    {
+        $product = $this->makeProduct(['name' => 'iPhone Mô Tả', 'slug' => 'iphone-mo-ta']);
+        $product->update(['description' => implode("\n\n", [
+            'Đoạn dẫn giới thiệu máy.',
+            'Đề mục chương lớn',
+            'Tiêu đề phụ thứ nhất',
+            'Nội dung của phần thứ nhất.',
+        ])]);
+
+        $response = $this->get(route('products.show', $product));
+
+        $response->assertOk();
+        $response->assertSeeInOrder([
+            'Đoạn dẫn giới thiệu máy.',
+            'Đề mục chương lớn',
+            'Tiêu đề phụ thứ nhất',
+            'Nội dung của phần thứ nhất.',
+        ]);
+        $response->assertSee('Xem thêm mô tả');
+    }
+
+    public function test_section_tabs_only_link_to_sections_the_page_actually_has(): void
+    {
+        $product = $this->makeProduct(['name' => 'iPhone Tab', 'slug' => 'iphone-tab', 'description' => 'Có mô tả.']);
+
+        $response = $this->get(route('products.show', $product));
+
+        $response->assertOk();
+        $response->assertSee('href="#mo-ta"', false);
+        $response->assertSee('href="#danh-gia"', false);
+        // No specifications on this product, so no tab pointing at them.
+        $response->assertDontSee('href="#thong-so"', false);
+    }
+
     public function test_includes_meta_description_and_json_ld_product_schema(): void
     {
         $product = $this->makeProduct([

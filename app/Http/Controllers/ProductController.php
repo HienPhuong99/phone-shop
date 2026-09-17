@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductSeries;
+use App\Services\SpecificationGrouper;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ProductController extends Controller
 {
+    public function __construct(private SpecificationGrouper $specGrouper) {}
+
     public function index(Request $request): View
     {
         $products = Product::query()
@@ -57,8 +60,10 @@ class ProductController extends Controller
         $hasReviewed = $user && $user->hasReviewed($product);
         $isWishlisted = $user && $product->wishlists()->where('user_id', $user->id)->exists();
 
+        $specGroups = $this->specGrouper->group($product->specifications);
+
         return view('products.show', compact(
-            'product', 'relatedProducts', 'comparisonProduct', 'canReview', 'hasReviewed', 'isWishlisted'
+            'product', 'relatedProducts', 'comparisonProduct', 'canReview', 'hasReviewed', 'isWishlisted', 'specGroups'
         ));
     }
 }

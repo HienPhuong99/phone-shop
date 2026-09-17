@@ -14,7 +14,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
-#[Fillable(['category_id', 'brand_id', 'series_id', 'name', 'slug', 'description', 'specifications', 'base_price', 'compare_at_price', 'thumbnail', 'thumbnail_thumb', 'status', 'is_featured', 'featured_tagline', 'search_text'])]
+#[Fillable(['category_id', 'brand_id', 'series_id', 'name', 'slug', 'description', 'specifications', 'spec_highlights', 'base_price', 'compare_at_price', 'thumbnail', 'thumbnail_thumb', 'status', 'is_featured', 'featured_tagline', 'search_text'])]
 class Product extends Model
 {
     /** @use HasFactory<ProductFactory> */
@@ -45,6 +45,7 @@ class Product extends Model
             'base_price' => 'decimal:2',
             'compare_at_price' => 'decimal:2',
             'specifications' => 'array',
+            'spec_highlights' => 'array',
             'is_featured' => 'boolean',
         ];
     }
@@ -270,6 +271,42 @@ class Product extends Model
     public function getAverageRatingAttribute(): ?float
     {
         return $this->reviews_avg_rating !== null ? round((float) $this->reviews_avg_rating, 1) : null;
+    }
+
+    /**
+     * Splits the description into typed blocks so the page can give each
+     * its own weight instead of rendering one flat run of text.
+     *
+     * Every seeded description follows the same shape: a lead paragraph,
+     * a chapter title, then alternating sub-heading/body pairs. Anything
+     * that does not follow it still renders — trailing lines fall through
+     * as body paragraphs.
+     *
+     * @return list<array{type: 'lead'|'chapter'|'heading'|'body', text: string}>
+     */
+    public function getDescriptionBlocksAttribute(): array
+    {
+        $lines = array_values(array_filter(
+            array_map('trim', preg_split('/\R/', (string) $this->description) ?: []),
+            fn (string $line) => $line !== ''
+        ));
+
+        if ($lines === []) {
+            return [];
+        }
+
+        $blocks = [['type' => 'lead', 'text' => array_shift($lines)]];
+
+        if ($lines !== []) {
+            $blocks[] = ['type' => 'chapter', 'text' => array_shift($lines)];
+        }
+
+        // What is left alternates heading, body, heading, body…
+        foreach ($lines as $index => $line) {
+            $blocks[] = ['type' => $index % 2 === 0 ? 'heading' : 'body', 'text' => $line];
+        }
+
+        return $blocks;
     }
 
     /**

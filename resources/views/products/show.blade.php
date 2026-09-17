@@ -387,33 +387,151 @@
             </div>
         </div>
 
-        <!-- Thông số & mô tả -->
-        <div class="mt-12 max-w-3xl">
-            @if (! empty($product->specifications))
-                <div>
-                    <h2 class="font-bold text-lg text-ink mb-3">Thông số kỹ thuật</h2>
-                    <dl class="divide-y divide-line rounded-2xl border border-line overflow-hidden bg-white shadow-sm">
-                        @foreach ($product->specifications as $label => $value)
-                            <div class="flex flex-col sm:flex-row gap-1 sm:gap-4 px-4 py-3 odd:bg-paper/60">
-                                <dt class="w-full sm:w-48 shrink-0 text-sm font-medium text-ink">{{ $label }}</dt>
-                                <dd class="text-sm text-ink-soft">{{ $value }}</dd>
-                            </div>
-                        @endforeach
-                    </dl>
-                </div>
-            @endif
+        {{-- Điều hướng nhanh giữa các khối nội dung --}}
+        <div class="mt-12 sticky top-0 z-30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 bg-paper/93 backdrop-blur border-y border-line">
+            <nav class="flex gap-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Nội dung sản phẩm">
+                @php
+                    $sectionLinks = array_filter([
+                        ['id' => 'mo-ta', 'label' => 'Tổng quan', 'show' => $product->description !== null],
+                        ['id' => 'thong-so', 'label' => 'Thông số kỹ thuật', 'show' => $specGroups !== []],
+                        ['id' => 'danh-gia', 'label' => 'Đánh giá', 'count' => $product->reviews_count, 'show' => true],
+                        ['id' => 'so-sanh', 'label' => 'So sánh', 'show' => $comparisonProduct && $comparisonSpecLabels->isNotEmpty()],
+                    ], fn ($link) => $link['show']);
+                @endphp
 
-            <div class="mt-10 border-t border-line pt-6">
-                <h2 class="font-bold text-lg text-ink mb-3">Mô tả sản phẩm</h2>
-                <p class="text-sm text-ink-soft whitespace-pre-line leading-relaxed">{{ $product->description }}</p>
-            </div>
+                @foreach ($sectionLinks as $link)
+                    <a
+                        href="#{{ $link['id'] }}"
+                        class="whitespace-nowrap px-4 py-3.5 text-sm font-semibold text-ink-soft hover:text-brand border-b-[2.5px] border-transparent hover:border-brand/40 transition"
+                    >
+                        {{ $link['label'] }}@if (! empty($link['count']))
+                            <span class="font-medium text-ink-soft/80">({{ $link['count'] }})</span>
+                        @endif
+                    </a>
+                @endforeach
+            </nav>
         </div>
+
+        {{-- Thông số nổi bật --}}
+        @if (! empty($product->spec_highlights))
+            <div class="mt-8">
+                <h2 class="font-bold text-lg text-ink mb-4">Thông số nổi bật</h2>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                    @php
+                        $highlightIcons = [
+                            'Màn hình' => 'display', 'Chip' => 'chip', 'RAM' => 'ram',
+                            'Bộ nhớ' => 'storage', 'Camera sau' => 'camera', 'Pin' => 'battery',
+                        ];
+                    @endphp
+
+                    @foreach ($product->spec_highlights as $label => $value)
+                        <div class="bg-white border border-line rounded-2xl p-3.5 flex flex-col gap-2 min-w-0">
+                            <x-spec-icon :name="$highlightIcons[$label] ?? 'dots'" class="h-5 w-5 text-brand shrink-0" />
+                            <p class="text-[10.5px] font-bold uppercase tracking-wider text-ink-soft">{{ $label }}</p>
+                            <p class="text-sm font-bold text-ink leading-tight break-words">{{ $value }}</p>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
+        {{-- Mô tả sản phẩm --}}
+        @if ($product->description)
+            <div id="mo-ta" class="mt-10 scroll-mt-16">
+                <h2 class="font-bold text-lg text-ink mb-4">Mô tả sản phẩm</h2>
+
+                <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_260px] gap-8 items-start">
+                    <div x-data="{ expanded: false }">
+                        <div
+                            class="relative overflow-hidden transition-[max-height] duration-300"
+                            :class="expanded ? 'max-h-none' : 'max-h-[365px]'"
+                        >
+                            @foreach ($product->description_blocks as $block)
+                                @if ($block['type'] === 'lead')
+                                    <p class="text-[16.5px] leading-[1.72] text-ink font-medium max-w-[66ch]">{{ $block['text'] }}</p>
+                                @elseif ($block['type'] === 'chapter')
+                                    <h3 class="mt-6 pl-3.5 border-l-[3px] border-brand font-bold text-base text-brand leading-snug max-w-[66ch]">{{ $block['text'] }}</h3>
+                                @elseif ($block['type'] === 'heading')
+                                    <h4 class="mt-5 font-bold text-[14.5px] text-ink max-w-[66ch]">{{ $block['text'] }}</h4>
+                                @else
+                                    <p class="mt-2 text-[14.5px] leading-[1.78] text-ink-soft max-w-[66ch]">{{ $block['text'] }}</p>
+                                @endif
+                            @endforeach
+
+                            <div
+                                x-show="! expanded"
+                                x-cloak
+                                class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-paper pointer-events-none"
+                            ></div>
+                        </div>
+
+                        <button
+                            type="button"
+                            @click="expanded = ! expanded"
+                            class="mt-3.5 inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white border-[1.5px] border-line hover:border-brand text-sm font-semibold text-brand transition"
+                        >
+                            <span x-text="expanded ? 'Thu gọn mô tả' : 'Xem thêm mô tả'">Xem thêm mô tả</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 transition-transform duration-200" :class="expanded && 'rotate-180'" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    {{-- Tóm tắt các chỉ số chốt đơn, giữ trong tầm mắt khi đọc mô tả dài --}}
+                    @if (! empty($product->spec_highlights))
+                        <aside class="lg:sticky lg:top-16 bg-white border border-line rounded-2xl overflow-hidden">
+                            <p class="px-4 py-2.5 bg-paper border-b border-line text-[11px] font-bold uppercase tracking-wider text-ink-soft">Tóm tắt máy</p>
+                            <dl class="py-1">
+                                @foreach ($product->spec_highlights as $label => $value)
+                                    <div class="flex gap-3 px-4 py-1.5 text-[12.5px] items-baseline">
+                                        <dt class="w-[72px] shrink-0 text-ink-soft">{{ $label }}</dt>
+                                        <dd class="font-semibold text-ink min-w-0 break-words">{{ $value }}</dd>
+                                    </div>
+                                @endforeach
+                            </dl>
+                            @if ($specGroups !== [])
+                                <a href="#thong-so" class="block px-4 py-2.5 border-t border-line text-center text-[12.5px] font-bold text-brand hover:bg-paper transition">
+                                    Xem thông số đầy đủ &rarr;
+                                </a>
+                            @endif
+                        </aside>
+                    @endif
+                </div>
+            </div>
+        @endif
+
+        {{-- Thông số kỹ thuật, gom theo nhóm --}}
+        @if ($specGroups !== [])
+            <div id="thong-so" class="mt-12 max-w-4xl scroll-mt-16">
+                <h2 class="font-bold text-lg text-ink mb-4">Thông số kỹ thuật</h2>
+
+                <div class="border border-line rounded-2xl overflow-hidden bg-white shadow-sm divide-y divide-line">
+                    @foreach ($specGroups as $group)
+                        <div>
+                            <div class="flex items-center gap-2.5 px-4 py-2.5 bg-paper border-b border-line">
+                                <x-spec-icon :name="$group['icon']" class="h-4 w-4 text-brand shrink-0" />
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-brand">{{ $group['label'] }}</h3>
+                                <span class="ml-auto text-[11px] text-ink-soft tabular-nums">{{ count($group['specs']) }}</span>
+                            </div>
+                            <dl class="divide-y divide-line">
+                                @foreach ($group['specs'] as $label => $value)
+                                    <div class="flex flex-col sm:flex-row gap-1 sm:gap-4 px-4 py-2.5">
+                                        <dt class="w-full sm:w-44 shrink-0 text-sm text-ink-soft font-medium">{{ $label }}</dt>
+                                        <dd class="text-sm text-ink leading-relaxed min-w-0">{{ $value }}</dd>
+                                    </div>
+                                @endforeach
+                            </dl>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
 
         <!-- Đánh giá -->
         @php
             $ratingCounts = $product->reviews->countBy('rating');
         @endphp
-        <div class="mt-12 max-w-3xl">
+        <div id="danh-gia" class="mt-12 max-w-3xl scroll-mt-16">
             <h2 class="font-bold text-lg text-ink mb-3">Đánh giá từ khách hàng</h2>
 
             <div class="rounded-2xl border border-line bg-white shadow-sm p-6">
@@ -507,7 +625,7 @@
 
         <!-- So sánh nhanh -->
         @if ($comparisonProduct && $comparisonSpecLabels->isNotEmpty())
-            <div class="mt-12 max-w-3xl">
+            <div id="so-sanh" class="mt-12 max-w-3xl scroll-mt-16">
                 <h2 class="font-bold text-lg text-ink mb-3">So sánh nhanh trong tầm giá</h2>
                 <div class="rounded-2xl border border-line overflow-hidden bg-white shadow-sm overflow-x-auto">
                     <table class="w-full text-sm">
