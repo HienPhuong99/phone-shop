@@ -23,7 +23,7 @@
                 </div>
             @endif
         </div>
-        <div class="p-4">
+        <div class="p-4 pb-10">
             <p class="text-xs font-bold tracking-wide uppercase text-ink-soft">{{ $product->series->name }}</p>
             <h3 class="mt-1 text-sm font-semibold text-ink group-hover:text-brand transition truncate">{{ $product->name }}</h3>
 
