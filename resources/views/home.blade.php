@@ -28,25 +28,39 @@
     <!-- Value propositions -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white border border-line rounded-2xl shadow-sm p-6">
-                <div class="w-10 h-10 rounded-xl bg-brand/10 text-brand flex items-center justify-center mb-4 font-bold text-lg">
-                    ✓
+            <div class="bg-white border border-line border-l-[3px] border-l-emerald-600 rounded-2xl shadow-sm p-6">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.5l2 2 4-5" />
+                            <circle cx="12" cy="12" r="9" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-base text-ink">Sản phẩm chính hãng</h3>
                 </div>
-                <h3 class="font-bold text-base text-ink mb-1">Sản phẩm chính hãng</h3>
                 <p class="text-sm text-ink-soft">100% điện thoại có nguồn gốc rõ ràng, kiểm định chất lượng kỹ lưỡng trước khi đến tay bạn.</p>
             </div>
-            <div class="bg-white border border-line rounded-2xl shadow-sm p-6">
-                <div class="w-10 h-10 rounded-xl bg-brand/10 text-brand flex items-center justify-center mb-4 font-bold text-lg">
-                    ★
+            <div class="bg-white border border-line border-l-[3px] border-l-amber-600 rounded-2xl shadow-sm p-6">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 3v5.2c0 4.4-3 8.3-7 9.3-4-1-7-4.9-7-9.3V6z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.5 12l1.8 1.8L14.8 10" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-base text-ink">Bảo hành uy tín</h3>
                 </div>
-                <h3 class="font-bold text-base text-ink mb-1">Bảo hành uy tín</h3>
                 <p class="text-sm text-ink-soft">Chính sách bảo hành minh bạch, hỗ trợ kỹ thuật tận tâm và đổi trả nhanh chóng.</p>
             </div>
-            <div class="bg-white border border-line rounded-2xl shadow-sm p-6">
-                <div class="w-10 h-10 rounded-xl bg-brand/10 text-brand flex items-center justify-center mb-4 font-bold text-lg">
-                    ⚡
+            <div class="bg-white border border-line border-l-[3px] border-l-brand rounded-2xl shadow-sm p-6">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 rounded-xl bg-brand/10 text-brand flex items-center justify-center shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 3L4 14h6l-1 7 9-11h-6z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-base text-ink">Giao hàng nhanh chóng</h3>
                 </div>
-                <h3 class="font-bold text-base text-ink mb-1">Giao hàng nhanh chóng</h3>
                 <p class="text-sm text-ink-soft">Đóng gói tiêu chuẩn an toàn, vận chuyển toàn quốc và cho phép đồng kiểm khi nhận hàng.</p>
             </div>
         </div>
