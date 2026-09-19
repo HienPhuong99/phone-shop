@@ -90,6 +90,79 @@ class CompareTest extends TestCase
         $response->assertDontSee('iPhone Số 4');
     }
 
+    public function test_flags_an_identical_spec_with_a_match_chip(): void
+    {
+        $a = $this->makeProduct(['name' => 'iPhone A', 'slug' => 'iphone-a']);
+        $a->update(['specifications' => ['Dung lượng RAM' => '8GB']]);
+
+        $b = $this->makeProduct(['name' => 'iPhone B', 'slug' => 'iphone-b']);
+        $b->update(['specifications' => ['Dung lượng RAM' => '8GB (tối ưu cho Apple Intelligence)']]);
+
+        $response = $this->get(route('compare.show', ['slugs' => 'iphone-a,iphone-b']));
+
+        $response->assertOk();
+        $response->assertSee('Giống nhau');
+    }
+
+    public function test_highlights_the_winning_value_for_a_measurable_spec(): void
+    {
+        $a = $this->makeProduct(['name' => 'iPhone A', 'slug' => 'iphone-a']);
+        $a->update(['specifications' => ['Pin' => '4.422 mAh']]);
+
+        $b = $this->makeProduct(['name' => 'iPhone B', 'slug' => 'iphone-b']);
+        $b->update(['specifications' => ['Pin' => '4.685 mAh']]);
+
+        $response = $this->get(route('compare.show', ['slugs' => 'iphone-a,iphone-b']));
+
+        $response->assertOk();
+        $response->assertSee('+263 mAh');
+    }
+
+    public function test_does_not_declare_a_winner_for_a_non_measurable_spec(): void
+    {
+        $a = $this->makeProduct(['name' => 'iPhone A', 'slug' => 'iphone-a']);
+        $a->update(['specifications' => ['Chất liệu' => 'Khung nhôm']]);
+
+        $b = $this->makeProduct(['name' => 'iPhone B', 'slug' => 'iphone-b']);
+        $b->update(['specifications' => ['Chất liệu' => 'Khung titan']]);
+
+        $response = $this->get(route('compare.show', ['slugs' => 'iphone-a,iphone-b']));
+
+        $response->assertOk();
+        $response->assertDontSee('Giống nhau');
+        // No measurable winner text should appear for a material comparison.
+        $response->assertDontSee('Lớn hơn');
+        $response->assertDontSee('Nhẹ hơn');
+    }
+
+    public function test_shows_the_hide_matches_toggle_only_when_something_matches(): void
+    {
+        $a = $this->makeProduct(['name' => 'iPhone A', 'slug' => 'iphone-a']);
+        $a->update(['specifications' => ['Chất liệu' => 'Khung nhôm']]);
+
+        $b = $this->makeProduct(['name' => 'iPhone B', 'slug' => 'iphone-b']);
+        $b->update(['specifications' => ['Chất liệu' => 'Khung titan']]);
+
+        $response = $this->get(route('compare.show', ['slugs' => 'iphone-a,iphone-b']));
+
+        $response->assertOk();
+        $response->assertDontSee('Ẩn điểm giống nhau');
+    }
+
+    public function test_specs_render_grouped_under_their_category_heading(): void
+    {
+        $a = $this->makeProduct(['name' => 'iPhone A', 'slug' => 'iphone-a']);
+        $a->update(['specifications' => ['Màn hình' => '6.1 inch', 'Pin' => '3.000 mAh']]);
+
+        $b = $this->makeProduct(['name' => 'iPhone B', 'slug' => 'iphone-b']);
+        $b->update(['specifications' => ['Màn hình' => '6.7 inch', 'Pin' => '4.000 mAh']]);
+
+        $response = $this->get(route('compare.show', ['slugs' => 'iphone-a,iphone-b']));
+
+        $response->assertOk();
+        $response->assertSeeInOrder(['Màn hình', '6.1 inch', 'Pin &amp; Sạc', '3.000 mAh'], false);
+    }
+
     public function test_ignores_inactive_products(): void
     {
         $active = $this->makeProduct(['name' => 'iPhone Active', 'slug' => 'iphone-active']);

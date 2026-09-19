@@ -3,12 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Services\ProductComparator;
+use App\Services\SpecificationGrouper;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CompareController extends Controller
 {
     private const MAX_COMPARE = 3;
+
+    public function __construct(
+        private SpecificationGrouper $grouper,
+        private ProductComparator $comparator,
+    ) {}
 
     public function show(Request $request): View
     {
@@ -28,11 +35,26 @@ class CompareController extends Controller
             ->sortBy(fn (Product $product) => array_search($product->slug, $slugs, true))
             ->values();
 
-        $specLabels = $products
+        $unionLabels = $products
             ->flatMap(fn (Product $product) => array_keys($product->specifications ?? []))
             ->unique()
             ->values();
 
-        return view('compare.show', compact('products', 'specLabels'));
+        // Reuse the product page's grouping by feeding it every label in
+        // play (values are irrelevant here, only the label→group mapping
+        // is), then swap in real per-product comparison rows.
+        $placeholder = $unionLabels->mapWithKeys(fn (string $label) => [$label => ''])->all();
+
+        $specGroups = collect($this->grouper->group($placeholder))
+            ->map(fn (array $group) => [
+                'label' => $group['label'],
+                'icon' => $group['icon'],
+                'rows' => collect(array_keys($group['specs']))
+                    ->map(fn (string $label) => $this->comparator->compareRow($label, $products))
+                    ->all(),
+            ])
+            ->all();
+
+        return view('compare.show', compact('products', 'specGroups'));
     }
 }
