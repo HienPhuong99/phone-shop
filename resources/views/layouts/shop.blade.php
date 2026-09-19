@@ -28,6 +28,10 @@
         {{ $head ?? '' }}
     </head>
     <body class="font-sans antialiased bg-paper text-ink [padding-left:env(safe-area-inset-left)] [padding-right:env(safe-area-inset-right)]">
+        @if ($announcement ?? null)
+            <x-announcement-popup :announcement="$announcement" />
+        @endif
+
         <div class="min-h-screen flex flex-col pb-16 sm:pb-0" x-data="{ accountSheetOpen: false }">
             <header class="bg-brand [padding-top:env(safe-area-inset-top)]">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
