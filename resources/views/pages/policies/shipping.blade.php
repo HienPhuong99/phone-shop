@@ -1,4 +1,5 @@
-<x-policy-page title="Chính sách vận chuyển & thanh toán">
+<x-policy-page title="Chính sách vận chuyển & thanh toán"
+    description="Chính sách vận chuyển và thanh toán tại phuonghihi: phí ship theo khu vực, thời gian giao hàng, các hình thức thanh toán gồm COD và VNPay.">
     <div>
         <h2>Phí vận chuyển</h2>
         <p>Đồng giá 30.000đ toàn quốc, hiển thị rõ ở bước thanh toán trước khi khách đặt hàng — không phát sinh thêm phí khi nhận.</p>

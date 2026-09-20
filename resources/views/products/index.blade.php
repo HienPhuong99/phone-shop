@@ -1,4 +1,7 @@
-<x-shop-layout title="Sản phẩm - phuonghihi">
+<x-shop-layout
+    title="Bảng giá iPhone mới nhất - phuonghihi"
+    description="Bảng giá iPhone đang bán tại phuonghihi, lọc theo dòng máy, dung lượng, màu và khoảng giá. Máy chính hãng, bảo hành 12 tháng, giao toàn quốc."
+>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <h1 class="font-bold text-3xl text-ink mb-6">Sản phẩm</h1>
 

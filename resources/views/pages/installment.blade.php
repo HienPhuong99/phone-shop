@@ -1,4 +1,5 @@
-<x-shop-layout title="Trả góp 0% - phuonghihi">
+<x-shop-layout title="Trả góp 0% - phuonghihi"
+    description="Trả góp iPhone qua thẻ tín dụng hoặc công ty tài chính tại phuonghihi: tính trước số tiền mỗi tháng, xem giấy tờ cần chuẩn bị và các khoản phí.">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <nav class="text-sm text-ink-soft mb-6">
             <a href="{{ route('home') }}" class="hover:text-brand transition">Trang chủ</a> /

@@ -1,4 +1,5 @@
-<x-shop-layout title="Giới thiệu - phuonghihi">
+<x-shop-layout title="Giới thiệu - phuonghihi"
+    description="Giới thiệu về phuonghihi: cửa hàng chuyên iPhone chính hãng, giá công khai không mặc cả, chính sách bảo hành và đổi trả minh bạch trên website.">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <nav class="text-sm text-ink-soft mb-6">
             <a href="{{ route('home') }}" class="hover:text-brand transition">Trang chủ</a> /

@@ -1,4 +1,4 @@
-<x-shop-layout title="So sánh sản phẩm - phuonghihi">
+<x-shop-layout title="So sánh sản phẩm - phuonghihi" :noindex="true">
     <div
         class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
         x-data="{ hideMatches: false }"

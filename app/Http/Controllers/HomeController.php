@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Post;
 use App\Models\Product;
 use App\Models\ProductSeries;
 use Illuminate\View\View;
@@ -30,6 +31,8 @@ class HomeController extends Controller
         $categories = Category::navList();
         $series = ProductSeries::navList();
 
-        return view('home', compact('heroProducts', 'featuredProducts', 'categories', 'series'));
+        $latestPosts = Post::query()->published()->latestPublished()->take(3)->get();
+
+        return view('home', compact('heroProducts', 'featuredProducts', 'categories', 'series', 'latestPosts'));
     }
 }

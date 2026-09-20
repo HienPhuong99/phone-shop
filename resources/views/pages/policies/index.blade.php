@@ -1,4 +1,5 @@
-<x-shop-layout title="Chính sách - phuonghihi">
+<x-shop-layout title="Chính sách - phuonghihi"
+    description="Toàn bộ chính sách của phuonghihi: bảo hành, đổi trả và hoàn tiền, vận chuyển và thanh toán, bảo mật thông tin khách hàng.">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <nav class="text-sm text-ink-soft mb-6">
             <a href="{{ route('home') }}" class="hover:text-brand transition">Trang chủ</a> /

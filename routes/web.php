@@ -7,10 +7,13 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderLookupController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\VnpayController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +29,9 @@ Route::get('/tim-kiem/goi-y', [SearchController::class, 'suggest'])
     ->name('search.suggest');
 
 Route::get('/so-sanh', [CompareController::class, 'show'])->name('compare.show');
+
+Route::get('/tin-tuc', [PostController::class, 'index'])->name('posts.index');
+Route::get('/tin-tuc/{post}', [PostController::class, 'show'])->name('posts.show');
 
 Route::get('/gio-hang', [CartController::class, 'index'])->name('cart.index');
 Route::post('/gio-hang', [CartController::class, 'store'])->name('cart.store');
@@ -61,6 +67,9 @@ Route::get('/chinh-sach/van-chuyen', [PageController::class, 'shippingPolicy'])-
 Route::get('/chinh-sach/bao-mat', [PageController::class, 'privacyPolicy'])->name('pages.policies.privacy');
 Route::get('/gioi-thieu', [PageController::class, 'about'])->name('pages.about');
 Route::get('/lien-he', [PageController::class, 'contact'])->name('pages.contact');
+
+Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
+Route::get('/robots.txt', RobotsController::class)->name('robots');
 
 Route::get('/vnpay/return', [VnpayController::class, 'return'])->name('vnpay.return');
 Route::get('/vnpay/ipn', [VnpayController::class, 'ipn'])->name('vnpay.ipn');

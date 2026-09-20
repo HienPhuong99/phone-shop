@@ -1,4 +1,5 @@
-<x-shop-layout title="Dịch vụ - phuonghihi">
+<x-shop-layout title="Dịch vụ - phuonghihi"
+    description="Các dịch vụ tại phuonghihi: thay pin, kiểm tra máy, hỗ trợ bảo hành, trả góp và thu cũ đổi mới iPhone. Báo giá rõ ràng trước khi làm.">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <nav class="text-sm text-ink-soft mb-6">
             <a href="{{ route('home') }}" class="hover:text-brand transition">Trang chủ</a> /
