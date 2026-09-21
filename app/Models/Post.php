@@ -64,6 +64,15 @@ class Post extends Model
             ->where(fn (Builder $q) => $q->whereNull('published_at')->orWhere('published_at', '<=', now()));
     }
 
+    /**
+     * Written and switched on, but dated ahead — the article is waiting
+     * for its own publish time and nothing needs to run for it to appear.
+     */
+    public function scopeScheduled(Builder $query): Builder
+    {
+        return $query->where('status', 'published')->where('published_at', '>', now());
+    }
+
     public function scopeTopic(Builder $query, ?string $topic): Builder
     {
         return $query->when(

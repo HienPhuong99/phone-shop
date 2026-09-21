@@ -14,15 +14,38 @@ class PostController extends Controller
 {
     public function __construct(private readonly ImageUploadService $imageUploadService) {}
 
+    /**
+     * The three states an article can be in, as the admin list filters
+     * them. The keys are what the URL carries.
+     *
+     * @var array<string, string>
+     */
+    private const STATE_FILTERS = [
+        'dang-hien' => 'Đang hiện',
+        'len-lich' => 'Lên lịch',
+        'ban-nhap' => 'Bản nháp',
+    ];
+
     public function index(Request $request): View
     {
+        $state = $request->string('trang-thai')->toString();
+
         $posts = Post::query()
             ->when($request->filled('search'), fn ($q) => $q->where('title', 'like', '%'.$request->string('search').'%'))
-            ->latest()
+            ->when($state === 'dang-hien', fn ($q) => $q->published())
+            ->when($state === 'len-lich', fn ($q) => $q->scheduled())
+            ->when($state === 'ban-nhap', fn ($q) => $q->where('status', 'draft'))
+            // Scheduled articles first, so the editorial calendar is the
+            // first thing the list answers: what goes out next, and when.
+            ->orderByRaw('CASE WHEN status = ? AND published_at > ? THEN 0 ELSE 1 END', ['published', now()])
+            ->orderByRaw('COALESCE(published_at, created_at) DESC')
             ->paginate(15)
             ->withQueryString();
 
-        return view('admin.posts.index', compact('posts'));
+        $stateFilters = self::STATE_FILTERS;
+        $activeState = array_key_exists($state, self::STATE_FILTERS) ? $state : null;
+
+        return view('admin.posts.index', compact('posts', 'stateFilters', 'activeState'));
     }
 
     public function create(): View

@@ -7,7 +7,23 @@
     <form method="GET" class="mb-4">
         <input type="search" name="search" value="{{ request('search') }}" placeholder="Tìm theo tiêu đề..."
                class="w-full max-w-sm rounded-md border-gray-300 text-sm">
+        @if ($activeState)
+            <input type="hidden" name="trang-thai" value="{{ $activeState }}">
+        @endif
     </form>
+
+    <div class="mb-4 flex flex-wrap gap-2">
+        <a href="{{ route('admin.posts.index', request()->except(['trang-thai', 'page'])) }}"
+           class="px-3 py-1.5 rounded-md text-sm font-medium border {{ $activeState === null ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-600 border-gray-300 hover:border-indigo-400' }}">
+            Tất cả
+        </a>
+        @foreach ($stateFilters as $value => $label)
+            <a href="{{ route('admin.posts.index', array_merge(request()->except(['trang-thai', 'page']), ['trang-thai' => $value])) }}"
+               class="px-3 py-1.5 rounded-md text-sm font-medium border {{ $activeState === $value ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-600 border-gray-300 hover:border-indigo-400' }}">
+                {{ $label }}
+            </a>
+        @endforeach
+    </div>
 
     <div class="bg-white border border-gray-200 rounded-lg divide-y divide-gray-100">
         @forelse ($posts as $post)
@@ -27,7 +43,8 @@
                             &middot; từ khoá: {{ $post->focus_keyword }}
                         @endif
                         @if ($post->published_at)
-                            &middot; {{ $post->published_at->format('d/m/Y H:i') }}
+                            &middot;
+                            {{ $post->published_at->isFuture() ? 'sẽ đăng ' : '' }}{{ $post->published_at->format('d/m/Y H:i') }}
                         @endif
                     </p>
                 </div>
@@ -43,7 +60,7 @@
                 </div>
             </div>
         @empty
-            <p class="p-4 text-sm text-gray-500">Chưa có bài viết nào. Bấm "Viết bài mới" để bắt đầu.</p>
+            <p class="p-4 text-sm text-gray-500">Không có bài viết nào ở mục này.</p>
         @endforelse
     </div>
 

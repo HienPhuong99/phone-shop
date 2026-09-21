@@ -22,10 +22,13 @@ class PostSeeder extends Seeder
         foreach ($posts as $index => $post) {
             Post::updateOrCreate(
                 ['slug' => $post['slug']],
+                // "+" keeps the keys already on the left, so an article
+                // that sets its own status/published_at (the scheduled ones
+                // at the end of the list) overrides these defaults.
                 $post + [
                     'status' => 'published',
-                    // Oldest first, one post every three days, so the
-                    // storefront listing is not six posts on one date.
+                    // Oldest first, one article every three days, so the
+                    // storefront listing is not eight posts on one date.
                     'published_at' => now()->subDays((count($posts) - $index) * 3),
                 ]
             );
@@ -299,6 +302,86 @@ BODY,
                     ['question' => 'iPhone 128GB thực tế dùng được bao nhiêu?', 'answer' => 'Khoảng 118GB. Hệ điều hành và ứng dụng hệ thống chiếm khoảng 10GB ngay từ khi máy mới.'],
                     ['question' => 'Có nâng cấp dung lượng iPhone sau khi mua được không?', 'answer' => 'Không. Bộ nhớ iPhone gắn liền bo mạch, không có khe thẻ nhớ. Chọn sai dung lượng thì chỉ còn cách dùng iCloud hoặc đổi máy.'],
                     ['question' => 'Quay video 4K tốn bao nhiêu dung lượng?', 'answer' => 'Khoảng 170 đến 400MB cho mỗi phút, tuỳ tốc độ khung hình. Quay 10 phút mỗi tháng thì sau hai năm đã chiếm khoảng 40 đến 96GB.'],
+                ],
+            ],
+            [
+                'title' => 'Cách chuyển dữ liệu từ iPhone cũ sang iPhone mới',
+                'slug' => 'cach-chuyen-du-lieu-tu-iphone-cu-sang-iphone-moi',
+                'topic' => 'huong-dan',
+                // Viết sẵn nhưng chưa hiện với khách: hẹn giờ đăng, tới
+                // ngày là tự lên. Đổi ngày hoặc chuyển về bản nháp trong
+                // Admin → Tin tức bất cứ lúc nào.
+                'status' => 'published',
+                'published_at' => now()->addDays(3),
+                'focus_keyword' => 'chuyển dữ liệu iphone',
+                'excerpt' => 'Ba cách chuyển dữ liệu, cách nào nhanh nhất, những thứ không tự chuyển được, và việc phải làm với máy cũ trước khi giao cho người khác.',
+                'body' => <<<'BODY'
+Cách nhanh nhất là đặt hai máy cạnh nhau và dùng Bắt đầu nhanh — máy mới sẽ hỏi có muốn chuyển từ máy cũ không ngay trong lúc cài đặt lần đầu. Toàn bộ ảnh, tin nhắn, ứng dụng và cài đặt đi theo. Việc này mất từ 30 phút đến vài tiếng tùy dung lượng.
+## Chuẩn bị trước khi bắt đầu
+Làm đủ bốn việc này thì quá trình chuyển gần như không bao giờ hỏng giữa chừng:
+- Sạc cả hai máy trên 50%, hoặc cắm sạc suốt quá trình.
+- Cập nhật máy cũ lên phiên bản iOS mới nhất.
+- Kết nối cùng một mạng Wi-Fi.
+- Chuẩn bị sẵn mật khẩu Apple Account, vì máy mới sẽ hỏi.
+> Đừng bắt đầu khi bạn chuẩn bị ra khỏi nhà. Hai máy phải nằm cạnh nhau cho tới khi xong, rút giữa chừng là phải làm lại từ đầu.
+## Cách 1: Bắt đầu nhanh, chuyển thẳng máy sang máy
+Đây là cách nên dùng trong hầu hết trường hợp. Bật máy mới, đặt cạnh máy cũ, máy cũ sẽ hiện thông báo hỏi có muốn thiết lập iPhone mới không. Làm theo hướng dẫn trên màn hình, chọn **Chuyển trực tiếp từ iPhone**. Dữ liệu đi thẳng từ máy này sang máy kia, không cần iCloud còn trống.
+## Cách 2: Khôi phục từ bản sao lưu iCloud
+Dùng khi bạn không còn giữ máy cũ trong tay, hoặc máy cũ đã hỏng. Điều kiện là trước đó máy cũ đã sao lưu lên iCloud. Trên máy mới, ở bước Ứng dụng & Dữ liệu chọn **Khôi phục từ bản sao lưu iCloud**. Cách này phụ thuộc tốc độ mạng và dung lượng iCloud bạn đang có.
+## Cách 3: Sao lưu qua máy tính
+Dùng khi dữ liệu nhiều mà mạng chậm, hoặc bạn không muốn trả phí iCloud. Cắm máy cũ vào máy tính, sao lưu toàn bộ, rồi cắm máy mới vào và khôi phục từ bản sao lưu đó. Nhớ chọn **mã hoá bản sao lưu**, vì nếu không thì dữ liệu Sức khỏe và mật khẩu đã lưu sẽ không đi theo.
+## Những thứ không tự chuyển được
+Đây là phần hay khiến người dùng tưởng mất dữ liệu:
+- Các ứng dụng ngân hàng và ví điện tử: phải đăng nhập và xác thực lại từ đầu.
+- Ứng dụng nhắn tin có mã hoá riêng: cần khôi phục bằng bản sao lưu của chính ứng dụng đó.
+- Apple Watch: phải huỷ ghép nối khỏi máy cũ rồi ghép lại với máy mới.
+- Thẻ trong Ví và eSIM: thường phải thêm lại thủ công.
+## Sau khi chuyển xong, làm gì với máy cũ?
+Mở máy mới, kiểm tra đủ ảnh, tin nhắn và danh bạ trước đã. Chắc chắn rồi mới đăng xuất iCloud, tắt Tìm iPhone và xoá toàn bộ nội dung trên máy cũ — thiếu bước này thì không nơi nào thu máy được. Nếu định bán lại, xem [cách máy cũ được định giá](/tin-tuc/thu-cu-doi-moi-iphone-dinh-gia-the-nao) rồi mang tới [chương trình thu cũ đổi mới](/thu-cu-doi-moi).
+## Chưa chọn được máy mới?
+Xem [máy đang bán](/san-pham), hoặc đọc [nên mua iPhone nào](/tin-tuc/nen-mua-iphone-nao-2026) để chọn theo ngân sách. Mua máy tại phuonghihi thì nhân viên hỗ trợ chuyển dữ liệu ngay tại cửa hàng, bạn không phải tự làm.
+BODY,
+                'faqs' => [
+                    ['question' => 'Chuyển dữ liệu từ iPhone cũ sang mới mất bao lâu?', 'answer' => 'Từ khoảng 30 phút đến vài tiếng, tuỳ lượng dữ liệu và cách chuyển. Chuyển thẳng máy sang máy bằng cáp là nhanh nhất, khôi phục qua iCloud phụ thuộc tốc độ mạng.'],
+                    ['question' => 'Không còn giữ máy cũ thì chuyển dữ liệu được không?', 'answer' => 'Được, nếu máy cũ đã từng sao lưu lên iCloud. Trên máy mới chọn Khôi phục từ bản sao lưu iCloud ở bước Ứng dụng và Dữ liệu.'],
+                    ['question' => 'Chuyển xong có mất dữ liệu trên máy cũ không?', 'answer' => 'Không. Quá trình chuyển là sao chép, máy cũ vẫn giữ nguyên dữ liệu cho tới khi bạn chủ động xoá toàn bộ nội dung và cài đặt.'],
+                ],
+            ],
+            [
+                'title' => 'Mua iPhone cho học sinh sinh viên: chọn thế nào với ngân sách dưới 12 triệu',
+                'slug' => 'mua-iphone-cho-hoc-sinh-sinh-vien',
+                'topic' => 'tu-van',
+                'status' => 'published',
+                'published_at' => now()->addDays(7),
+                'focus_keyword' => 'iphone cho sinh viên',
+                'excerpt' => 'Bốn tiêu chí thật sự quan trọng với người đi học, cách chia ngân sách dưới 12 triệu cho hợp lý, và những thứ không nên trả tiền thêm ở tầm giá này.',
+                'body' => <<<'BODY'
+Với người đi học, ba thứ đáng tiền nhất theo đúng thứ tự là pin, dung lượng và độ bền. Camera và màn hình cao cấp xếp sau, vì đó là phần đội giá nhanh nhất mà lại ít ảnh hưởng tới việc học. Dưới 12 triệu bạn nên nhắm tới máy đời cũ hơn hai đến ba năm nhưng dung lượng lớn.
+## Bốn tiêu chí theo thứ tự ưu tiên
+- **Pin**: một ngày học kéo dài từ sáng tới chiều tối, thường không có chỗ cắm sạc. Ưu tiên máy pin còn trên 85%.
+- **Dung lượng**: ảnh chụp bảng, tài liệu, video bài giảng cộng dồn rất nhanh. Tối thiểu 128GB.
+- **Độ bền**: máy đi học bị rơi nhiều hơn máy để bàn làm việc. Nên tính thêm tiền ốp và dán màn hình vào ngân sách.
+- **Thời gian còn được cập nhật**: máy càng mới đời thì càng được hỗ trợ iOS lâu, đây là thứ quyết định máy dùng được mấy năm nữa.
+## Chia ngân sách 12 triệu thế nào cho hợp lý
+Đừng tiêu hết 12 triệu vào thân máy. Một cách chia thực tế hơn:
+- Khoảng 10 đến 11 triệu cho máy.
+- Khoảng 300 đến 500 nghìn cho ốp lưng và dán màn hình.
+- Phần còn lại để dành cho việc thay pin sau một đến hai năm.
+Xem toàn bộ máy trong tầm giá tại [danh sách máy dưới 12 triệu](/san-pham?max_price=12000000).
+> Máy đời cũ hơn nhưng dung lượng 256GB gần như luôn là lựa chọn tốt hơn máy mới hơn một đời mà chỉ có 128GB, nếu bạn hay quay video và chụp tài liệu.
+## Những thứ không nên trả tiền thêm ở tầm giá này
+- **Bản Pro**: chênh lệch tiền lớn, nhưng thứ bạn nhận lại chủ yếu là camera tele và màn hình quét cao — không phục vụ việc học. Cách cân nhắc nằm ở bài [nên chọn iPhone Pro hay bản thường](/tin-tuc/nen-chon-iphone-pro-hay-ban-thuong).
+- **Dung lượng 512GB trở lên**: quá dư cho nhu cầu đi học, số tiền đó để dành mua máy đời mới hơn thì đáng hơn.
+- **Màu đặc biệt**: một số màu bị hét giá cao hơn dù cấu hình giống hệt.
+## Mua máy mới hay máy đã qua sử dụng?
+Ở tầm dưới 12 triệu, máy đã qua sử dụng cho bạn đời máy cao hơn rõ rệt với cùng số tiền. Đổi lại phải kiểm tra kỹ — đọc [iPhone cũ có nên mua không](/tin-tuc/iphone-cu-co-nen-mua-khong) trước khi quyết. Nếu người mua là học sinh còn nhỏ và ở nhà không ai xử lý được khi máy trục trặc, nên chọn máy mới cho yên tâm.
+## Chưa đủ tiền một lần thì làm sao?
+Hai cách thường dùng: [trả góp](/tra-gop) để chia nhỏ theo tháng, hoặc [thu cũ đổi mới](/thu-cu-doi-moi) nếu trong nhà còn máy cũ không dùng tới. Hai cách này ghép được với nhau: lấy tiền máy cũ trừ vào giá, phần còn lại mới trả góp.
+BODY,
+                'faqs' => [
+                    ['question' => 'Sinh viên nên mua iPhone dung lượng bao nhiêu?', 'answer' => 'Tối thiểu 128GB. Nếu hay quay video bài giảng hoặc chụp nhiều tài liệu thì nên lấy 256GB, vì dung lượng iPhone không nâng cấp được sau khi mua.'],
+                    ['question' => 'Dưới 12 triệu nên mua máy mới hay máy cũ?', 'answer' => 'Máy đã qua sử dụng cho đời máy cao hơn với cùng số tiền, nhưng phải kiểm tra pin và nguồn gốc kỹ. Máy mới phù hợp hơn khi người dùng là học sinh nhỏ tuổi.'],
+                    ['question' => 'Học sinh sinh viên có mua trả góp được không?', 'answer' => 'Được, nhưng hồ sơ trả góp qua công ty tài chính thường cần người đủ 18 tuổi và có giấy tờ tuỳ thân. Người chưa đủ tuổi cần người thân đứng tên.'],
                 ],
             ],
         ];

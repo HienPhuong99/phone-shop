@@ -51,6 +51,21 @@ class PostManagementTest extends TestCase
         $this->assertNull(Post::firstWhere('slug', 'nen-mua-iphone-nao-2026')->published_at);
     }
 
+    public function test_a_publish_time_in_the_future_is_kept_and_the_post_stays_hidden(): void
+    {
+        $publishAt = now()->addWeek()->startOfMinute();
+
+        $this->actingAs($this->admin)->post('/admin/posts', $this->payload([
+            'published_at' => $publishAt->format('Y-m-d\TH:i'),
+        ]));
+
+        $post = Post::firstWhere('slug', 'nen-mua-iphone-nao-2026');
+
+        $this->assertTrue($publishAt->equalTo($post->published_at));
+        $this->assertSame('Lên lịch', $post->status_label);
+        $this->get(route('posts.index'))->assertDontSee($post->title);
+    }
+
     public function test_a_second_post_with_the_same_title_gets_its_own_slug(): void
     {
         Post::factory()->create(['slug' => 'nen-mua-iphone-nao-2026']);
@@ -118,6 +133,29 @@ class PostManagementTest extends TestCase
 
         $this->assertSame('cach-kiem-tra-pin-iphone', $post->refresh()->slug);
         $this->assertSame('Tiêu đề đã sửa hoàn toàn khác', $post->title);
+    }
+
+    public function test_the_list_filters_by_state(): void
+    {
+        Post::factory()->create(['title' => 'Bài đang hiện']);
+        Post::factory()->scheduled()->create(['title' => 'Bài hẹn giờ']);
+        Post::factory()->draft()->create(['title' => 'Bài nháp']);
+
+        $response = $this->actingAs($this->admin)->get('/admin/posts?trang-thai=len-lich');
+
+        $response->assertSee('Bài hẹn giờ');
+        $response->assertDontSee('Bài đang hiện');
+        $response->assertDontSee('Bài nháp');
+    }
+
+    public function test_the_list_puts_scheduled_articles_first(): void
+    {
+        Post::factory()->create(['title' => 'Bài đã đăng hôm qua']);
+        Post::factory()->scheduled()->create(['title' => 'Bài hẹn giờ tuần sau']);
+
+        $response = $this->actingAs($this->admin)->get('/admin/posts');
+
+        $response->assertSeeInOrder(['Bài hẹn giờ tuần sau', 'Bài đã đăng hôm qua']);
     }
 
     public function test_admin_can_delete_a_post(): void

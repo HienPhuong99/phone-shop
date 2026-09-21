@@ -18,15 +18,43 @@ class PostSeederTest extends TestCase
         $this->seed(PostSeeder::class);
     }
 
-    public function test_every_seeded_article_is_readable_on_the_storefront(): void
+    public function test_every_published_article_is_readable_on_the_storefront(): void
     {
-        $posts = Post::all();
+        $posts = Post::published()->get();
 
         $this->assertNotEmpty($posts);
 
         foreach ($posts as $post) {
             $this->get(route('posts.show', $post->slug))->assertOk();
         }
+    }
+
+    /**
+     * The last articles in the seeder are written but scheduled: they must
+     * stay invisible until their publish date arrives on its own.
+     */
+    public function test_scheduled_articles_stay_hidden_until_their_publish_date(): void
+    {
+        $scheduled = Post::where('published_at', '>', now())->get();
+
+        $this->assertNotEmpty($scheduled);
+
+        $listing = $this->get(route('posts.index'));
+
+        foreach ($scheduled as $post) {
+            $listing->assertDontSee($post->title);
+            $this->get(route('posts.show', $post->slug))->assertNotFound();
+        }
+    }
+
+    public function test_a_scheduled_article_goes_live_on_its_own_once_the_date_passes(): void
+    {
+        $post = Post::where('published_at', '>', now())->firstOrFail();
+
+        $this->travelTo($post->published_at->addMinute());
+
+        $this->get(route('posts.show', $post->slug))->assertOk();
+        $this->get(route('posts.index'))->assertSee($post->title);
     }
 
     /**

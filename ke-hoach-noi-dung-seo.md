@@ -21,9 +21,11 @@ Toàn bộ phần kỹ thuật đã được làm sẵn trong code (xem Phần 5
 
 ## Phần 1 — Bảng 24 bài viết: viết gì, theo thứ tự nào
 
-8 bài đầu **đã được viết sẵn và nằm trong hệ thống** — vào Admin → Tin tức là thấy. Dùng chúng làm mẫu cho 16 bài còn lại.
+10 bài đầu **đã được viết sẵn và nằm trong hệ thống** — vào Admin → Tin tức là thấy. Dùng chúng làm mẫu cho 14 bài còn lại.
 
-Tám bài này nằm trong `database/seeders/PostSeeder.php` nên có sẵn ở mọi môi trường deploy. Từ bài #9 trở đi viết thẳng trong Admin, không đụng vào seeder nữa.
+Trong đó 8 bài đang hiện, còn **bài #9 và #10 đang ở trạng thái hẹn giờ**: đã viết xong nhưng khách chưa thấy, tới ngày là tự lên. Muốn đổi ngày hoặc giấu hẳn thì vào Admin → Tin tức → Sửa, xem Phần 2.5.
+
+Mười bài này nằm trong `database/seeders/PostSeeder.php` nên có sẵn ở mọi môi trường deploy. Từ bài #11 trở đi viết thẳng trong Admin, không đụng vào seeder nữa.
 
 | # | Tuần | Chủ đề | Tiêu đề (dùng nguyên cũng được) | Từ khoá chính | Link nội bộ bắt buộc chèn | Trạng thái |
 |---|---|---|---|---|---|---|
@@ -35,8 +37,8 @@ Tám bài này nằm trong `database/seeders/PostSeeder.php` nên có sẵn ở 
 | 6 | 3 | Tin mới | Thu cũ đổi mới iPhone: máy của bạn được định giá thế nào? | thu cũ đổi mới iphone | /thu-cu-doi-moi, /tra-gop | ✅ Đã có sẵn |
 | 7 | 4 | Tư vấn mua | iPhone cũ có nên mua không? 5 thứ phải kiểm tra trước khi chốt | iphone cũ có nên mua | bài #1, bài #2, /san-pham | ✅ Đã có sẵn |
 | 8 | 4 | So sánh | iPhone 128GB hay 256GB? Cách tự biết mình cần bao nhiêu | iphone 128gb hay 256gb | /san-pham, bài #1, bài #4 | ✅ Đã có sẵn |
-| 9 | 5 | Hướng dẫn | Cách chuyển dữ liệu từ iPhone cũ sang iPhone mới | chuyển dữ liệu iphone | /thu-cu-doi-moi | Cần viết |
-| 10 | 5 | Tư vấn mua | Mua iPhone cho học sinh sinh viên: 4 lựa chọn dưới 12 triệu | iphone cho sinh viên | /san-pham, /tra-gop | Cần viết |
+| 9 | 5 | Hướng dẫn | Cách chuyển dữ liệu từ iPhone cũ sang iPhone mới | chuyển dữ liệu iphone | /thu-cu-doi-moi, bài #6, /san-pham | 🕒 Đã viết, hẹn giờ |
+| 10 | 5 | Tư vấn mua | Mua iPhone cho học sinh sinh viên: chọn thế nào với ngân sách dưới 12 triệu | iphone cho sinh viên | /san-pham, /tra-gop, bài #4, #7 | 🕒 Đã viết, hẹn giờ |
 | 11 | 6 | So sánh | iPhone Pro Max có đáng tiền hơn Pro không? | iphone pro max có đáng mua | /so-sanh, /san-pham | Cần viết |
 | 12 | 6 | Hướng dẫn | iPhone hết pin nhanh: 8 cách tiết kiệm pin làm được ngay | iphone hao pin | bài #3, /dich-vu | Cần viết |
 | 13 | 7 | Tư vấn mua | Mua iPhone trả góp qua thẻ tín dụng hay công ty tài chính? | trả góp thẻ tín dụng iphone | /tra-gop, bài #5 | Cần viết |
@@ -74,6 +76,24 @@ Tám bài này nằm trong `database/seeders/PostSeeder.php` nên có sẵn ở 
 | 12 | Bấm **Xem trên web** để đọc lại | Bản nháp vẫn xem được khi đang đăng nhập admin |
 
 Không cần đụng vào mục "8. Tuỳ chọn nâng cao" — để trống hệ thống tự điền.
+
+### 2.5. Hẹn giờ đăng bài
+
+Một bài có đúng ba trạng thái, đổi bằng hai ô ở cột phải của form:
+
+| Trạng thái | Cách đặt | Khách có thấy không |
+|---|---|---|
+| **Bản nháp** | Trạng thái = *Bản nháp* | Không, và không bao giờ tự lên |
+| **Lên lịch** | Trạng thái = *Đăng* + Thời gian đăng là ngày giờ **tương lai** | Chưa thấy, tới đúng giờ đó là tự lên |
+| **Đang hiện** | Trạng thái = *Đăng* + Thời gian đăng để trống hoặc trong quá khứ | Thấy ngay |
+
+Vài điểm cần biết:
+
+- **Không cần cài thêm gì để lịch chạy.** Bài tự xuất hiện khi tới giờ, không phải chạy lệnh hay bật dịch vụ nền nào.
+- Ở danh sách Admin → Tin tức, bài hẹn giờ **luôn nằm trên cùng** kèm nhãn vàng *Lên lịch* và dòng "sẽ đăng ngày…", để bạn nhìn phát biết bài nào sắp ra.
+- Bốn nút lọc ngay trên danh sách — *Tất cả*, *Đang hiện*, *Lên lịch*, *Bản nháp* — để xem riêng từng nhóm.
+- Bài chưa lên vẫn **bấm Xem đọc thử được** khi bạn đang đăng nhập admin; khách vào cùng đường dẫn đó thì gặp trang 404.
+- Cách dùng hợp lý: dành một buổi viết 4–6 bài, hẹn giờ rải ra mỗi tuần hai bài, rồi quên đi. Nội dung vẫn ra đều mà không cần nhớ.
 
 ---
 
