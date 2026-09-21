@@ -225,6 +225,82 @@ BODY,
                     ['question' => 'Thu cũ đổi mới có kết hợp trả góp được không?', 'answer' => 'Được. Tiền thu máy cũ trừ thẳng vào giá máy mới, phần chênh lệch còn lại có thể trả góp.'],
                 ],
             ],
+            [
+                'title' => 'iPhone cũ có nên mua không? 5 thứ phải kiểm tra trước khi chốt',
+                'slug' => 'iphone-cu-co-nen-mua-khong',
+                'topic' => 'tu-van',
+                'focus_keyword' => 'iphone cũ có nên mua',
+                'excerpt' => 'Máy cũ đáng mua khi bạn kiểm tra đủ 5 thứ và người bán chịu bảo hành. Bài này nói rõ kiểm tra gì, trừ giá bao nhiêu là hợp lý, và khi nào nên bỏ qua máy cũ.',
+                'body' => <<<'BODY'
+Có, nếu bạn kiểm tra đủ năm thứ dưới đây và người bán chịu bảo hành bằng giấy tờ. Cùng số tiền, một chiếc máy cũ thường cho bạn đời máy cao hơn một đến hai bậc so với máy mới. Đổi lại, rủi ro nằm ở pin, linh kiện đã thay và nguồn gốc máy.
+## Máy cũ rẻ hơn máy mới bao nhiêu?
+Mức chênh phụ thuộc vào đời máy và tình trạng, nhưng quy luật chung là máy càng cũ thì tốc độ mất giá càng chậm lại. Chiếc máy mất giá mạnh nhất trong năm đầu tiên; từ năm thứ ba trở đi giá gần như đi ngang. Vì vậy máy đã qua sử dụng khoảng hai đến ba năm thường là điểm cân bằng tốt nhất giữa giá và thời gian còn dùng được.
+## Năm thứ phải kiểm tra
+- **Nguồn gốc máy**: số IMEI phải trùng ở cả ba nơi và tra được trên trang của Apple.
+- **Tình trạng pin**: xem Dung lượng tối đa trong Cài đặt, dưới 80% thì phải trừ tiền thay pin vào giá.
+- **Lịch sử linh kiện**: máy từng thay màn hình hoặc camera không chính hãng phải rẻ hơn rõ rệt.
+- **Khoá iCloud và khoá mạng**: máy còn khoá là không dùng được, không có cách nào chữa.
+- **Cam kết sau khi mua**: đổi trả trong bao nhiêu ngày, bảo hành bao lâu, ghi ở đâu.
+Ba thứ đầu làm được ngay tại quầy trong năm phút, các bước bấm chi tiết nằm ở bài [cách kiểm tra iPhone chính hãng](/tin-tuc/cach-kiem-tra-iphone-chinh-hang).
+## Trừ giá bao nhiêu là hợp lý?
+Đây là phần người mua hay chịu thiệt vì không biết lấy mốc nào. Cách tính đơn giản: lấy giá người bán đưa ra, trừ đi chi phí phải bỏ thêm để máy về trạng thái dùng tốt.
+- Pin dưới 80%: trừ đúng bằng giá thay pin.
+- Màn hình đã thay không chính hãng: trừ nhiều, vì đây là thứ ảnh hưởng tới cảm ứng và độ sáng lâu dài.
+- Xước nhẹ ở viền hoặc lưng máy: trừ ít, không ảnh hưởng sử dụng.
+- Không còn hộp và phụ kiện: trừ một khoản nhỏ.
+> Nếu người bán không cho bạn cầm máy kiểm tra đủ năm phút trước khi chuyển tiền, đó đã là câu trả lời. Máy không có gì giấu thì không ai ngại cho kiểm tra.
+## Khi nào thì đừng mua máy cũ?
+Có ba trường hợp nên bỏ tiền thêm mua máy mới:
+- Bạn cần máy dùng liên tục 4 đến 5 năm nữa — máy cũ đã đi hết một phần tuổi thọ pin và phần mềm.
+- Bạn mua cho người lớn tuổi hoặc trẻ nhỏ, không ai ở nhà xử lý được khi máy trục trặc.
+- Người bán không có cửa hàng cố định và không cam kết đổi trả bằng giấy tờ.
+Nếu rơi vào một trong ba trường hợp này, xem hướng chọn máy mới theo ngân sách ở bài [nên mua iPhone nào](/tin-tuc/nen-mua-iphone-nao-2026).
+## Mua máy đã qua sử dụng tại phuonghihi
+Toàn bộ máy tại cửa hàng đều được kiểm tra đủ năm hạng mục trên trước khi lên kệ, giá niêm yết công khai theo từng tình trạng máy. Bạn vẫn được kiểm tra lại khi nhận hàng theo [chính sách đổi trả](/chinh-sach/doi-tra), và máy có bảo hành theo [chính sách bảo hành](/chinh-sach/bao-hanh). Xem máy đang có tại [trang sản phẩm](/san-pham).
+BODY,
+                'faqs' => [
+                    ['question' => 'iPhone cũ dùng được thêm bao lâu?', 'answer' => 'Tuỳ tình trạng pin và đời máy. Máy đã dùng hai đến ba năm, pin trên 85%, thường còn dùng tốt thêm hai đến ba năm nữa nếu không va đập.'],
+                    ['question' => 'Mua iPhone cũ có được bảo hành không?', 'answer' => 'Tuỳ nơi bán. Tại phuonghihi máy đã qua sử dụng vẫn có bảo hành của cửa hàng, điều kiện ghi rõ trong chính sách bảo hành trên website.'],
+                    ['question' => 'Pin còn bao nhiêu phần trăm thì mua được?', 'answer' => 'Trên 85% là mua được mà không cần trừ giá. Từ 80 đến 85% nên trả giá thêm. Dưới 80% thì phải trừ đúng chi phí thay pin vào giá máy.'],
+                ],
+            ],
+            [
+                'title' => 'iPhone 128GB hay 256GB? Cách tự biết mình cần bao nhiêu',
+                'slug' => 'iphone-128gb-hay-256gb',
+                'topic' => 'so-sanh',
+                'focus_keyword' => 'iphone 128gb hay 256gb',
+                'excerpt' => 'Cách tự tính dung lượng mình thật sự cần trong hai phút, dựa trên số ảnh và số phút video bạn quay mỗi tháng, thay vì đoán mò rồi hối hận.',
+                'body' => <<<'BODY'
+Chọn 128GB nếu bạn bật sao lưu ảnh lên iCloud và hiếm khi quay video. Chọn 256GB nếu bạn giữ ảnh và video trên máy, hoặc quay video 4K. Đây là thứ duy nhất trên iPhone không nâng cấp được sau khi mua, nên thà dư còn hơn thiếu.
+## Thực tế bạn dùng được bao nhiêu?
+Con số ghi trên hộp không phải con số bạn dùng được. Hệ điều hành và các ứng dụng hệ thống chiếm khoảng 10GB. Nghĩa là máy 128GB còn lại khoảng 118GB, máy 256GB còn khoảng 246GB cho dữ liệu của bạn.
+## Mỗi thứ chiếm bao nhiêu dung lượng?
+Đây là các mức xấp xỉ, đủ để bạn tự tính:
+- Một tấm ảnh chụp thường: khoảng 2 đến 4MB.
+- Một phút video Full HD: khoảng 60 đến 90MB.
+- Một phút video 4K: khoảng 170 đến 400MB tuỳ tốc độ khung hình.
+- Một ứng dụng mạng xã hội sau vài tháng dùng: 2 đến 5GB.
+- Một bộ phim tải về xem offline: 2 đến 5GB.
+## Tự tính trong hai phút
+Lấy ba con số của chính bạn trong một tháng, rồi nhân với 24 tháng — khoảng thời gian trung bình trước khi đổi máy:
+- Số ảnh mỗi tháng × 3MB
+- Số phút video mỗi tháng × 100MB (Full HD) hoặc × 250MB (4K)
+- Cộng thêm 30GB cho ứng dụng, tin nhắn và hệ điều hành
+Ra dưới 100GB thì 128GB là đủ. Ra trên 100GB thì lấy 256GB.
+> Ví dụ: 200 ảnh và 10 phút video Full HD mỗi tháng → khoảng 1,6GB/tháng → sau 2 năm khoảng 38GB, cộng 30GB nữa là 68GB. Người này chọn 128GB là hợp lý.
+## iCloud có thay thế được dung lượng máy không?
+Chỉ thay thế được một phần. Khi bật Tối ưu hoá dung lượng, máy giữ bản ảnh nhẹ và đẩy bản gốc lên iCloud, tiết kiệm được đáng kể. Nhưng iCloud là dịch vụ trả tiền hằng tháng, và khi không có mạng bạn không mở được ảnh gốc. Nếu bạn ngại trả phí hằng tháng thì mua thẳng dung lượng lớn hơn một lần vẫn rẻ hơn về lâu dài.
+## Chênh lệch giá có đáng không?
+Khoản chênh giữa hai bản dung lượng thường nhỏ hơn nhiều so với khoản chênh giữa bản thường và bản Pro. Nếu ngân sách chỉ đủ chọn một trong hai, ưu tiên dung lượng lớn hơn trước, vì camera thì đời nào cũng dùng được còn máy đầy bộ nhớ thì ngày nào cũng khó chịu. Cách cân nhắc giữa các bản máy nằm ở bài [nên chọn iPhone Pro hay bản thường](/tin-tuc/nen-chon-iphone-pro-hay-ban-thuong).
+## Xem giá từng bản dung lượng
+Giá của từng dung lượng có ở [trang sản phẩm](/san-pham), lọc được theo dung lượng ngay trên bộ lọc bên trái. Chưa chắc chọn đời máy nào thì xem trước bài [nên mua iPhone nào](/tin-tuc/nen-mua-iphone-nao-2026).
+BODY,
+                'faqs' => [
+                    ['question' => 'iPhone 128GB thực tế dùng được bao nhiêu?', 'answer' => 'Khoảng 118GB. Hệ điều hành và ứng dụng hệ thống chiếm khoảng 10GB ngay từ khi máy mới.'],
+                    ['question' => 'Có nâng cấp dung lượng iPhone sau khi mua được không?', 'answer' => 'Không. Bộ nhớ iPhone gắn liền bo mạch, không có khe thẻ nhớ. Chọn sai dung lượng thì chỉ còn cách dùng iCloud hoặc đổi máy.'],
+                    ['question' => 'Quay video 4K tốn bao nhiêu dung lượng?', 'answer' => 'Khoảng 170 đến 400MB cho mỗi phút, tuỳ tốc độ khung hình. Quay 10 phút mỗi tháng thì sau hai năm đã chiếm khoảng 40 đến 96GB.'],
+                ],
+            ],
         ];
     }
 }

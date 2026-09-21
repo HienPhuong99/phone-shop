@@ -21,7 +21,9 @@ Toàn bộ phần kỹ thuật đã được làm sẵn trong code (xem Phần 5
 
 ## Phần 1 — Bảng 24 bài viết: viết gì, theo thứ tự nào
 
-6 bài đầu **đã được viết sẵn và nằm trong hệ thống** — vào Admin → Tin tức là thấy. Dùng chúng làm mẫu cho 18 bài còn lại.
+8 bài đầu **đã được viết sẵn và nằm trong hệ thống** — vào Admin → Tin tức là thấy. Dùng chúng làm mẫu cho 16 bài còn lại.
+
+Tám bài này nằm trong `database/seeders/PostSeeder.php` nên có sẵn ở mọi môi trường deploy. Từ bài #9 trở đi viết thẳng trong Admin, không đụng vào seeder nữa.
 
 | # | Tuần | Chủ đề | Tiêu đề (dùng nguyên cũng được) | Từ khoá chính | Link nội bộ bắt buộc chèn | Trạng thái |
 |---|---|---|---|---|---|---|
@@ -31,8 +33,8 @@ Toàn bộ phần kỹ thuật đã được làm sẵn trong code (xem Phần 5
 | 4 | 2 | So sánh | Nên chọn iPhone Pro hay bản thường? So sánh theo cách bạn dùng máy | iphone pro hay bản thường | /so-sanh, /san-pham | ✅ Đã có sẵn |
 | 5 | 3 | Tư vấn mua | Mua iPhone trả góp: cần giấy tờ gì và mỗi tháng trả bao nhiêu? | mua iphone trả góp | /tra-gop, /thu-cu-doi-moi | ✅ Đã có sẵn |
 | 6 | 3 | Tin mới | Thu cũ đổi mới iPhone: máy của bạn được định giá thế nào? | thu cũ đổi mới iphone | /thu-cu-doi-moi, /tra-gop | ✅ Đã có sẵn |
-| 7 | 4 | Tư vấn mua | iPhone cũ có nên mua không? 5 thứ phải kiểm tra trước khi chốt | iphone cũ có nên mua | bài #2, /san-pham | Cần viết |
-| 8 | 4 | So sánh | iPhone 128GB hay 256GB? Cách tự biết mình cần bao nhiêu | iphone 128gb hay 256gb | /san-pham, bài #1 | Cần viết |
+| 7 | 4 | Tư vấn mua | iPhone cũ có nên mua không? 5 thứ phải kiểm tra trước khi chốt | iphone cũ có nên mua | bài #1, bài #2, /san-pham | ✅ Đã có sẵn |
+| 8 | 4 | So sánh | iPhone 128GB hay 256GB? Cách tự biết mình cần bao nhiêu | iphone 128gb hay 256gb | /san-pham, bài #1, bài #4 | ✅ Đã có sẵn |
 | 9 | 5 | Hướng dẫn | Cách chuyển dữ liệu từ iPhone cũ sang iPhone mới | chuyển dữ liệu iphone | /thu-cu-doi-moi | Cần viết |
 | 10 | 5 | Tư vấn mua | Mua iPhone cho học sinh sinh viên: 4 lựa chọn dưới 12 triệu | iphone cho sinh viên | /san-pham, /tra-gop | Cần viết |
 | 11 | 6 | So sánh | iPhone Pro Max có đáng tiền hơn Pro không? | iphone pro max có đáng mua | /so-sanh, /san-pham | Cần viết |

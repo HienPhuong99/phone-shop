@@ -85,6 +85,17 @@ class NewsTest extends TestCase
         $response->assertDontSee('Câu trả lời không có câu hỏi');
     }
 
+    public function test_reading_time_counts_vietnamese_words_not_ascii_letter_runs(): void
+    {
+        // 80 × 5 = 400 words, which is 2 minutes at 200 words per minute.
+        // str_word_count() scores the same text at 640 and reports 4.
+        $post = Post::factory()->create([
+            'body' => trim(str_repeat('kiểm tra pin điện thoại ', 80)),
+        ]);
+
+        $this->assertSame(2, $post->reading_minutes);
+    }
+
     public function test_draft_article_returns_404_for_a_visitor(): void
     {
         $post = Post::factory()->draft()->create();

@@ -111,7 +111,13 @@ class Post extends Model
 
     public function getReadingMinutesAttribute(): int
     {
-        return max(1, (int) ceil(str_word_count(strip_tags($this->body)) / self::WORDS_READ_PER_MINUTE));
+        // Split on whitespace rather than str_word_count(), which counts
+        // only ASCII letter runs: every Vietnamese diacritic ends a "word"
+        // for it, so "kiểm tra" counts as three and the reading time comes
+        // out about half again too long.
+        $words = count(preg_split('/\s+/u', trim(strip_tags($this->body))) ?: []);
+
+        return max(1, (int) ceil($words / self::WORDS_READ_PER_MINUTE));
     }
 
     /**
