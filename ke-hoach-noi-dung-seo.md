@@ -189,7 +189,7 @@ Hệ thống tự cắt 155 ký tự đầu làm mô tả hiện trên Google, n
 
 **Việc duy nhất cần làm một lần khi lên tên miền thật:**
 
-1. Sửa `APP_URL` trong `.env` thành tên miền thật (nếu không, link trong sitemap sẽ sai).
+1. Sửa `APP_URL` trong `.env` thành tên miền thật — **trước khi upload tấm ảnh đầu tiên**. Ảnh tải lên được lưu bằng URL tuyệt đối dựng từ biến này và ghi thẳng vào database, nên ảnh upload lúc `APP_URL` còn sai sẽ hỏng vĩnh viễn cho tới khi upload lại. Biến này cũng chi phối đường dẫn quay về sau khi thanh toán VNPay và link trong email. Riêng sitemap và canonical thì lấy tên miền từ chính request nên không phụ thuộc biến này.
 2. Sửa thông tin thật của cửa hàng trong `config/shop.php` (tên, số điện thoại, địa chỉ, giờ mở cửa).
 3. Vào [Google Search Console](https://search.google.com/search-console), thêm website, rồi dán `https://tenmien.com/sitemap.xml` vào mục Sitemaps.
 
