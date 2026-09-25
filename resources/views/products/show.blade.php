@@ -31,6 +31,54 @@
     $metaDescription = $product->description
         ? Illuminate\Support\Str::limit(preg_replace('/\s+/', ' ', trim($product->description)), 155)
         : "{$product->name} chính hãng, giá ".number_format((float) $product->base_price, 0, ',', '.')."đ tại phuonghihi. Bảo hành 12 tháng, giao toàn quốc.";
+
+    $canonical = route('products.show', $product->slug);
+
+    $productSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'Product',
+        'name' => $product->name,
+        'description' => $metaDescription,
+        'image' => $galleryImages->pluck('url')->values()->all(),
+        'brand' => ['@type' => 'Brand', 'name' => 'Apple'],
+        'offers' => [
+            '@type' => 'Offer',
+            'url' => $canonical,
+            'priceCurrency' => 'VND',
+            'price' => (string) $product->base_price,
+            'availability' => $product->total_stock > 0
+                ? 'https://schema.org/InStock'
+                : 'https://schema.org/OutOfStock',
+        ],
+    ];
+
+    // Star ratings only show up in Google's results when the page backs
+    // them with real review data, so this is added only once a product
+    // actually has reviews.
+    if ($product->reviews_count > 0) {
+        $productSchema['aggregateRating'] = [
+            '@type' => 'AggregateRating',
+            'ratingValue' => (string) round((float) $product->reviews_avg_rating, 1),
+            'reviewCount' => (string) $product->reviews_count,
+            'bestRating' => '5',
+            'worstRating' => '1',
+        ];
+    }
+
+    $breadcrumbSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'BreadcrumbList',
+        'itemListElement' => collect([
+            ['name' => 'Trang chủ', 'item' => route('home')],
+            ['name' => 'Sản phẩm', 'item' => route('products.index')],
+            ['name' => $product->series?->name, 'item' => route('products.index', ['series' => $product->series?->slug])],
+            ['name' => $product->name, 'item' => $canonical],
+        ])
+            ->filter(fn (array $crumb) => filled($crumb['name']))
+            ->values()
+            ->map(fn (array $crumb, int $index) => ['@type' => 'ListItem', 'position' => $index + 1] + $crumb)
+            ->all(),
+    ];
 @endphp
 
 <x-shop-layout
@@ -38,6 +86,8 @@
     :hide-bottom-nav="true"
     :description="$metaDescription"
     :og-image="$galleryImages->first()['url'] ?? null"
+    :canonical="$canonical"
+    og-type="product"
 >
     <x-slot:head>
         {{--
@@ -48,23 +98,8 @@
             json_encode()'s default slash-escaping keeps a stray
             "</script>" in any field from breaking out of the tag.
         --}}
-        <script type="application/ld+json">{!! json_encode([
-                '@@context' => 'https://schema.org',
-                '@type' => 'Product',
-                'name' => $product->name,
-                'description' => $metaDescription,
-                'image' => $galleryImages->pluck('url')->values()->all(),
-                'brand' => ['@type' => 'Brand', 'name' => 'Apple'],
-                'offers' => [
-                    '@type' => 'Offer',
-                    'url' => route('products.show', $product->slug),
-                    'priceCurrency' => 'VND',
-                    'price' => (string) $product->base_price,
-                    'availability' => $product->total_stock > 0
-                        ? 'https://schema.org/InStock'
-                        : 'https://schema.org/OutOfStock',
-                ],
-            ], JSON_UNESCAPED_UNICODE) !!}</script>
+        <script type="application/ld+json">{!! json_encode($productSchema, JSON_UNESCAPED_UNICODE) !!}</script>
+        <script type="application/ld+json">{!! json_encode($breadcrumbSchema, JSON_UNESCAPED_UNICODE) !!}</script>
     </x-slot:head>
     <div
         class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-28 sm:pb-8"

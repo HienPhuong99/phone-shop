@@ -1,4 +1,5 @@
-<x-policy-page title="Chính sách bảo mật thông tin">
+<x-policy-page title="Chính sách bảo mật thông tin"
+    description="Chính sách bảo mật của phuonghihi: thông tin nào được thu thập, dùng vào việc gì, chia sẻ với ai và cách khách hàng yêu cầu xoá dữ liệu.">
     <div>
         <h2>Thông tin thu thập</h2>
         <p>Họ tên, số điện thoại, địa chỉ giao hàng khi bạn đặt hàng hoặc tạo tài khoản. Chúng tôi không yêu cầu thông tin thẻ ngân hàng — mọi giao dịch thẻ được xử lý trực tiếp qua cổng thanh toán VNPay.</p>

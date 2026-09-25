@@ -11,14 +11,32 @@
             <meta name="description" content="{{ $description }}">
         @endif
 
-        <meta property="og:type" content="website">
+        <link rel="canonical" href="{{ $canonicalUrl() }}">
+
+        @if ($noindex)
+            {{-- Search results and cart/checkout pages: no value in the index, but still worth crawling for the links they carry. --}}
+            <meta name="robots" content="noindex, follow">
+        @endif
+
+        <meta property="og:type" content="{{ $ogType }}">
+        <meta property="og:site_name" content="{{ config('app.name', 'phuonghihi') }}">
+        <meta property="og:locale" content="vi_VN">
         <meta property="og:title" content="{{ $title ?? config('app.name', 'phuonghihi') }}">
-        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:url" content="{{ $canonicalUrl() }}">
         @if ($description)
             <meta property="og:description" content="{{ $description }}">
         @endif
         @if ($ogImage)
             <meta property="og:image" content="{{ $ogImage }}">
+        @endif
+
+        <meta name="twitter:card" content="{{ $ogImage ? 'summary_large_image' : 'summary' }}">
+        <meta name="twitter:title" content="{{ $title ?? config('app.name', 'phuonghihi') }}">
+        @if ($description)
+            <meta name="twitter:description" content="{{ $description }}">
+        @endif
+        @if ($ogImage)
+            <meta name="twitter:image" content="{{ $ogImage }}">
         @endif
 
         <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo-icon.svg') }}">
@@ -49,6 +67,9 @@
                             </a>
                             <a href="{{ route('products.index') }}" class="inline-flex items-center px-1 pt-1 text-sm font-semibold border-b-2 {{ request()->routeIs('products.*') ? 'text-white border-white' : 'text-white/70 hover:text-white border-transparent' }}">
                                 Sản phẩm
+                            </a>
+                            <a href="{{ route('posts.index') }}" class="inline-flex items-center px-1 pt-1 text-sm font-semibold border-b-2 {{ request()->routeIs('posts.*') ? 'text-white border-white' : 'text-white/70 hover:text-white border-transparent' }}">
+                                Tin tức
                             </a>
                         </nav>
 
@@ -124,6 +145,7 @@
             <footer class="bg-white border-t border-line mt-12 [padding-bottom:env(safe-area-inset-bottom)]">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
                     <div class="flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm font-medium text-ink-soft">
+                        <a href="{{ route('posts.index') }}" class="hover:text-brand transition">Tin tức</a>
                         <a href="{{ route('pages.services') }}" class="hover:text-brand transition">Dịch vụ</a>
                         <a href="{{ route('pages.policies') }}" class="hover:text-brand transition">Chính sách</a>
                         <a href="{{ route('pages.about') }}" class="hover:text-brand transition">Giới thiệu</a>
@@ -210,6 +232,7 @@
                 @endauth
 
                 <div class="border-t border-line px-2 py-2 space-y-0.5">
+                    <a href="{{ route('posts.index') }}" class="block px-3 py-3 rounded-xl text-sm text-ink-soft hover:bg-paper">Tin tức</a>
                     <a href="{{ route('pages.services') }}" class="block px-3 py-3 rounded-xl text-sm text-ink-soft hover:bg-paper">Dịch vụ</a>
                     <a href="{{ route('pages.policies') }}" class="block px-3 py-3 rounded-xl text-sm text-ink-soft hover:bg-paper">Chính sách</a>
                     <a href="{{ route('pages.about') }}" class="block px-3 py-3 rounded-xl text-sm text-ink-soft hover:bg-paper">Giới thiệu</a>

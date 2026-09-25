@@ -2,7 +2,8 @@
     $productOptions = $products->map(fn ($p) => ['id' => $p->id, 'name' => $p->name, 'price' => (float) $p->base_price]);
 @endphp
 
-<x-shop-layout title="Thu cũ đổi mới - phuonghihi">
+<x-shop-layout title="Thu cũ đổi mới - phuonghihi"
+    description="Thu cũ đổi mới iPhone tại phuonghihi: ước tính giá máy cũ ngay trên web, trừ thẳng vào giá máy mới, phần chênh lệch có thể trả góp.">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <nav class="text-sm text-ink-soft mb-6">
             <a href="{{ route('home') }}" class="hover:text-brand transition">Trang chủ</a> /

@@ -1,4 +1,4 @@
-<x-shop-layout title="Đơn hàng của tôi - phuonghihi">
+<x-shop-layout title="Đơn hàng của tôi - phuonghihi" :noindex="true">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <h1 class="text-3xl font-bold text-ink mb-6">Đơn hàng của tôi</h1>
 

@@ -31,6 +31,7 @@
                             ['route' => 'admin.product-series.index', 'label' => 'Dòng sản phẩm'],
                             ['route' => 'admin.coupons.index', 'label' => 'Mã giảm giá'],
                             ['route' => 'admin.announcements.index', 'label' => 'Thông báo'],
+                            ['route' => 'admin.posts.index', 'label' => 'Tin tức'],
                             ['route' => 'admin.orders.index', 'label' => 'Đơn hàng'],
                         ];
                     @endphp

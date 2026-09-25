@@ -1,4 +1,7 @@
-<x-shop-layout :title="($term !== '' ? 'Tìm kiếm: '.$term : 'Tìm kiếm').' - phuonghihi'">
+<x-shop-layout
+    :title="($term !== '' ? 'Tìm kiếm: '.$term : 'Tìm kiếm').' - phuonghihi'"
+    :noindex="true"
+>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <nav class="text-sm text-ink-soft mb-4">
             <a href="{{ route('home') }}" class="hover:text-brand transition">Trang chủ</a> /

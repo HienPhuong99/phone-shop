@@ -1,0 +1,389 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Post;
+use Illuminate\Database\Seeder;
+
+/**
+ * The six starter articles of the content plan — two per week for the
+ * first three weeks. Each one follows the same SEO shape the admin form
+ * asks for: a lead paragraph that answers the title in about 50 words,
+ * "## " sections written as the questions buyers actually type, at least
+ * one internal link to a page that sells, and three FAQ rows that feed the
+ * FAQPage schema.
+ */
+class PostSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $posts = $this->posts();
+
+        foreach ($posts as $index => $post) {
+            Post::updateOrCreate(
+                ['slug' => $post['slug']],
+                // "+" keeps the keys already on the left, so an article
+                // that sets its own status/published_at (the scheduled ones
+                // at the end of the list) overrides these defaults.
+                $post + [
+                    'status' => 'published',
+                    // Oldest first, one article every three days, so the
+                    // storefront listing is not eight posts on one date.
+                    'published_at' => now()->subDays((count($posts) - $index) * 3),
+                ]
+            );
+        }
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    private function posts(): array
+    {
+        return [
+            [
+                'title' => 'Nên mua iPhone nào 2026? Chọn theo nhu cầu và túi tiền',
+                'slug' => 'nen-mua-iphone-nao-2026',
+                'topic' => 'tu-van',
+                'focus_keyword' => 'nên mua iphone nào',
+                'excerpt' => 'Bốn nhóm ngân sách, bốn gợi ý máy cụ thể: chọn nhanh chiếc iPhone hợp với cách bạn dùng máy hằng ngày thay vì chọn theo đời máy mới nhất.',
+                'body' => <<<'BODY'
+Nếu bạn chỉ dùng để nhắn tin, xem video và chụp ảnh gia đình, một chiếc iPhone đời cũ hơn hai đến ba năm vẫn dư sức và rẻ hơn đáng kể. Chỉ khi bạn quay video nhiều, chơi game nặng hoặc cần pin trụ cả ngày dài thì mới nên trả thêm tiền cho bản Pro hoặc Pro Max.
+## Chọn theo ngân sách: bốn mức, bốn hướng đi
+Đây là cách nhanh nhất để thu hẹp lựa chọn. Bạn xác định số tiền tối đa trước, rồi mới xem máy — làm ngược lại thì gần như luôn đội giá.
+- **Dưới 10 triệu**: các đời iPhone cũ hơn, hợp với nhu cầu cơ bản và làm máy phụ.
+- **10 đến 18 triệu**: nhóm bán chạy nhất, cân bằng giữa camera, pin và giá.
+- **18 đến 25 triệu**: bản Pro của đời trước, thường là lựa chọn khôn ngoan nhất nếu bạn chụp ảnh nhiều.
+- **Trên 25 triệu**: bản Pro Max mới nhất, dành cho người quay video và muốn dùng máy 4 đến 5 năm.
+Toàn bộ máy đang bán và mức giá hiện tại nằm ở [trang sản phẩm](/san-pham), lọc được theo dòng máy và khoảng giá.
+## Bản thường, Pro hay Pro Max khác nhau ở đâu?
+Ba điểm khác biệt đáng tiền nhất, xếp theo thứ tự bạn sẽ cảm nhận được: thời lượng pin, hệ thống camera và màn hình. Bản Pro Max luôn có pin lớn nhất trong cùng một đời máy, nên nếu bạn hay đi cả ngày không cắm sạc thì đây là lý do chính đáng nhất để trả thêm tiền.
+> Mẹo chọn nhanh: nếu bạn không quay video quá một phút mỗi tuần, tiền chênh lệch giữa bản thường và bản Pro nên để dành cho dung lượng lớn hơn.
+## Nên chọn dung lượng bao nhiêu?
+128GB đủ cho người dùng phổ thông có sao lưu ảnh lên iCloud. Nếu bạn quay video, tải phim về xem hoặc giữ ảnh trên máy nhiều năm không xoá, hãy chọn 256GB trở lên — dung lượng là thứ duy nhất trên iPhone không nâng cấp được sau khi mua.
+## Máy mới hay máy đã qua sử dụng?
+Máy cũ rẻ hơn nhưng phải kiểm tra kỹ nguồn gốc và tình trạng pin. Nếu bạn chọn hướng này, xem trước [cách kiểm tra iPhone chính hãng](/tin-tuc/cach-kiem-tra-iphone-chinh-hang) để không trả tiền cho một chiếc máy đã bị thay linh kiện.
+## Mua tại phuonghihi thì được gì?
+Tất cả máy đều có bảo hành theo [chính sách bảo hành](/chinh-sach/bao-hanh), đổi trả theo [chính sách đổi trả](/chinh-sach/doi-tra), giao hàng toàn quốc. Nếu chưa đủ tiền, bạn có thể xem [chương trình trả góp](/tra-gop) hoặc [thu cũ đổi mới](/thu-cu-doi-moi) để bù một phần.
+BODY,
+                'faqs' => [
+                    ['question' => 'Mua iPhone đời cũ có còn được cập nhật phần mềm không?', 'answer' => 'Có. Apple thường hỗ trợ cập nhật iOS cho máy trong nhiều năm sau ngày ra mắt, nên một chiếc iPhone cũ hơn hai đến ba năm vẫn nhận bản cập nhật bảo mật.'],
+                    ['question' => 'Nên mua 128GB hay 256GB?', 'answer' => 'Chọn 128GB nếu bạn sao lưu ảnh lên iCloud và ít quay video. Chọn 256GB trở lên nếu bạn giữ ảnh và video trên máy, vì dung lượng iPhone không nâng cấp được sau khi mua.'],
+                    ['question' => 'Có trả góp được không?', 'answer' => 'Có. phuonghihi hỗ trợ trả góp qua thẻ tín dụng và qua công ty tài chính, chi tiết ở trang trả góp.'],
+                ],
+            ],
+            [
+                'title' => 'Cách kiểm tra iPhone chính hãng trước khi trả tiền',
+                'slug' => 'cach-kiem-tra-iphone-chinh-hang',
+                'topic' => 'huong-dan',
+                'focus_keyword' => 'cách kiểm tra iphone chính hãng',
+                'excerpt' => 'Sáu bước kiểm tra làm được ngay tại quầy trong năm phút: số IMEI, thời hạn bảo hành, tình trạng pin, camera, màn hình và các linh kiện đã bị thay.',
+                'body' => <<<'BODY'
+Kiểm tra một chiếc iPhone mất khoảng năm phút và chỉ cần chính chiếc máy đó cùng kết nối mạng. Sáu bước dưới đây đi từ thứ dễ làm giả nhất đến thứ khó làm giả nhất, làm đủ cả sáu bước trước khi chuyển tiền.
+## Bước 1: So số IMEI ở ba nơi
+Bấm gọi **\*#06#** để máy hiện số IMEI, rồi so với số in trên khay SIM và số trong Cài đặt > Cài đặt chung > Giới thiệu. Ba số phải trùng nhau. Lệch một chữ số nghĩa là máy đã bị can thiệp phần cứng.
+## Bước 2: Tra bảo hành trên trang của Apple
+Nhập số IMEI vào trang kiểm tra bảo hành của Apple. Trang này cho bạn biết máy có tồn tại thật không, đã kích hoạt chưa và còn bao nhiêu ngày bảo hành. Máy mới nguyên seal mà đã kích hoạt từ lâu là dấu hiệu cần hỏi lại người bán.
+## Bước 3: Xem tình trạng pin
+Vào Cài đặt > Pin > Tình trạng pin và sạc. Con số Dung lượng tối đa cho biết pin còn bao nhiêu phần trăm so với lúc mới. Chi tiết về ngưỡng nên thay pin có ở bài [cách kiểm tra pin iPhone](/tin-tuc/cach-kiem-tra-pin-iphone).
+## Bước 4: Tìm dấu vết linh kiện đã thay
+Vẫn trong Cài đặt > Giới thiệu, kéo xuống phần Lịch sử linh kiện và dịch vụ. Nếu màn hình, pin hoặc camera từng bị thay bằng linh kiện không chính hãng, máy sẽ báo ở đây.
+> Đây là bước nhiều người bỏ qua nhất, và cũng là bước phát hiện ra nhiều vấn đề nhất khi mua máy đã qua sử dụng.
+## Bước 5: Thử camera, loa và cảm ứng
+Chụp thử cả camera trước và sau, quay một đoạn video ngắn, mở nhạc để nghe loa ngoài, rồi vuốt hết bốn cạnh màn hình. Lỗi cảm ứng viền màn hình là lỗi thường gặp ở máy đã bị thay màn.
+## Bước 6: Kiểm tra Face ID và khoá iCloud
+Thử đăng ký một khuôn mặt mới để chắc chắn Face ID còn hoạt động. Sau đó vào Cài đặt > Cài đặt chung > Chuyển hoặc Đặt lại iPhone, xác nhận máy không còn bị khoá vào tài khoản iCloud của người khác — máy dính iCloud của người khác thì bạn không dùng được.
+## Mua ở đâu thì không phải làm hết sáu bước này?
+Khi mua máy tại [phuonghihi](/san-pham), toàn bộ các bước trên đã được kiểm tra trước khi máy lên kệ, và bạn vẫn được kiểm tra lại khi nhận hàng theo [chính sách đổi trả](/chinh-sach/doi-tra).
+BODY,
+                'faqs' => [
+                    ['question' => 'Bấm gì để xem số IMEI trên iPhone?', 'answer' => 'Mở ứng dụng Điện thoại và bấm *#06#, số IMEI sẽ hiện ra ngay. So số này với số in trên khay SIM và số trong Cài đặt > Giới thiệu.'],
+                    ['question' => 'Làm sao biết iPhone đã bị thay màn hình hay pin?', 'answer' => 'Vào Cài đặt > Cài đặt chung > Giới thiệu, kéo xuống mục Lịch sử linh kiện và dịch vụ. Linh kiện không chính hãng sẽ được báo tại đây.'],
+                    ['question' => 'Máy dính iCloud của người khác có dùng được không?', 'answer' => 'Không. Máy còn bị khoá vào tài khoản iCloud của chủ cũ sẽ không kích hoạt được, và chỉ chủ tài khoản đó mới gỡ được.'],
+                ],
+            ],
+            [
+                'title' => 'Cách kiểm tra pin iPhone: chai bao nhiêu phần trăm thì nên thay?',
+                'slug' => 'cach-kiem-tra-pin-iphone',
+                'topic' => 'huong-dan',
+                'focus_keyword' => 'kiểm tra pin iphone',
+                'excerpt' => 'Xem dung lượng pin tối đa trong ba bước, hiểu con số đó nói lên điều gì, và biết khi nào thay pin là đáng tiền hơn đổi máy.',
+                'body' => <<<'BODY'
+Vào Cài đặt > Pin > Tình trạng pin và sạc, đọc con số ở dòng Dung lượng tối đa. Trên 85% là pin còn tốt, từ 80 đến 85% là bắt đầu xuống, dưới 80% thì nên thay pin. Con số này Apple tính sẵn, bạn không cần ứng dụng nào khác.
+## Dung lượng tối đa nghĩa là gì?
+Nó cho biết pin hiện giữ được bao nhiêu phần trăm điện so với lúc máy còn mới. Pin 100% giữ đúng như ngày xuất xưởng; pin 80% nghĩa là một lần sạc đầy chỉ dùng được khoảng 80% thời gian so với ban đầu.
+## Mốc nào thì nên thay pin?
+- **Trên 85%**: dùng bình thường, chưa cần làm gì.
+- **80 đến 85%**: pin tụt nhanh hơn vào cuối ngày, cân nhắc thay nếu bạn hay đi xa.
+- **Dưới 80%**: nên thay. Ở mốc này máy có thể bị giảm hiệu năng để tránh sập nguồn.
+- **Máy báo "Cần bảo trì"**: thay càng sớm càng tốt.
+## Thay pin hay đổi máy mới?
+Quy tắc đơn giản: nếu máy còn dùng mượt và bạn hài lòng với camera, thay pin luôn rẻ hơn đổi máy rất nhiều. Nếu máy đã chậm, chụp ảnh không còn đủ dùng và bạn phải sạc hai lần mỗi ngày thì tiền thay pin nên để dành đổi máy. Xem thử [thu cũ đổi mới](/thu-cu-doi-moi) để biết máy hiện tại bù được bao nhiêu.
+## Sạc thế nào cho pin lâu chai?
+- Bật Sạc pin tối ưu trong Cài đặt > Pin để máy tự dừng ở 80% qua đêm.
+- Tránh để máy cạn sạch rồi mới sạc; cắm sạc khi còn khoảng 20% là vừa.
+- Hạn chế để máy nóng lâu, nhiệt độ cao làm pin chai nhanh hơn cả số lần sạc.
+> Số lần sạc không quan trọng bằng nhiệt độ. Một chiếc máy hay để trong ô tô giữa trưa sẽ chai pin nhanh hơn máy sạc mỗi ngày hai lần.
+## Thay pin tại phuonghihi
+Dịch vụ thay pin và các dịch vụ kỹ thuật khác có ở [trang dịch vụ](/dich-vu). Máy còn trong thời gian bảo hành thì xem trước [chính sách bảo hành](/chinh-sach/bao-hanh) vì có trường hợp được xử lý miễn phí.
+BODY,
+                'faqs' => [
+                    ['question' => 'Xem tình trạng pin iPhone ở đâu?', 'answer' => 'Cài đặt > Pin > Tình trạng pin và sạc. Dòng Dung lượng tối đa là con số cần xem.'],
+                    ['question' => 'Pin iPhone còn 80% có nên thay không?', 'answer' => 'Nên. Từ mốc 80% trở xuống, máy có thể tự giảm hiệu năng để tránh sập nguồn và thời lượng dùng mỗi ngày giảm rõ.'],
+                    ['question' => 'Thay pin có làm mất dữ liệu không?', 'answer' => 'Không. Thay pin không đụng đến bộ nhớ máy, nhưng vẫn nên sao lưu trước khi giao máy cho bất kỳ đơn vị sửa chữa nào.'],
+                ],
+            ],
+            [
+                'title' => 'Nên chọn iPhone Pro hay bản thường? So sánh theo cách bạn dùng máy',
+                'slug' => 'nen-chon-iphone-pro-hay-ban-thuong',
+                'topic' => 'so-sanh',
+                'focus_keyword' => 'iphone pro hay bản thường',
+                'excerpt' => 'Bốn khác biệt thật sự giữa bản Pro và bản thường, kèm bốn tình huống dùng máy cụ thể để biết khoản chênh lệch có đáng tiền với riêng bạn không.',
+                'body' => <<<'BODY'
+Bản Pro hơn bản thường ở camera, màn hình, chất liệu khung máy và thời lượng pin. Nếu bạn chủ yếu nhắn tin, lướt mạng xã hội và chụp ảnh đời thường thì bản thường đã đủ; khoản chênh lệch chỉ đáng tiền khi bạn chụp thiếu sáng nhiều hoặc quay video.
+## Khác biệt 1: Camera
+Đây là lý do chính để mua bản Pro. Bản Pro có thêm ống kính tele để chụp xa, chụp thiếu sáng sạch hơn và có các định dạng quay video chuyên nghiệp hơn. Nếu điện thoại là máy ảnh chính của bạn, tiền bỏ vào đây là đáng.
+## Khác biệt 2: Màn hình
+Bản Pro có tần số quét cao hơn, nên thao tác vuốt mượt hơn và màn hình sáng hơn khi dùng ngoài trời. Đây là thứ dễ quen và khó quay lại, nhưng cũng là thứ bạn sẽ không nhận ra nếu chưa từng dùng qua.
+## Khác biệt 3: Pin
+Trong cùng một đời máy, thứ tự thời lượng pin gần như luôn là Pro Max, rồi Pro, rồi bản thường. Nếu bạn ra khỏi nhà từ sáng tới tối không sạc, hãy ưu tiên máy có pin lớn hơn, kể cả khi phải chọn đời máy cũ hơn một năm.
+## Khác biệt 4: Khung máy và trọng lượng
+Bản Pro dùng chất liệu khung cao cấp hơn nhưng cũng nặng hơn. Người tay nhỏ hoặc hay cầm máy một tay lâu thường thấy bản thường dễ chịu hơn — đây là điểm nên ra cửa hàng cầm thử.
+## Bốn tình huống, bốn lựa chọn
+- **Chủ yếu nhắn tin và mạng xã hội**: bản thường, ưu tiên dung lượng lớn hơn.
+- **Chụp ảnh nhiều, hay chụp buổi tối**: bản Pro.
+- **Quay video, làm nội dung**: bản Pro Max, chọn dung lượng từ 256GB.
+- **Ngân sách chặt**: bản Pro của đời trước thường đáng tiền hơn bản thường đời mới.
+> So sánh trực tiếp hai máy bất kỳ bằng [công cụ so sánh](/so-sanh) — thông số xếp cạnh nhau theo từng dòng, không phải nhớ.
+## Xem giá từng bản
+Giá hiện tại của tất cả các bản có ở [trang sản phẩm](/san-pham). Nếu khoản chênh lệch là thứ duy nhất cản bạn, xem thêm [trả góp](/tra-gop).
+BODY,
+                'faqs' => [
+                    ['question' => 'iPhone Pro và bản thường khác nhau nhiều nhất ở đâu?', 'answer' => 'Ở camera. Bản Pro có thêm ống kính tele, chụp thiếu sáng tốt hơn và nhiều tuỳ chọn quay video hơn. Sau đó mới đến màn hình, pin và chất liệu khung máy.'],
+                    ['question' => 'Nên mua Pro đời cũ hay bản thường đời mới?', 'answer' => 'Nếu bạn chụp ảnh nhiều, bản Pro đời trước thường đáng tiền hơn. Nếu bạn cần pin và phần mềm được hỗ trợ lâu nhất, chọn bản thường đời mới.'],
+                    ['question' => 'Bản Pro Max có nặng hơn nhiều không?', 'answer' => 'Có, đây là bản nặng và to nhất trong cùng một đời máy. Nếu hay cầm một tay, nên ra cửa hàng cầm thử trước khi quyết định.'],
+                ],
+            ],
+            [
+                'title' => 'Mua iPhone trả góp: cần giấy tờ gì và mỗi tháng trả bao nhiêu?',
+                'slug' => 'mua-iphone-tra-gop-can-giay-to-gi',
+                'topic' => 'tu-van',
+                'focus_keyword' => 'mua iphone trả góp',
+                'excerpt' => 'Hai hình thức trả góp phổ biến, giấy tờ cần chuẩn bị cho từng hình thức, cách tự tính số tiền mỗi tháng và những khoản phí cần hỏi trước khi ký.',
+                'body' => <<<'BODY'
+Có hai đường trả góp: qua thẻ tín dụng và qua công ty tài chính. Trả góp qua thẻ tín dụng chỉ cần chiếc thẻ đang có hạn mức, duyệt ngay tại quầy. Trả góp qua công ty tài chính cần căn cước công dân, thường thêm một giấy tờ chứng minh thu nhập, và chờ duyệt khoảng 15 đến 30 phút.
+## Trả góp qua thẻ tín dụng
+Ngân hàng chuyển khoản tiền máy thành các kỳ trả đều trên thẻ. Bạn cần thẻ tín dụng còn đủ hạn mức bằng giá máy. Hình thức này thường có kỳ 3, 6, 9 hoặc 12 tháng và là đường nhanh nhất.
+## Trả góp qua công ty tài chính
+Dành cho người không có thẻ tín dụng. Giấy tờ thường gồm:
+- Căn cước công dân còn hạn.
+- Bằng lái xe hoặc giấy tờ tuỳ thân thứ hai, tuỳ gói vay.
+- Số điện thoại chính chủ đang dùng.
+- Trả trước một phần giá trị máy, thường từ 20% đến 40%.
+## Tự tính số tiền mỗi tháng
+Công thức để tự ước lượng trước khi tới cửa hàng: lấy giá máy trừ đi số tiền trả trước, chia cho số tháng, rồi cộng phần lãi và phí chuyển đổi mà nhân viên báo. Công cụ tính sẵn theo từng máy nằm ở [trang trả góp](/tra-gop).
+> Luôn hỏi tổng số tiền phải trả đến hết kỳ, chứ không chỉ hỏi số tiền mỗi tháng. Hai gói cùng "góp 2 triệu mỗi tháng" có thể chênh nhau vài triệu ở tổng cuối.
+## Bốn câu nên hỏi trước khi ký
+- Tổng số tiền phải trả đến hết kỳ là bao nhiêu?
+- Có phí chuyển đổi trả góp hay phí hồ sơ không?
+- Trả hết sớm có bị phạt không, phạt bao nhiêu?
+- Trả chậm một kỳ thì bị tính phí thế nào?
+## Cách giảm số tiền phải vay
+Mang máy cũ đi [thu cũ đổi mới](/thu-cu-doi-moi) để trừ thẳng vào giá máy mới, phần còn lại mới đem trả góp. Cách này giảm cả số tiền vay lẫn tiền lãi. Xem giá máy trước ở [trang sản phẩm](/san-pham).
+BODY,
+                'faqs' => [
+                    ['question' => 'Mua iPhone trả góp cần giấy tờ gì?', 'answer' => 'Qua thẻ tín dụng thì chỉ cần thẻ còn đủ hạn mức. Qua công ty tài chính thì cần căn cước công dân, thường thêm một giấy tờ tuỳ thân thứ hai và số điện thoại chính chủ.'],
+                    ['question' => 'Trả góp 0% có thật sự không mất thêm đồng nào không?', 'answer' => 'Lãi suất 0% nghĩa là không tính lãi, nhưng vẫn có thể có phí chuyển đổi trả góp hoặc phí hồ sơ. Hãy hỏi tổng số tiền phải trả đến hết kỳ để biết chính xác.'],
+                    ['question' => 'Không có thẻ tín dụng thì trả góp được không?', 'answer' => 'Được, qua công ty tài chính. Hình thức này cần trả trước một phần giá máy và chờ duyệt hồ sơ khoảng 15 đến 30 phút.'],
+                ],
+            ],
+            [
+                'title' => 'Thu cũ đổi mới iPhone: máy của bạn được định giá thế nào?',
+                'slug' => 'thu-cu-doi-moi-iphone-dinh-gia-the-nao',
+                'topic' => 'tin-moi',
+                'focus_keyword' => 'thu cũ đổi mới iphone',
+                'excerpt' => 'Năm yếu tố quyết định giá thu máy cũ, cách chuẩn bị máy để không bị trừ giá oan, và các bước đổi máy tại cửa hàng trong một buổi.',
+                'body' => <<<'BODY'
+Giá thu một chiếc iPhone cũ phụ thuộc vào năm thứ: đời máy, dung lượng, tình trạng pin, ngoại hình và việc máy đã từng thay linh kiện hay chưa. Chuẩn bị đúng bốn việc trước khi mang máy đi có thể giữ lại được một khoản đáng kể.
+## Năm yếu tố quyết định giá
+- **Đời máy và dung lượng**: máy đời mới hơn và dung lượng lớn hơn luôn được giá hơn.
+- **Tình trạng pin**: pin dưới 80% thường bị trừ tiền thay pin. Cách xem ở bài [kiểm tra pin iPhone](/tin-tuc/cach-kiem-tra-pin-iphone).
+- **Ngoại hình**: xước nhẹ trừ ít, móp viền hoặc nứt kính trừ nhiều.
+- **Lịch sử sửa chữa**: máy từng thay màn hình hoặc camera không chính hãng bị trừ nhiều nhất.
+- **Phụ kiện và hộp**: còn đủ hộp và phụ kiện thường được cộng thêm.
+## Bốn việc cần làm trước khi mang máy đi
+- Sao lưu dữ liệu lên iCloud hoặc máy tính.
+- Đăng xuất iCloud và tắt Tìm iPhone — thiếu bước này cửa hàng không thu được.
+- Xoá toàn bộ nội dung và cài đặt.
+- Lau máy, gom đủ hộp, cáp và củ sạc nếu còn giữ.
+> Đăng xuất iCloud là bước hay bị quên nhất. Máy còn khoá tài khoản thì dù ngoại hình đẹp đến đâu cũng không định giá được.
+## Quy trình đổi máy tại cửa hàng
+Nhân viên kiểm tra máy khoảng 10 đến 15 phút, báo giá thu, bạn chọn máy mới và phần chênh lệch là số tiền phải bù. Nếu vẫn muốn chia nhỏ khoản bù, ghép tiếp với [trả góp](/tra-gop).
+## Xem trước giá máy mới
+Danh sách máy đang bán và giá hiện tại có ở [trang sản phẩm](/san-pham). Bảng định giá máy cũ theo từng đời nằm ở [trang thu cũ đổi mới](/thu-cu-doi-moi).
+BODY,
+                'faqs' => [
+                    ['question' => 'Máy bị xước có thu được không?', 'answer' => 'Được. Xước nhẹ chỉ bị trừ một khoản nhỏ; móp viền, nứt kính hoặc lỗi màn hình mới là những thứ bị trừ nhiều.'],
+                    ['question' => 'Có bắt buộc đăng xuất iCloud trước khi thu không?', 'answer' => 'Có. Máy còn đăng nhập iCloud và bật Tìm iPhone thì cửa hàng không thể nhận, vì máy vẫn bị khoá vào tài khoản của bạn.'],
+                    ['question' => 'Thu cũ đổi mới có kết hợp trả góp được không?', 'answer' => 'Được. Tiền thu máy cũ trừ thẳng vào giá máy mới, phần chênh lệch còn lại có thể trả góp.'],
+                ],
+            ],
+            [
+                'title' => 'iPhone cũ có nên mua không? 5 thứ phải kiểm tra trước khi chốt',
+                'slug' => 'iphone-cu-co-nen-mua-khong',
+                'topic' => 'tu-van',
+                'focus_keyword' => 'iphone cũ có nên mua',
+                'excerpt' => 'Máy cũ đáng mua khi bạn kiểm tra đủ 5 thứ và người bán chịu bảo hành. Bài này nói rõ kiểm tra gì, trừ giá bao nhiêu là hợp lý, và khi nào nên bỏ qua máy cũ.',
+                'body' => <<<'BODY'
+Có, nếu bạn kiểm tra đủ năm thứ dưới đây và người bán chịu bảo hành bằng giấy tờ. Cùng số tiền, một chiếc máy cũ thường cho bạn đời máy cao hơn một đến hai bậc so với máy mới. Đổi lại, rủi ro nằm ở pin, linh kiện đã thay và nguồn gốc máy.
+## Máy cũ rẻ hơn máy mới bao nhiêu?
+Mức chênh phụ thuộc vào đời máy và tình trạng, nhưng quy luật chung là máy càng cũ thì tốc độ mất giá càng chậm lại. Chiếc máy mất giá mạnh nhất trong năm đầu tiên; từ năm thứ ba trở đi giá gần như đi ngang. Vì vậy máy đã qua sử dụng khoảng hai đến ba năm thường là điểm cân bằng tốt nhất giữa giá và thời gian còn dùng được.
+## Năm thứ phải kiểm tra
+- **Nguồn gốc máy**: số IMEI phải trùng ở cả ba nơi và tra được trên trang của Apple.
+- **Tình trạng pin**: xem Dung lượng tối đa trong Cài đặt, dưới 80% thì phải trừ tiền thay pin vào giá.
+- **Lịch sử linh kiện**: máy từng thay màn hình hoặc camera không chính hãng phải rẻ hơn rõ rệt.
+- **Khoá iCloud và khoá mạng**: máy còn khoá là không dùng được, không có cách nào chữa.
+- **Cam kết sau khi mua**: đổi trả trong bao nhiêu ngày, bảo hành bao lâu, ghi ở đâu.
+Ba thứ đầu làm được ngay tại quầy trong năm phút, các bước bấm chi tiết nằm ở bài [cách kiểm tra iPhone chính hãng](/tin-tuc/cach-kiem-tra-iphone-chinh-hang).
+## Trừ giá bao nhiêu là hợp lý?
+Đây là phần người mua hay chịu thiệt vì không biết lấy mốc nào. Cách tính đơn giản: lấy giá người bán đưa ra, trừ đi chi phí phải bỏ thêm để máy về trạng thái dùng tốt.
+- Pin dưới 80%: trừ đúng bằng giá thay pin.
+- Màn hình đã thay không chính hãng: trừ nhiều, vì đây là thứ ảnh hưởng tới cảm ứng và độ sáng lâu dài.
+- Xước nhẹ ở viền hoặc lưng máy: trừ ít, không ảnh hưởng sử dụng.
+- Không còn hộp và phụ kiện: trừ một khoản nhỏ.
+> Nếu người bán không cho bạn cầm máy kiểm tra đủ năm phút trước khi chuyển tiền, đó đã là câu trả lời. Máy không có gì giấu thì không ai ngại cho kiểm tra.
+## Khi nào thì đừng mua máy cũ?
+Có ba trường hợp nên bỏ tiền thêm mua máy mới:
+- Bạn cần máy dùng liên tục 4 đến 5 năm nữa — máy cũ đã đi hết một phần tuổi thọ pin và phần mềm.
+- Bạn mua cho người lớn tuổi hoặc trẻ nhỏ, không ai ở nhà xử lý được khi máy trục trặc.
+- Người bán không có cửa hàng cố định và không cam kết đổi trả bằng giấy tờ.
+Nếu rơi vào một trong ba trường hợp này, xem hướng chọn máy mới theo ngân sách ở bài [nên mua iPhone nào](/tin-tuc/nen-mua-iphone-nao-2026).
+## Mua máy đã qua sử dụng tại phuonghihi
+Toàn bộ máy tại cửa hàng đều được kiểm tra đủ năm hạng mục trên trước khi lên kệ, giá niêm yết công khai theo từng tình trạng máy. Bạn vẫn được kiểm tra lại khi nhận hàng theo [chính sách đổi trả](/chinh-sach/doi-tra), và máy có bảo hành theo [chính sách bảo hành](/chinh-sach/bao-hanh). Xem máy đang có tại [trang sản phẩm](/san-pham).
+BODY,
+                'faqs' => [
+                    ['question' => 'iPhone cũ dùng được thêm bao lâu?', 'answer' => 'Tuỳ tình trạng pin và đời máy. Máy đã dùng hai đến ba năm, pin trên 85%, thường còn dùng tốt thêm hai đến ba năm nữa nếu không va đập.'],
+                    ['question' => 'Mua iPhone cũ có được bảo hành không?', 'answer' => 'Tuỳ nơi bán. Tại phuonghihi máy đã qua sử dụng vẫn có bảo hành của cửa hàng, điều kiện ghi rõ trong chính sách bảo hành trên website.'],
+                    ['question' => 'Pin còn bao nhiêu phần trăm thì mua được?', 'answer' => 'Trên 85% là mua được mà không cần trừ giá. Từ 80 đến 85% nên trả giá thêm. Dưới 80% thì phải trừ đúng chi phí thay pin vào giá máy.'],
+                ],
+            ],
+            [
+                'title' => 'iPhone 128GB hay 256GB? Cách tự biết mình cần bao nhiêu',
+                'slug' => 'iphone-128gb-hay-256gb',
+                'topic' => 'so-sanh',
+                'focus_keyword' => 'iphone 128gb hay 256gb',
+                'excerpt' => 'Cách tự tính dung lượng mình thật sự cần trong hai phút, dựa trên số ảnh và số phút video bạn quay mỗi tháng, thay vì đoán mò rồi hối hận.',
+                'body' => <<<'BODY'
+Chọn 128GB nếu bạn bật sao lưu ảnh lên iCloud và hiếm khi quay video. Chọn 256GB nếu bạn giữ ảnh và video trên máy, hoặc quay video 4K. Đây là thứ duy nhất trên iPhone không nâng cấp được sau khi mua, nên thà dư còn hơn thiếu.
+## Thực tế bạn dùng được bao nhiêu?
+Con số ghi trên hộp không phải con số bạn dùng được. Hệ điều hành và các ứng dụng hệ thống chiếm khoảng 10GB. Nghĩa là máy 128GB còn lại khoảng 118GB, máy 256GB còn khoảng 246GB cho dữ liệu của bạn.
+## Mỗi thứ chiếm bao nhiêu dung lượng?
+Đây là các mức xấp xỉ, đủ để bạn tự tính:
+- Một tấm ảnh chụp thường: khoảng 2 đến 4MB.
+- Một phút video Full HD: khoảng 60 đến 90MB.
+- Một phút video 4K: khoảng 170 đến 400MB tuỳ tốc độ khung hình.
+- Một ứng dụng mạng xã hội sau vài tháng dùng: 2 đến 5GB.
+- Một bộ phim tải về xem offline: 2 đến 5GB.
+## Tự tính trong hai phút
+Lấy ba con số của chính bạn trong một tháng, rồi nhân với 24 tháng — khoảng thời gian trung bình trước khi đổi máy:
+- Số ảnh mỗi tháng × 3MB
+- Số phút video mỗi tháng × 100MB (Full HD) hoặc × 250MB (4K)
+- Cộng thêm 30GB cho ứng dụng, tin nhắn và hệ điều hành
+Ra dưới 100GB thì 128GB là đủ. Ra trên 100GB thì lấy 256GB.
+> Ví dụ: 200 ảnh và 10 phút video Full HD mỗi tháng → khoảng 1,6GB/tháng → sau 2 năm khoảng 38GB, cộng 30GB nữa là 68GB. Người này chọn 128GB là hợp lý.
+## iCloud có thay thế được dung lượng máy không?
+Chỉ thay thế được một phần. Khi bật Tối ưu hoá dung lượng, máy giữ bản ảnh nhẹ và đẩy bản gốc lên iCloud, tiết kiệm được đáng kể. Nhưng iCloud là dịch vụ trả tiền hằng tháng, và khi không có mạng bạn không mở được ảnh gốc. Nếu bạn ngại trả phí hằng tháng thì mua thẳng dung lượng lớn hơn một lần vẫn rẻ hơn về lâu dài.
+## Chênh lệch giá có đáng không?
+Khoản chênh giữa hai bản dung lượng thường nhỏ hơn nhiều so với khoản chênh giữa bản thường và bản Pro. Nếu ngân sách chỉ đủ chọn một trong hai, ưu tiên dung lượng lớn hơn trước, vì camera thì đời nào cũng dùng được còn máy đầy bộ nhớ thì ngày nào cũng khó chịu. Cách cân nhắc giữa các bản máy nằm ở bài [nên chọn iPhone Pro hay bản thường](/tin-tuc/nen-chon-iphone-pro-hay-ban-thuong).
+## Xem giá từng bản dung lượng
+Giá của từng dung lượng có ở [trang sản phẩm](/san-pham), lọc được theo dung lượng ngay trên bộ lọc bên trái. Chưa chắc chọn đời máy nào thì xem trước bài [nên mua iPhone nào](/tin-tuc/nen-mua-iphone-nao-2026).
+BODY,
+                'faqs' => [
+                    ['question' => 'iPhone 128GB thực tế dùng được bao nhiêu?', 'answer' => 'Khoảng 118GB. Hệ điều hành và ứng dụng hệ thống chiếm khoảng 10GB ngay từ khi máy mới.'],
+                    ['question' => 'Có nâng cấp dung lượng iPhone sau khi mua được không?', 'answer' => 'Không. Bộ nhớ iPhone gắn liền bo mạch, không có khe thẻ nhớ. Chọn sai dung lượng thì chỉ còn cách dùng iCloud hoặc đổi máy.'],
+                    ['question' => 'Quay video 4K tốn bao nhiêu dung lượng?', 'answer' => 'Khoảng 170 đến 400MB cho mỗi phút, tuỳ tốc độ khung hình. Quay 10 phút mỗi tháng thì sau hai năm đã chiếm khoảng 40 đến 96GB.'],
+                ],
+            ],
+            [
+                'title' => 'Cách chuyển dữ liệu từ iPhone cũ sang iPhone mới',
+                'slug' => 'cach-chuyen-du-lieu-tu-iphone-cu-sang-iphone-moi',
+                'topic' => 'huong-dan',
+                // Viết sẵn nhưng chưa hiện với khách: hẹn giờ đăng, tới
+                // ngày là tự lên. Đổi ngày hoặc chuyển về bản nháp trong
+                // Admin → Tin tức bất cứ lúc nào.
+                'status' => 'published',
+                'published_at' => now()->addDays(3),
+                'focus_keyword' => 'chuyển dữ liệu iphone',
+                'excerpt' => 'Ba cách chuyển dữ liệu, cách nào nhanh nhất, những thứ không tự chuyển được, và việc phải làm với máy cũ trước khi giao cho người khác.',
+                'body' => <<<'BODY'
+Cách nhanh nhất là đặt hai máy cạnh nhau và dùng Bắt đầu nhanh — máy mới sẽ hỏi có muốn chuyển từ máy cũ không ngay trong lúc cài đặt lần đầu. Toàn bộ ảnh, tin nhắn, ứng dụng và cài đặt đi theo. Việc này mất từ 30 phút đến vài tiếng tùy dung lượng.
+## Chuẩn bị trước khi bắt đầu
+Làm đủ bốn việc này thì quá trình chuyển gần như không bao giờ hỏng giữa chừng:
+- Sạc cả hai máy trên 50%, hoặc cắm sạc suốt quá trình.
+- Cập nhật máy cũ lên phiên bản iOS mới nhất.
+- Kết nối cùng một mạng Wi-Fi.
+- Chuẩn bị sẵn mật khẩu Apple Account, vì máy mới sẽ hỏi.
+> Đừng bắt đầu khi bạn chuẩn bị ra khỏi nhà. Hai máy phải nằm cạnh nhau cho tới khi xong, rút giữa chừng là phải làm lại từ đầu.
+## Cách 1: Bắt đầu nhanh, chuyển thẳng máy sang máy
+Đây là cách nên dùng trong hầu hết trường hợp. Bật máy mới, đặt cạnh máy cũ, máy cũ sẽ hiện thông báo hỏi có muốn thiết lập iPhone mới không. Làm theo hướng dẫn trên màn hình, chọn **Chuyển trực tiếp từ iPhone**. Dữ liệu đi thẳng từ máy này sang máy kia, không cần iCloud còn trống.
+## Cách 2: Khôi phục từ bản sao lưu iCloud
+Dùng khi bạn không còn giữ máy cũ trong tay, hoặc máy cũ đã hỏng. Điều kiện là trước đó máy cũ đã sao lưu lên iCloud. Trên máy mới, ở bước Ứng dụng & Dữ liệu chọn **Khôi phục từ bản sao lưu iCloud**. Cách này phụ thuộc tốc độ mạng và dung lượng iCloud bạn đang có.
+## Cách 3: Sao lưu qua máy tính
+Dùng khi dữ liệu nhiều mà mạng chậm, hoặc bạn không muốn trả phí iCloud. Cắm máy cũ vào máy tính, sao lưu toàn bộ, rồi cắm máy mới vào và khôi phục từ bản sao lưu đó. Nhớ chọn **mã hoá bản sao lưu**, vì nếu không thì dữ liệu Sức khỏe và mật khẩu đã lưu sẽ không đi theo.
+## Những thứ không tự chuyển được
+Đây là phần hay khiến người dùng tưởng mất dữ liệu:
+- Các ứng dụng ngân hàng và ví điện tử: phải đăng nhập và xác thực lại từ đầu.
+- Ứng dụng nhắn tin có mã hoá riêng: cần khôi phục bằng bản sao lưu của chính ứng dụng đó.
+- Apple Watch: phải huỷ ghép nối khỏi máy cũ rồi ghép lại với máy mới.
+- Thẻ trong Ví và eSIM: thường phải thêm lại thủ công.
+## Sau khi chuyển xong, làm gì với máy cũ?
+Mở máy mới, kiểm tra đủ ảnh, tin nhắn và danh bạ trước đã. Chắc chắn rồi mới đăng xuất iCloud, tắt Tìm iPhone và xoá toàn bộ nội dung trên máy cũ — thiếu bước này thì không nơi nào thu máy được. Nếu định bán lại, xem [cách máy cũ được định giá](/tin-tuc/thu-cu-doi-moi-iphone-dinh-gia-the-nao) rồi mang tới [chương trình thu cũ đổi mới](/thu-cu-doi-moi).
+## Chưa chọn được máy mới?
+Xem [máy đang bán](/san-pham), hoặc đọc [nên mua iPhone nào](/tin-tuc/nen-mua-iphone-nao-2026) để chọn theo ngân sách. Mua máy tại phuonghihi thì nhân viên hỗ trợ chuyển dữ liệu ngay tại cửa hàng, bạn không phải tự làm.
+BODY,
+                'faqs' => [
+                    ['question' => 'Chuyển dữ liệu từ iPhone cũ sang mới mất bao lâu?', 'answer' => 'Từ khoảng 30 phút đến vài tiếng, tuỳ lượng dữ liệu và cách chuyển. Chuyển thẳng máy sang máy bằng cáp là nhanh nhất, khôi phục qua iCloud phụ thuộc tốc độ mạng.'],
+                    ['question' => 'Không còn giữ máy cũ thì chuyển dữ liệu được không?', 'answer' => 'Được, nếu máy cũ đã từng sao lưu lên iCloud. Trên máy mới chọn Khôi phục từ bản sao lưu iCloud ở bước Ứng dụng và Dữ liệu.'],
+                    ['question' => 'Chuyển xong có mất dữ liệu trên máy cũ không?', 'answer' => 'Không. Quá trình chuyển là sao chép, máy cũ vẫn giữ nguyên dữ liệu cho tới khi bạn chủ động xoá toàn bộ nội dung và cài đặt.'],
+                ],
+            ],
+            [
+                'title' => 'Mua iPhone cho học sinh sinh viên: chọn thế nào với ngân sách dưới 12 triệu',
+                'slug' => 'mua-iphone-cho-hoc-sinh-sinh-vien',
+                'topic' => 'tu-van',
+                'status' => 'published',
+                'published_at' => now()->addDays(7),
+                'focus_keyword' => 'iphone cho sinh viên',
+                'excerpt' => 'Bốn tiêu chí thật sự quan trọng với người đi học, cách chia ngân sách dưới 12 triệu cho hợp lý, và những thứ không nên trả tiền thêm ở tầm giá này.',
+                'body' => <<<'BODY'
+Với người đi học, ba thứ đáng tiền nhất theo đúng thứ tự là pin, dung lượng và độ bền. Camera và màn hình cao cấp xếp sau, vì đó là phần đội giá nhanh nhất mà lại ít ảnh hưởng tới việc học. Dưới 12 triệu bạn nên nhắm tới máy đời cũ hơn hai đến ba năm nhưng dung lượng lớn.
+## Bốn tiêu chí theo thứ tự ưu tiên
+- **Pin**: một ngày học kéo dài từ sáng tới chiều tối, thường không có chỗ cắm sạc. Ưu tiên máy pin còn trên 85%.
+- **Dung lượng**: ảnh chụp bảng, tài liệu, video bài giảng cộng dồn rất nhanh. Tối thiểu 128GB.
+- **Độ bền**: máy đi học bị rơi nhiều hơn máy để bàn làm việc. Nên tính thêm tiền ốp và dán màn hình vào ngân sách.
+- **Thời gian còn được cập nhật**: máy càng mới đời thì càng được hỗ trợ iOS lâu, đây là thứ quyết định máy dùng được mấy năm nữa.
+## Chia ngân sách 12 triệu thế nào cho hợp lý
+Đừng tiêu hết 12 triệu vào thân máy. Một cách chia thực tế hơn:
+- Khoảng 10 đến 11 triệu cho máy.
+- Khoảng 300 đến 500 nghìn cho ốp lưng và dán màn hình.
+- Phần còn lại để dành cho việc thay pin sau một đến hai năm.
+Xem toàn bộ máy trong tầm giá tại [danh sách máy dưới 12 triệu](/san-pham?max_price=12000000).
+> Máy đời cũ hơn nhưng dung lượng 256GB gần như luôn là lựa chọn tốt hơn máy mới hơn một đời mà chỉ có 128GB, nếu bạn hay quay video và chụp tài liệu.
+## Những thứ không nên trả tiền thêm ở tầm giá này
+- **Bản Pro**: chênh lệch tiền lớn, nhưng thứ bạn nhận lại chủ yếu là camera tele và màn hình quét cao — không phục vụ việc học. Cách cân nhắc nằm ở bài [nên chọn iPhone Pro hay bản thường](/tin-tuc/nen-chon-iphone-pro-hay-ban-thuong).
+- **Dung lượng 512GB trở lên**: quá dư cho nhu cầu đi học, số tiền đó để dành mua máy đời mới hơn thì đáng hơn.
+- **Màu đặc biệt**: một số màu bị hét giá cao hơn dù cấu hình giống hệt.
+## Mua máy mới hay máy đã qua sử dụng?
+Ở tầm dưới 12 triệu, máy đã qua sử dụng cho bạn đời máy cao hơn rõ rệt với cùng số tiền. Đổi lại phải kiểm tra kỹ — đọc [iPhone cũ có nên mua không](/tin-tuc/iphone-cu-co-nen-mua-khong) trước khi quyết. Nếu người mua là học sinh còn nhỏ và ở nhà không ai xử lý được khi máy trục trặc, nên chọn máy mới cho yên tâm.
+## Chưa đủ tiền một lần thì làm sao?
+Hai cách thường dùng: [trả góp](/tra-gop) để chia nhỏ theo tháng, hoặc [thu cũ đổi mới](/thu-cu-doi-moi) nếu trong nhà còn máy cũ không dùng tới. Hai cách này ghép được với nhau: lấy tiền máy cũ trừ vào giá, phần còn lại mới trả góp.
+BODY,
+                'faqs' => [
+                    ['question' => 'Sinh viên nên mua iPhone dung lượng bao nhiêu?', 'answer' => 'Tối thiểu 128GB. Nếu hay quay video bài giảng hoặc chụp nhiều tài liệu thì nên lấy 256GB, vì dung lượng iPhone không nâng cấp được sau khi mua.'],
+                    ['question' => 'Dưới 12 triệu nên mua máy mới hay máy cũ?', 'answer' => 'Máy đã qua sử dụng cho đời máy cao hơn với cùng số tiền, nhưng phải kiểm tra pin và nguồn gốc kỹ. Máy mới phù hợp hơn khi người dùng là học sinh nhỏ tuổi.'],
+                    ['question' => 'Học sinh sinh viên có mua trả góp được không?', 'answer' => 'Được, nhưng hồ sơ trả góp qua công ty tài chính thường cần người đủ 18 tuổi và có giấy tờ tuỳ thân. Người chưa đủ tuổi cần người thân đứng tên.'],
+                ],
+            ],
+        ];
+    }
+}

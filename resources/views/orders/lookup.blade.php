@@ -1,4 +1,4 @@
-<x-shop-layout title="Tra cứu đơn hàng - phuonghihi">
+<x-shop-layout title="Tra cứu đơn hàng - phuonghihi" :noindex="true">
     <div class="max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h1 class="font-bold text-3xl text-ink mb-2 text-center">Tra cứu đơn hàng</h1>
         <p class="text-ink-soft mb-8 text-center">Nhập mã đơn hàng và số điện thoại đã dùng khi đặt để xem tình trạng đơn hàng.</p>

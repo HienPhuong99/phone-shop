@@ -1,4 +1,54 @@
-<x-shop-layout title="Trang chủ - phuonghihi">
+<x-shop-layout
+    title="phuonghihi - Cửa hàng iPhone chính hãng, giá công khai"
+    description="Mua iPhone chính hãng tại phuonghihi: giá niêm yết công khai, bảo hành 12 tháng, trả góp 0%, thu cũ đổi mới và giao hàng toàn quốc."
+>
+    <x-slot:head>
+        {{--
+            The shop itself, described once for search engines and AI
+            assistants: who we are, where we are, how to reach us. Values
+            come from config/shop.php so this block and the contact page
+            can never drift apart. Plain json_encode() rather than
+            Js::from() — see products/show.blade.php for why.
+        --}}
+        <script type="application/ld+json">{!! json_encode([
+            '@@context' => 'https://schema.org',
+            '@type' => 'Store',
+            'name' => config('shop.legal_name'),
+            'url' => route('home'),
+            'logo' => url('/images/logo-icon.svg'),
+            'image' => url('/images/logo-icon.svg'),
+            'description' => 'Cửa hàng chuyên iPhone chính hãng: giá niêm yết công khai, bảo hành 12 tháng, trả góp 0%, thu cũ đổi mới, giao hàng toàn quốc.',
+            'telephone' => config('shop.phone'),
+            'email' => config('shop.email'),
+            'priceRange' => config('shop.price_range'),
+            'openingHours' => config('shop.opening_hours_schema'),
+            'currenciesAccepted' => 'VND',
+            'paymentAccepted' => 'Tiền mặt khi nhận hàng, VNPay, thẻ tín dụng, trả góp',
+            'address' => [
+                '@type' => 'PostalAddress',
+                'streetAddress' => config('shop.address.street'),
+                'addressLocality' => config('shop.address.district'),
+                'addressRegion' => config('shop.address.city'),
+                'addressCountry' => config('shop.address.country'),
+            ],
+        ], JSON_UNESCAPED_UNICODE) !!}</script>
+
+        {{-- Lets Google offer a search box straight into /tim-kiem from the result page. --}}
+        <script type="application/ld+json">{!! json_encode([
+            '@@context' => 'https://schema.org',
+            '@type' => 'WebSite',
+            'name' => config('shop.legal_name'),
+            'url' => route('home'),
+            'potentialAction' => [
+                '@type' => 'SearchAction',
+                'target' => [
+                    '@type' => 'EntryPoint',
+                    'urlTemplate' => route('search').'?q={search_term_string}',
+                ],
+                'query-input' => 'required name=search_term_string',
+            ],
+        ], JSON_UNESCAPED_UNICODE) !!}</script>
+    </x-slot:head>
     <!-- Banner -->
     <section class="bg-paper border-b border-line">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -122,4 +172,20 @@
             @endforeach
         </div>
     </section>
+
+    <!-- Tin tức mới nhất -->
+    @if ($latestPosts->isNotEmpty())
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="font-bold text-2xl text-ink">Tin tức &amp; tư vấn</h2>
+                <a href="{{ route('posts.index') }}" class="text-sm font-semibold text-brand hover:text-brand-dark transition">Xem tất cả &rarr;</a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                @foreach ($latestPosts as $post)
+                    <x-post-card :post="$post" />
+                @endforeach
+            </div>
+        </section>
+    @endif
 </x-shop-layout>

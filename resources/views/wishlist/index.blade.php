@@ -1,4 +1,4 @@
-<x-shop-layout title="Sản phẩm yêu thích - phuonghihi">
+<x-shop-layout title="Sản phẩm yêu thích - phuonghihi" :noindex="true">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <nav class="text-sm text-ink-soft mb-4">
             <a href="{{ route('home') }}" class="hover:text-brand transition">Trang chủ</a> /

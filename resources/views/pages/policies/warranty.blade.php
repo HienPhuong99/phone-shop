@@ -1,4 +1,5 @@
-<x-policy-page title="Chính sách bảo hành">
+<x-policy-page title="Chính sách bảo hành"
+    description="Chính sách bảo hành iPhone tại phuonghihi: thời hạn bảo hành, trường hợp được bảo hành, trường hợp từ chối và cách gửi máy bảo hành.">
     <div>
         <h2>Thời hạn bảo hành</h2>
         <p>12 tháng kể từ ngày mua, tính theo số IMEI ghi trên hoá đơn. Thời hạn bảo hành được tra cứu công khai tại quầy hoặc qua hotline, không cần giữ hoá đơn giấy.</p>
