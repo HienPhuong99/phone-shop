@@ -21,11 +21,13 @@ Toàn bộ phần kỹ thuật đã được làm sẵn trong code (xem Phần 5
 
 ## Phần 1 — Bảng 24 bài viết: viết gì, theo thứ tự nào
 
-10 bài đầu **đã được viết sẵn và nằm trong hệ thống** — vào Admin → Tin tức là thấy. Dùng chúng làm mẫu cho 14 bài còn lại.
+Cả 24 bài **đã được viết sẵn và nằm trong hệ thống** — vào Admin → Tin tức là thấy.
 
-Trong đó 8 bài đang hiện, còn **bài #9 và #10 đang ở trạng thái hẹn giờ**: đã viết xong nhưng khách chưa thấy, tới ngày là tự lên. Muốn đổi ngày hoặc giấu hẳn thì vào Admin → Tin tức → Sửa, xem Phần 2.5.
+Trong đó 8 bài đang hiện, còn **bài #9 tới #24 đang ở trạng thái hẹn giờ**, mỗi tuần tự lên hai bài theo đúng thứ tự trong bảng (khoảng 3–4 ngày một bài, tính từ ngày chạy seeder). Muốn đổi ngày hoặc giấu hẳn bài nào thì vào Admin → Tin tức → Sửa, xem Phần 2.5.
 
-Mười bài này nằm trong `database/seeders/PostSeeder.php` nên có sẵn ở mọi môi trường deploy. Từ bài #11 trở đi viết thẳng trong Admin, không đụng vào seeder nữa.
+24 bài này nằm trong `database/seeders/PostSeeder.php` nên có sẵn ở mọi môi trường deploy. Bài số 25 trở đi viết thẳng trong Admin.
+
+> **Lưu ý khi chạy lại seeder** (`php artisan db:seed --class=PostSeeder`): seeder ghi đè nội dung của các bài trùng đường dẫn và tính lại ngày đăng từ thời điểm chạy. Nếu bạn đã sửa bài nào trong Admin thì chỉnh sửa đó sẽ mất. Chỉ chạy lại khi muốn đưa toàn bộ 24 bài về đúng bản gốc.
 
 | # | Tuần | Chủ đề | Tiêu đề (dùng nguyên cũng được) | Từ khoá chính | Link nội bộ bắt buộc chèn | Trạng thái |
 |---|---|---|---|---|---|---|
@@ -39,20 +41,20 @@ Mười bài này nằm trong `database/seeders/PostSeeder.php` nên có sẵn �
 | 8 | 4 | So sánh | iPhone 128GB hay 256GB? Cách tự biết mình cần bao nhiêu | iphone 128gb hay 256gb | /san-pham, bài #1, bài #4 | ✅ Đã có sẵn |
 | 9 | 5 | Hướng dẫn | Cách chuyển dữ liệu từ iPhone cũ sang iPhone mới | chuyển dữ liệu iphone | /thu-cu-doi-moi, bài #6, /san-pham | 🕒 Đã viết, hẹn giờ |
 | 10 | 5 | Tư vấn mua | Mua iPhone cho học sinh sinh viên: chọn thế nào với ngân sách dưới 12 triệu | iphone cho sinh viên | /san-pham, /tra-gop, bài #4, #7 | 🕒 Đã viết, hẹn giờ |
-| 11 | 6 | So sánh | iPhone Pro Max có đáng tiền hơn Pro không? | iphone pro max có đáng mua | /so-sanh, /san-pham | Cần viết |
-| 12 | 6 | Hướng dẫn | iPhone hết pin nhanh: 8 cách tiết kiệm pin làm được ngay | iphone hao pin | bài #3, /dich-vu | Cần viết |
-| 13 | 7 | Tư vấn mua | Mua iPhone trả góp qua thẻ tín dụng hay công ty tài chính? | trả góp thẻ tín dụng iphone | /tra-gop, bài #5 | Cần viết |
-| 14 | 7 | Hướng dẫn | Cách sao lưu iPhone trước khi bán hoặc đổi máy | sao lưu iphone | /thu-cu-doi-moi, bài #6 | Cần viết |
-| 15 | 8 | Tin mới | Bảng giá iPhone tháng này tại phuonghihi | bảng giá iphone | /san-pham | Cần viết |
-| 16 | 8 | So sánh | Mua iPhone chính hãng và hàng xách tay khác nhau thế nào? | iphone chính hãng và xách tay | bài #2, /chinh-sach/bao-hanh | Cần viết |
-| 17 | 9 | Hướng dẫn | Face ID không hoạt động: tự xử lý trước khi mang ra tiệm | face id không hoạt động | /dich-vu, /chinh-sach/bao-hanh | Cần viết |
-| 18 | 9 | Tư vấn mua | Mua iPhone làm quà tặng: chọn máy, chọn dung lượng, chọn màu | mua iphone làm quà | /san-pham | Cần viết |
-| 19 | 10 | Hướng dẫn | Cách kiểm tra iPhone có bị khoá mạng hay không | iphone khoá mạng | bài #2, /san-pham | Cần viết |
-| 20 | 10 | So sánh | Màn hình, camera hay pin: nên ưu tiên cái nào khi ngân sách hẹp? | chọn iphone ngân sách hẹp | /san-pham, bài #1 | Cần viết |
-| 21 | 11 | Tin mới | Chính sách bảo hành tại phuonghihi: những gì được và không được | bảo hành iphone | /chinh-sach/bao-hanh, /dich-vu | Cần viết |
-| 22 | 11 | Hướng dẫn | Cách xoá sạch dữ liệu iPhone trước khi bán | xoá dữ liệu iphone | bài #14, /thu-cu-doi-moi | Cần viết |
-| 23 | 12 | Tư vấn mua | 5 lỗi thường gặp khi mua iPhone lần đầu | mua iphone lần đầu | bài #1, bài #2 | Cần viết |
-| 24 | 12 | Tin mới | Giao hàng và thanh toán tại phuonghihi: COD, VNPay, trả góp | thanh toán mua iphone | /chinh-sach/van-chuyen | Cần viết |
+| 11 | 6 | So sánh | iPhone Pro Max có đáng tiền hơn Pro không? | iphone pro max có đáng mua | /so-sanh, /san-pham | 🕒 Đã viết, hẹn giờ |
+| 12 | 6 | Hướng dẫn | iPhone hết pin nhanh: 8 cách tiết kiệm pin làm được ngay | iphone hao pin | bài #3, /dich-vu | 🕒 Đã viết, hẹn giờ |
+| 13 | 7 | Tư vấn mua | Mua iPhone trả góp qua thẻ tín dụng hay công ty tài chính? | trả góp thẻ tín dụng iphone | /tra-gop, bài #5 | 🕒 Đã viết, hẹn giờ |
+| 14 | 7 | Hướng dẫn | Cách sao lưu iPhone trước khi bán hoặc đổi máy | sao lưu iphone | /thu-cu-doi-moi, bài #6 | 🕒 Đã viết, hẹn giờ |
+| 15 | 8 | Tin mới | Bảng giá iPhone mới nhất tại phuonghihi theo từng tầm tiền | bảng giá iphone | /san-pham | 🕒 Đã viết, hẹn giờ |
+| 16 | 8 | So sánh | Mua iPhone chính hãng và hàng xách tay khác nhau thế nào? | iphone chính hãng và xách tay | bài #2, /chinh-sach/bao-hanh | 🕒 Đã viết, hẹn giờ |
+| 17 | 9 | Hướng dẫn | Face ID không hoạt động: tự xử lý trước khi mang ra tiệm | face id không hoạt động | /dich-vu, /chinh-sach/bao-hanh | 🕒 Đã viết, hẹn giờ |
+| 18 | 9 | Tư vấn mua | Mua iPhone làm quà tặng: chọn máy, chọn dung lượng, chọn màu | mua iphone làm quà | /san-pham | 🕒 Đã viết, hẹn giờ |
+| 19 | 10 | Hướng dẫn | Cách kiểm tra iPhone có bị khoá mạng hay không | iphone khoá mạng | bài #2, /san-pham | 🕒 Đã viết, hẹn giờ |
+| 20 | 10 | So sánh | Màn hình, camera hay pin: ưu tiên gì khi ngân sách hẹp? | chọn iphone ngân sách hẹp | /san-pham, bài #1 | 🕒 Đã viết, hẹn giờ |
+| 21 | 11 | Tin mới | Bảo hành iPhone tại phuonghihi: được gì, không được gì? | bảo hành iphone | /chinh-sach/bao-hanh, /dich-vu | 🕒 Đã viết, hẹn giờ |
+| 22 | 11 | Hướng dẫn | Cách xoá sạch dữ liệu iPhone trước khi bán | xoá dữ liệu iphone | bài #14, /thu-cu-doi-moi | 🕒 Đã viết, hẹn giờ |
+| 23 | 12 | Tư vấn mua | 5 lỗi thường gặp khi mua iPhone lần đầu | mua iphone lần đầu | bài #1, bài #2 | 🕒 Đã viết, hẹn giờ |
+| 24 | 12 | Tin mới | Giao hàng và thanh toán tại phuonghihi: COD, VNPay, trả góp | thanh toán mua iphone | /chinh-sach/van-chuyen | 🕒 Đã viết, hẹn giờ |
 
 **Quy tắc chọn từ khoá nếu bạn muốn tự nghĩ bài mới:** mở Google, gõ "iphone" rồi xem phần gợi ý tự động và mục "Mọi người cũng hỏi". Mỗi gợi ý ở đó là một bài viết.
 
