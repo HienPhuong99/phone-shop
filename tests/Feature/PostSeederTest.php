@@ -61,23 +61,60 @@ class PostSeederTest extends TestCase
      * The articles cross-link to each other and to the pages that sell. A
      * typo in one of those paths is invisible on the page — the link just
      * renders and quietly leads to a 404, which costs a reader and tells
-     * search engines the site links to nothing.
+     * search engines the site links to nothing. Checked once every
+     * scheduled article is live, so links between them resolve too.
      */
     public function test_every_internal_link_in_the_seeded_articles_resolves(): void
     {
         $links = Post::all()
-            ->flatMap(function (Post $post) {
-                preg_match_all('~\]\((/[^)\s]*)\)~', $post->body, $matches);
-
-                return $matches[1];
-            })
+            ->flatMap(fn (Post $post) => $this->internalLinks($post))
             ->unique()
             ->values();
 
         $this->assertGreaterThan(10, $links->count());
 
+        $this->travelTo(Post::max('published_at'));
+        $this->travel(1)->minutes();
+
         foreach ($links as $link) {
             $this->get($link)->assertOk();
+        }
+    }
+
+    /**
+     * A scheduled article may only link to articles that are already live
+     * by the time it goes up; otherwise readers of the new article meet a 404
+     * until the linked one catches up.
+     */
+    public function test_an_article_only_links_to_articles_published_before_it(): void
+    {
+        $publishedAtBySlug = Post::pluck('published_at', 'slug');
+
+        foreach (Post::all() as $post) {
+            foreach ($this->internalLinks($post) as $link) {
+                if (! preg_match('~^/tin-tuc/([^/?#]+)~', $link, $match)) {
+                    continue;
+                }
+
+                $this->assertTrue(
+                    $publishedAtBySlug[$match[1]]->lte(max(now(), $post->published_at)),
+                    "Bài {$post->slug} link tới {$match[1]}, bài này lên sau nó"
+                );
+            }
+        }
+    }
+
+    /**
+     * The shape the content plan asks of every article: at least three
+     * question-style sections and two internal links.
+     */
+    public function test_every_seeded_article_meets_the_content_plan_minimums(): void
+    {
+        foreach (Post::all() as $post) {
+            $sections = collect($post->body_blocks)->where('type', 'heading')->count();
+
+            $this->assertGreaterThanOrEqual(3, $sections, "Bài {$post->slug} có dưới 3 mục ##");
+            $this->assertGreaterThanOrEqual(2, count($this->internalLinks($post)), "Bài {$post->slug} có dưới 2 link nội bộ");
         }
     }
 
@@ -86,5 +123,15 @@ class PostSeederTest extends TestCase
         foreach (Post::all() as $post) {
             $this->assertCount(3, $post->answered_faqs, "Bài {$post->slug} thiếu câu hỏi thường gặp");
         }
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function internalLinks(Post $post): array
+    {
+        preg_match_all('~\]\((/[^)\s]*)\)~', $post->body, $matches);
+
+        return $matches[1];
     }
 }
